@@ -1,4 +1,4 @@
-package test.powerlog.mobile.springboot.domain.posts;
+package test.powerlog.mobile.springboot.domain.products;
 
 import javax.persistence.*;
 
@@ -12,8 +12,8 @@ import java.util.Date;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-@Table(name="new_view")
-public class Product {
+@Table(name="login_view")
+public class TestProduct {
     @Id
     private String id;
 
@@ -44,3 +44,24 @@ public class Product {
 //        this.memo2 = memo2;
 //    }
 }
+
+//package test.powerlog.mobile.springboot.domain.products;
+//
+//import javax.persistence.*;
+//
+//import lombok.*;
+//
+//import java.util.Date;
+//
+//@NoArgsConstructor(access = AccessLevel.PROTECTED)
+//@Getter
+//@Entity
+//@Table(name="test_view")
+//public class Product2 {
+//    @Id
+//    private Long uid;
+//
+//    @Column
+//    @Temporal(TemporalType.DATE)
+//    private Date udate;
+//}
