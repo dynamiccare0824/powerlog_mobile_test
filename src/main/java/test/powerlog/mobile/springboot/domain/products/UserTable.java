@@ -59,9 +59,12 @@ public class UserTable {
     @Column
     private Date u_updatedtime;
 
+    @Column
+    private String  u_cellphone;
+
     @Builder
     public UserTable(String email, String password, String uid, String name, String gender, String birth, int height, int weight,
-                     String agree_fg, String pd_fg, String goal_cd, String certification, String login_fg, Date createdtime, Date updatedtime) {
+                     String agree_fg, String pd_fg, String goal_cd, String certification, String login_fg, Date createdtime, Date updatedtime, String cellphone) {
         this.u_email = email;
         this.u_password = password;
         this.u_uid = uid;
@@ -77,5 +80,46 @@ public class UserTable {
         this.u_login_fg = login_fg;
         this.u_createdtime = createdtime;
         this.u_updatedtime = updatedtime;
+        this.u_cellphone = cellphone;
     }
 }
+
+//    @Id
+//    @GeneratedValue // Auto IncId Generator
+//    private Long id;
+//
+//    @Id
+//    @Column(length = 20, nullable = false)
+//    private String name;
+//
+//    @Column(columnDefinition = "TEXT", nullable = true)
+//    private Integer price;
+//    private String memo;
+//    private String memo2;
+//
+//    @Builder
+//    public Product(String name, Integer price, String memo,String memo2) {
+//        this.name = name;
+//        this.price = price;
+//        this.memo = memo;
+//        this.memo2 = memo2;
+//    }
+
+//package test.powerlog.mobile.springboot.domain.products;
+//import javax.persistence.*;
+//import lombok.*;
+
+//import java.util.Date;
+//
+//@NoArgsConstructor(access = AccessLevel.PROTECTED)
+//@Getter
+//@Entity
+//@Table(name="test_view")
+//public class Product2 {
+//    @Id
+//    private Long uid;
+//
+//    @Column
+//    @Temporal(TemporalType.DATE)
+//    private Date udate;
+// }

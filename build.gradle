@@ -26,6 +26,8 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    compile 'com.googlecode.json-simple:json-simple:1.1.1'
+    compile 'org.apache.httpcomponents:httpcore:4.4.1'
     compile('javax.xml.bind:jaxb-api:2.3.0')
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.projectlombok:lombok')

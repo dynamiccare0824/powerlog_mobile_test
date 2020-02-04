@@ -25,10 +25,11 @@ public class SignUpDto {
     private String u_login_fg;
     private Date u_createdtime;
     private Date u_updatedtime;
+    private String u_cellphone;
 
     @Builder
     public SignUpDto(String email, String password, String uid, String name, String gender, String birth, int height, int weight,
-                     String agree_fg, String pd_fg, String goal_cd, String certification, String login_fg, Date createdtime, Date updatedtime) {
+                     String agree_fg, String pd_fg, String goal_cd, String certification, String login_fg, Date createdtime, Date updatedtime, String cellphone) {
         this.u_email = email;
         this.u_password = password;
         this.u_uid = uid;
@@ -44,10 +45,11 @@ public class SignUpDto {
         this.u_login_fg = login_fg;
         this.u_createdtime = createdtime;
         this.u_updatedtime = updatedtime;
+        this.u_cellphone = cellphone;
     }
 
     public UserTable toEntity(){
         return UserTable.builder().email(u_email).password(u_password).uid(u_uid).name(u_name).gender(u_gender).birth(u_birth).height(u_height).weight(u_weight)
-                .agree_fg(u_agree_fg).pd_fg(u_pd_fg).goal_cd(u_goal_cd).certification(u_certification).login_fg(u_login_fg).createdtime(u_createdtime).updatedtime(u_updatedtime).build();
+                .agree_fg(u_agree_fg).pd_fg(u_pd_fg).goal_cd(u_goal_cd).certification(u_certification).login_fg(u_login_fg).createdtime(u_createdtime).updatedtime(u_updatedtime).cellphone(u_cellphone).build();
     }
 }
