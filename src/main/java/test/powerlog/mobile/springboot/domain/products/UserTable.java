@@ -12,75 +12,71 @@ import java.sql.Date;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-@Table(name="user_tb")
+@Table(name="UserTb")
 public class UserTable {
     @Id
-    private String u_email;
+    private String uEmail;
 
     @Column
-    private String u_uid;
+    private String uUid;
 
     @Column
-    private String u_password;
+    private String uPassword;
 
     @Column
-    private String u_name;
+    private String uName;
 
     @Column
-    private String u_gender;
+    private String uGender;
 
     @Column
-    private String u_birth;
+    private String uBirth;
 
     @Column
-    private int u_height;
+    private String uPhone;
 
     @Column
-    private int u_weight;
+    private int uHeight;
 
     @Column
-    private String u_agree_fg;
+    private int uWeight;
 
     @Column
-    private String u_pd_fg;
+    private String uAgreeFlag;
 
     @Column
-    private String u_goal_cd;
+    private String uPersonalFlag;
 
     @Column
-    private String u_certification;
+    private String uShapeCode;
 
     @Column
-    private String u_login_fg;
+    private String uVerification;
 
     @Column
-    private Date u_createdtime;
+    private Date uCreatedTime;
 
     @Column
-    private Date u_updatedtime;
-
-    @Column
-    private String  u_cellphone;
+    private Date uUpdatedTime;
 
     @Builder
     public UserTable(String email, String password, String uid, String name, String gender, String birth, int height, int weight,
                      String agree_fg, String pd_fg, String goal_cd, String certification, String login_fg, Date createdtime, Date updatedtime, String cellphone) {
-        this.u_email = email;
-        this.u_password = password;
-        this.u_uid = uid;
-        this.u_name = name;
-        this.u_gender = gender;
-        this.u_birth = birth;
-        this.u_height = height;
-        this.u_weight = weight;
-        this.u_agree_fg = agree_fg;
-        this.u_pd_fg = pd_fg;
-        this.u_goal_cd = goal_cd;
-        this.u_certification = certification;
-        this.u_login_fg = login_fg;
-        this.u_createdtime = createdtime;
-        this.u_updatedtime = updatedtime;
-        this.u_cellphone = cellphone;
+        this.uEmail = email;
+        this.uPassword = password;
+        this.uUid = uid;
+        this.uName = name;
+        this.uGender = gender;
+        this.uBirth = birth;
+        this.uHeight = height;
+        this.uWeight = weight;
+        this.uAgreeFlag = agree_fg;
+        this.uPersonalFlag = pd_fg;
+        this.uShapeCode = goal_cd;
+        this.uVerification = certification;
+        this.uCreatedTime = createdtime;
+        this.uUpdatedTime = updatedtime;
+        this.uPhone = cellphone;
     }
 }
 

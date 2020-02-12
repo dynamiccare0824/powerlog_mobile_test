@@ -17,6 +17,6 @@ public class SignUpService {
     @Transactional
     public String Signup(SignUpDto signUpDto)
     {
-        return userTableRepository.save(signUpDto.toEntity()).getU_email();
+        return userTableRepository.save(signUpDto.toEntity()).getUEmail();
     }
 }

@@ -9,7 +9,10 @@ spring:
       hibernate:
         format_sql:true
     hibernate:
-      ddl-auto:create
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        #  대문자를 자동으로 _소문자로 변경하는 문제를 해결하기 위함
     # 객체에 매핑되는 기존 테이블 자동 드랍 및 새로운 테이블 생성
 
 
