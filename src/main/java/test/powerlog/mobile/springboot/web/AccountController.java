@@ -36,18 +36,21 @@ public class AccountController {
         String password =userAccountDto.getPassword();
         try{
             // match 경우 있거나, 아이디는 존재하는데 비밀번호 틀린 경우
-            System.out.println(userAccountVWRepository.findById(id).get().getLoginVwEmail());
+//            System.out.println(userAccountVWRepository.findById(id).get().getLoginVwEmail());
+//            System.out.println(userAccountVWRepository.findById(id).get().getLoginVwName());
             //아이디(이메일)이 존재하지 않는 경우 여기서 catch로 넘어가게 될 것임
-            System.out.println(id + password);
+//            System.out.println(id + password);
             Boolean result = loginService.Login(id, password);
             resultMap.put("received_password", userAccountDto.getPassword());
             resultMap.put("received_email", userAccountDto.getEmail());
+            resultMap.put("name", userAccountVWRepository.findById(id).get().getLoginVwName());
             resultMap.put("match", result.toString());
         }
         // 아이디가 아예 존재하지 않는 경우
         catch(Exception ex){
             resultMap.put("received_password", userAccountDto.getPassword());
             resultMap.put("received_email", userAccountDto.getEmail());
+            resultMap.put("name", null);
             resultMap.put("match", "false");
         }
         return resultMap;
