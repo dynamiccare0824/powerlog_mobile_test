@@ -22,7 +22,7 @@ public class LoginService {
             Optional<UserAccountVW> record = userAccountVWRepository.findById(email);
             // System.out.println(userAccountDto.getM_login_vw_email());
 
-            if (record.get().getLoginVwEmail().equals(email) && record.get().getLoginVwEmail().equals(password)) {
+            if (record.get().getLoginVwEmail().equals(email) && record.get().getLoginVwPassword().equals(password)) {
                 System.out.println(record.get().getLoginVwEmail());
                 System.out.println("Correct");
                 result = true;
