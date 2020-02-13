@@ -11,6 +11,7 @@ import test.powerlog.mobile.springboot.service.*;
 import test.powerlog.mobile.springboot.web.dto.SignUpDto;
 import test.powerlog.mobile.springboot.web.dto.UserAccountDto;
 import java.util.HashMap;
+import java.util.Optional;
 
 @RestController
 public class AccountController {
@@ -18,8 +19,8 @@ public class AccountController {
     @Autowired
     private UserAccountVWRepository userAccountVWRepository;
 
-//    @Autowired
-//    private UserTableRepository userTableRepository;
+    @Autowired
+    private UserTableRepository userTableRepository;
 
     @Autowired
     LoginService loginService;
@@ -53,7 +54,7 @@ public class AccountController {
     }
 
     @PostMapping(value = "/checkEmail")
-    public HashMap<String, Object> EmailCheck(@RequestBody UserAccountDto userAccountDto) throws JsonProcessingException {
+    public HashMap<String, Object> CheckEmail(@RequestBody UserAccountDto userAccountDto) throws JsonProcessingException {
         HashMap<String, Object> resultMap = new HashMap();
         String id = userAccountDto.getEmail();
 
@@ -72,11 +73,11 @@ public class AccountController {
         return resultMap;
     }
 
-    @PostMapping(value = "/checkPhoneNSend")
-    public HashMap<String, Object> PhoneCheck(@RequestBody UserAccountDto userAccountDto) throws JsonProcessingException {
+    @PostMapping(value = "/sendMsg")
+    public HashMap<String, Object> SendMsg(@RequestBody UserAccountDto userAccountDto) throws JsonProcessingException {
         HashMap<String, Object> tmpMap = new HashMap();
         HashMap<String, Object> resultMap = new HashMap();
-        SendMsgServic_New sendMsgServic_new = new SendMsgServic_New();
+        SendMsgService_New sendMsgService_new = new SendMsgService_New();
         String phone = userAccountDto.getPhone();
         ObjectMapper mapper = new ObjectMapper();
         NumberGen numberGen = new NumberGen();
@@ -98,7 +99,7 @@ public class AccountController {
             tmpMap.put("content", "인증번호 [" + randNum + "] 숫자 4자리를 입력해주세요 - 파워로그 모바일");
             String json = mapper.writeValueAsString(tmpMap);
 
-            sendMsgServic_new.NewSend("https://api-sens.ncloud.com/v1/sms/services/ncp:sms:kr:258080742855:testpowerlog/messages", json);
+            sendMsgService_new.NewSend("https://api-sens.ncloud.com/v1/sms/services/ncp:sms:kr:258080742855:testpowerlog/messages", json);
 
             resultMap.put("phonePresent", false);
             resultMap.put("verificationNum", randNum);
@@ -106,61 +107,41 @@ public class AccountController {
         return resultMap;
     }
 
-    @PostMapping(value = "/signup")
+    @PostMapping(value = "/signUp")
     public HashMap<String, Object> SignUp(@RequestBody UserAccountDto userAccountDto) throws JsonProcessingException {
+
+        HashMap<String, Object> resultMap = new HashMap();
+        NumberGen numberGen = new NumberGen();
+
+
         java.util.Date utilDate = new java.util.Date();
         java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+        String tmpUid = numberGen.four_digits(8, 1);
+        int careerY = userAccountDto.getCareer_year();
+        int careerM = userAccountDto.getCareer_month();
+
+        System.out.println(userAccountDto.getQuestionCode());
+        System.out.println(userAccountDto.getQuestionAnswer());
 
 
-        HashMap<String, Object> tmpMap = new HashMap();
-        HashMap<String, Object> resultMap = new HashMap();
-        SendMsgServic_New sendMsgServic_new = new SendMsgServic_New();
-        String phone = userAccountDto.getPhone();
-        ObjectMapper mapper = new ObjectMapper();
-        NumberGen numberGen = new NumberGen();
-        String randNum = numberGen.four_digits(4, 1);
-        String[] numbers = {"99999999999"};
+
+        SignUpDto signUpDto  = SignUpDto.builder().email(userAccountDto.getEmail()).password(userAccountDto.getPassword()).uid(tmpUid).name(userAccountDto.getName())
+                .gender(userAccountDto.getGender()).birth(userAccountDto.getBirth()).height(userAccountDto.getHeight()).weight(userAccountDto.getWeight())
+                .agreeFlag(userAccountDto.getAgreeFlag()).personalFlag(userAccountDto.getAgreeFlag()).shapeCode(userAccountDto.getShapeCode()).qAnswer(userAccountDto.getQuestionAnswer()).qCode(userAccountDto.getQuestionCode())
+                .verification(userAccountDto.getVerification()).phone(userAccountDto.getPhone()).createdTime(sqlDate).updatedTime(sqlDate).career(careerM + careerY * 12).build();
+        signUpService.Signup(signUpDto); // save 실행
+
         try{
-            userAccountVWRepository.findByLoginVwPhone(phone).getLoginVwPhone();
-            resultMap.put("phonePresent", true);
-            resultMap.put("verificationNum", randNum);
+            String findById = userAccountVWRepository.findById(userAccountDto.getEmail()).get().getLoginVwEmail();
+            resultMap.put("findById", findById);
+            resultMap.put("result", "true");
         }
         catch(Exception ex){
-            System.out.println(ex);
-//             전화번호가 존재하지 않은 경우에만 메시지를 보낸다
-
-            numbers[0] = phone;
-            tmpMap.put("type", "SMS");
-            tmpMap.put("from", "01050055438");
-            tmpMap.put("to", numbers);
-            tmpMap.put("content", "인증번호 [" + randNum + "] 숫자 4자리를 입력해주세요 - 파워로그 모바일");
-            String json = mapper.writeValueAsString(tmpMap);
-
-            sendMsgServic_new.NewSend("https://api-sens.ncloud.com/v1/sms/services/ncp:sms:kr:258080742855:testpowerlog/messages", json);
-
-            resultMap.put("phonePresent", false);
-            resultMap.put("verificationNum", randNum);
+            resultMap.put("findById", ex);
+            resultMap.put("result", "false");
         }
+
         return resultMap;
-    }
-
-    // 회원가입 요청
-    @GetMapping("/signUp")
-    public String Signup(String email, String password, String uid, String name, String gender, String birth, int height, int weight,
-                         String agree_fg, String pd_fg, String goal_cd, String certification, String login_fg, String cellphone)
-    {
-        java.util.Date utilDate = new java.util.Date();
-        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-        System.out.println(sqlDate);
-
-        SignUpDto signUpDto  = SignUpDto.builder().email(email).password(password).uid(uid).name(name).gender(gender).birth(birth).height(height).weight(weight)
-                .agree_fg(agree_fg).pd_fg(pd_fg).goal_cd(goal_cd).certification(certification).login_fg(login_fg).createdtime(sqlDate).updatedtime(sqlDate).build();
-        return signUpService.Signup(signUpDto);
-    }
-
-    @GetMapping("/hello2")
-    public String hello() {
-        return "Hello World";
     }
 
     @GetMapping("/create")

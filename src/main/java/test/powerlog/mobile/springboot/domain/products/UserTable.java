@@ -14,11 +14,13 @@ import java.sql.Date;
 @Entity
 @Table(name="UserTb")
 public class UserTable {
-    @Id
-    private String uEmail;
+
 
     @Column
     private String uUid;
+
+    @Id
+    private String uEmail;
 
     @Column
     private String uPassword;
@@ -34,6 +36,9 @@ public class UserTable {
 
     @Column
     private String uPhone;
+
+    @Column
+    private int uCareer;
 
     @Column
     private int uHeight;
@@ -59,9 +64,15 @@ public class UserTable {
     @Column
     private Date uUpdatedTime;
 
+    @Column
+    private String uQCode;
+
+    @Column
+    private String uQAnswer;
+
     @Builder
     public UserTable(String email, String password, String uid, String name, String gender, String birth, int height, int weight,
-                     String agree_fg, String pd_fg, String goal_cd, String certification, String login_fg, Date createdtime, Date updatedtime, String cellphone) {
+                     String agreeFlag, String personalFlag, String shapeCode, String verification, Date createdTime, Date updatedTime, String phone, int career, String qCode, String qAnswer) {
         this.uEmail = email;
         this.uPassword = password;
         this.uUid = uid;
@@ -70,13 +81,16 @@ public class UserTable {
         this.uBirth = birth;
         this.uHeight = height;
         this.uWeight = weight;
-        this.uAgreeFlag = agree_fg;
-        this.uPersonalFlag = pd_fg;
-        this.uShapeCode = goal_cd;
-        this.uVerification = certification;
-        this.uCreatedTime = createdtime;
-        this.uUpdatedTime = updatedtime;
-        this.uPhone = cellphone;
+        this.uAgreeFlag = agreeFlag;
+        this.uPersonalFlag = personalFlag;
+        this.uShapeCode = shapeCode;
+        this.uVerification = verification;
+        this.uCreatedTime = createdTime;
+        this.uUpdatedTime = updatedTime;
+        this.uPhone = phone;
+        this.uCareer = career;
+        this.uQCode = qCode;
+        this.uQAnswer = qAnswer;
     }
 }
 

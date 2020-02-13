@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class SendMsgServic_New {
+public class SendMsgService_New {
     public static String NewSend(String sendUrl, String jsonValue) throws IllegalStateException {
 
         String inputLine = null;
