@@ -3,7 +3,7 @@ package test.powerlog.mobile.springboot.web.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import test.powerlog.mobile.springboot.domain.products.UserTable;
+import test.powerlog.mobile.springboot.domain.products.UserTb;
 import java.sql.Date;
 
 @Getter
@@ -54,10 +54,15 @@ public class SignUpDto {
         this.qCode = qCode;
     }
 
-    public UserTable toEntity(){
+    public UserTb toEntity(){
         System.out.println("hello " + career + qCode + qAnswer
         );
-        return UserTable.builder().email(email).password(password).uid(uid).name(name).gender(gender).birth(birth).height(height).weight(weight).career(career)
+        return UserTb.builder().email(email).password(password).uid(uid).name(name).gender(gender).birth(birth).height(height).weight(weight).career(career)
+                .agreeFlag(agreeFlag).personalFlag(personalFlag).shapeCode(shapeCode).verification(verification).createdTime(createdTime).updatedTime(updatedTime).phone(phone).qCode(qCode).qAnswer(qAnswer).build();
+    }
+
+    public UserTb resetPW(){
+        return UserTb.builder().email(email).password(password).uid(uid).name(name).gender(gender).birth(birth).height(height).weight(weight).career(career)
                 .agreeFlag(agreeFlag).personalFlag(personalFlag).shapeCode(shapeCode).verification(verification).createdTime(createdTime).updatedTime(updatedTime).phone(phone).qCode(qCode).qAnswer(qAnswer).build();
     }
 }

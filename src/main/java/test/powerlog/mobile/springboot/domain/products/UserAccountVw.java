@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Entity
 @Table(name="LoginVw")
-public class UserAccountVW {
+public class UserAccountVw {
     @Id
     private String loginVwEmail;
 

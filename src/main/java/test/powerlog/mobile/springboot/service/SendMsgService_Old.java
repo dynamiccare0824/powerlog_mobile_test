@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -34,7 +33,6 @@ public class SendMsgService_Old {
         httpHeaders.add("Content-Type", "application/json; charset=utf-8");
         httpHeaders.add("x-ncp-auth-key", "SmxiQBvfpnf1eaPiJByC");
         httpHeaders.add("x-ncp-service-secret", "7af448a8032745a68fe8dd7bc5ea000b");
-
 
         System.out.println("4");
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<MultiValueMap<String, Object>>(map, httpHeaders);

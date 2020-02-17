@@ -2,8 +2,8 @@ package test.powerlog.mobile.springboot.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import test.powerlog.mobile.springboot.domain.products.UserAccountVW;
-import test.powerlog.mobile.springboot.domain.products.UserAccountVWRepository;
+import test.powerlog.mobile.springboot.domain.products.UserAccountVw;
+import test.powerlog.mobile.springboot.domain.products.UserAccountVwRepository;
 
 import java.util.Optional;
 
@@ -11,7 +11,7 @@ import java.util.Optional;
 public class LoginService {
 
     @Autowired
-    private UserAccountVWRepository userAccountVWRepository;
+    private UserAccountVwRepository userAccountVWRepository;
 
     /*로그인 요청 처리*/
     public boolean Login(String email, String password) {
@@ -19,7 +19,7 @@ public class LoginService {
 //        System.out.println(userAccountRepository.findById(email).get().getM_login_vw_email());
         try {
             System.out.println(userAccountVWRepository.findById(email));
-            Optional<UserAccountVW> record = userAccountVWRepository.findById(email);
+            Optional<UserAccountVw> record = userAccountVWRepository.findById(email);
 
             if (record.get().getLoginVwEmail().equals(email) && record.get().getLoginVwPassword().equals(password)) {
                 System.out.println(record.get().getLoginVwEmail());

@@ -1,4 +1,14 @@
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: noreply.dynamiccare@gmail.com
+    password: dynamic1!
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
   datasource:
     url: jdbc:mysql://test-dynamiccare.cm9okkpsjcm4.ap-northeast-2.rds.amazonaws.com:3306/DYNAMIC_CARE
     username: dynamiccare0824

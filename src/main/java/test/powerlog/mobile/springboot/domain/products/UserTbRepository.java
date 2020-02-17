@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserTableRepository extends JpaRepository<UserTable, String>{
+public interface UserTbRepository extends JpaRepository<UserTb, String>{
 
 //    @Modifying
 //    @Transactional

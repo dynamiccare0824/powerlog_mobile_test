@@ -1,26 +1,35 @@
 package test.powerlog.mobile.springboot.web;
 
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import test.powerlog.mobile.springboot.domain.products.UserAccountVW;
-import test.powerlog.mobile.springboot.domain.products.UserAccountVWRepository;
-import test.powerlog.mobile.springboot.domain.products.UserTableRepository;
+import test.powerlog.mobile.springboot.domain.products.*;
+import test.powerlog.mobile.springboot.web.dto.EmailDto;
 import test.powerlog.mobile.springboot.service.*;
+import test.powerlog.mobile.springboot.web.dto.LogLateMsrDto;
 import test.powerlog.mobile.springboot.web.dto.SignUpDto;
 import test.powerlog.mobile.springboot.web.dto.UserAccountDto;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
 public class AccountController {
 
     @Autowired
-    private UserAccountVWRepository userAccountVWRepository;
+    EmailService emailService;
 
     @Autowired
-    private UserTableRepository userTableRepository;
+    private UserAccountVwRepository userAccountVWRepository;
+
+    @Autowired
+    private LogLateMsrVwRepository logLateMsrVwRepository;
+
+    @Autowired
+    private UserTbRepository userTbRepository;
 
     @Autowired
     LoginService loginService;
@@ -32,18 +41,20 @@ public class AccountController {
     @PostMapping(value = "/login")
     public HashMap<String, Object> Login(@RequestBody UserAccountDto userAccountDto) throws JsonProcessingException {
         HashMap<String, Object> resultMap = new HashMap();
-        String id = userAccountDto.getEmail();
+        String email = userAccountDto.getEmail();
         String password =userAccountDto.getPassword();
+        LogLateMsrDto logLateMsrDto = new LogLateMsrDto();
         try{
             // match 경우 있거나, 아이디는 존재하는데 비밀번호 틀린 경우
-//            System.out.println(userAccountVWRepository.findById(id).get().getLoginVwEmail());
-//            System.out.println(userAccountVWRepository.findById(id).get().getLoginVwName());
+
+//            userAccountVWRepository.findById(email).get().getLoginVwEmail();
+//            logLateMsrVwRepository.findAllByLgLateMsrVwEmail(email);
             //아이디(이메일)이 존재하지 않는 경우 여기서 catch로 넘어가게 될 것임
-//            System.out.println(id + password);
-            Boolean result = loginService.Login(id, password);
+            Boolean result = loginService.Login(email, password);
             resultMap.put("received_password", userAccountDto.getPassword());
             resultMap.put("received_email", userAccountDto.getEmail());
-            resultMap.put("name", userAccountVWRepository.findById(id).get().getLoginVwName());
+            resultMap.put("name", userAccountVWRepository.findById(email).get().getLoginVwName());
+            resultMap.put("result", logLateMsrVwRepository.findAllByLgLateMsrVwEmail(email));
             resultMap.put("match", result.toString());
         }
         // 아이디가 아예 존재하지 않는 경우
@@ -116,7 +127,6 @@ public class AccountController {
         HashMap<String, Object> resultMap = new HashMap();
         NumberGen numberGen = new NumberGen();
 
-
         java.util.Date utilDate = new java.util.Date();
         java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
         String tmpUid = numberGen.four_digits(8, 1);
@@ -147,8 +157,30 @@ public class AccountController {
         return resultMap;
     }
 
+    @PostMapping(value = "/sendMail")
+    public SignUpDto SignUp(@RequestBody EmailDto emailDto) throws JsonProcessingException {
+        SignUpDto signupDto = new SignUpDto();
+        HashMap<String, Object> resultMap = new HashMap();
+
+        try{
+            Optional<UserTb> signUpDto = userTbRepository.findById(emailDto.getRecipient());
+        }
+        catch (Exception ex){
+            System.out.println(ex);
+        }
+        try{
+            emailService.sendMail(emailDto);
+        }
+        catch(Exception ex){
+            resultMap.put("findById", ex);
+            resultMap.put("result", "false");
+        }
+
+        return signupDto;
+    }
+
     @GetMapping("/create")
-    public void create(UserAccountVW product) {
+    public void create(UserAccountVw product) {
         userAccountVWRepository.save(product);
     }
 

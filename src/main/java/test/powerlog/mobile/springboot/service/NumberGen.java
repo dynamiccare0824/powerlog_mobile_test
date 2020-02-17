@@ -3,6 +3,10 @@ package test.powerlog.mobile.springboot.service;
 import java.util.Random;
 // 고유 번호와 문자 인증 번호를 만들어내기 위한 클래스
 public class NumberGen {
+
+    private int size;
+    private boolean lowerCheck;
+
     public String four_digits(int len, int dupCd ) {
 
         Random rand = new Random();
@@ -28,5 +32,35 @@ public class NumberGen {
             }
         }
         return numStr;
+    }
+
+
+    public String getKey(int size, boolean lowerCheck) {
+        this.size = size;
+        this.lowerCheck = lowerCheck;
+        return init();
+    }
+
+    private String init() {
+        Random ran = new Random();
+        StringBuffer sb = new StringBuffer();
+
+        int num = 0;
+
+        do {
+            num = ran.nextInt(75) + 48;
+
+            if((num >= 48 && num <= 57) || (num >= 65 && num <= 90) || (num >= 97 && num <= 122)) {
+                sb.append((char)num);
+            }else {
+                continue;
+            }
+        } while (sb.length() < size);
+
+        if(lowerCheck) {
+            return sb.toString().toLowerCase();
+        }
+
+        return sb.toString();
     }
 }

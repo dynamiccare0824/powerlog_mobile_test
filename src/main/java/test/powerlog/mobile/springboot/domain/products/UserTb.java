@@ -13,7 +13,7 @@ import java.sql.Date;
 @Getter
 @Entity
 @Table(name="UserTb")
-public class UserTable {
+public class UserTb {
 
 
     @Column
@@ -71,8 +71,8 @@ public class UserTable {
     private String uQAnswer;
 
     @Builder
-    public UserTable(String email, String password, String uid, String name, String gender, String birth, int height, int weight,
-                     String agreeFlag, String personalFlag, String shapeCode, String verification, Date createdTime, Date updatedTime, String phone, int career, String qCode, String qAnswer) {
+    public UserTb(String email, String password, String uid, String name, String gender, String birth, int height, int weight,
+                  String agreeFlag, String personalFlag, String shapeCode, String verification, Date createdTime, Date updatedTime, String phone, int career, String qCode, String qAnswer) {
         this.uEmail = email;
         this.uPassword = password;
         this.uUid = uid;
