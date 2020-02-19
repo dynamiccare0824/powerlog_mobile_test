@@ -10,7 +10,11 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name="LogLateMsrVw")
 public class LogLateMsrVw {
+
     @Id
+    private String lgLateMsrVwIndex;
+
+    @Column
     private String lgLateMsrVwEmail;
 
     @Column

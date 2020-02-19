@@ -54,7 +54,7 @@ public class AccountController {
             resultMap.put("received_password", userAccountDto.getPassword());
             resultMap.put("received_email", userAccountDto.getEmail());
             resultMap.put("name", userAccountVWRepository.findById(email).get().getLoginVwName());
-            resultMap.put("result", logLateMsrVwRepository.findAllByLgLateMsrVwEmail(email));
+            resultMap.put("result", logLateMsrVwRepository.findAllByLgLateMsrVwEmail(userAccountDto.getEmail()));
             resultMap.put("match", result.toString());
         }
         // 아이디가 아예 존재하지 않는 경우
