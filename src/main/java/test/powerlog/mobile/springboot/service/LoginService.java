@@ -11,15 +11,15 @@ import java.util.Optional;
 public class LoginService {
 
     @Autowired
-    private UserAccountVwRepository userAccountVWRepository;
+    private UserAccountVwRepository userAccountVwRepository;
 
     /*로그인 요청 처리*/
     public boolean Login(String email, String password) {
         boolean result = false;
 //        System.out.println(userAccountRepository.findById(email).get().getM_login_vw_email());
         try {
-            System.out.println(userAccountVWRepository.findById(email));
-            Optional<UserAccountVw> record = userAccountVWRepository.findById(email);
+            System.out.println(userAccountVwRepository.findById(email));
+            Optional<UserAccountVw> record = userAccountVwRepository.findById(email);
 
             if (record.get().getLoginVwEmail().equals(email) && record.get().getLoginVwPassword().equals(password)) {
                 System.out.println(record.get().getLoginVwEmail());
@@ -33,9 +33,6 @@ public class LoginService {
         } catch (Exception ex) {
             System.out.println(ex);
         }
-        System.out.println("Finally");
         return result;
     }
-
-//    public boolean EmailPresent(String )
 }

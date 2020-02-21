@@ -67,6 +67,12 @@ public class UserAccountVw {
     private String loginVwPersonalFlag;
 
     @Column
+    private String loginVwQCode;
+
+    @Column
+    private String loginVwQAnswer;
+
+    @Column
     private LocalDateTime loginVwCreatedTime;
 
     @Column

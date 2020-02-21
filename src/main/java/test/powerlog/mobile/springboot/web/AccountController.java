@@ -21,23 +21,25 @@ import java.util.Optional;
 public class AccountController {
 
     @Autowired
-    EmailService emailService;
-
-    @Autowired
     private UserAccountVwRepository userAccountVWRepository;
 
     @Autowired
     private LogLateMsrVwRepository logLateMsrVwRepository;
 
     @Autowired
-    private UserTbRepository userTbRepository;
+    LoginService loginService;
 
     @Autowired
-    LoginService loginService;
+    EmailPhoneCheckService emailPhoneCheckService;
+
+    @Autowired
+    EmailQuestionCheckService emailQuestionCheckService;
 
     @Autowired
     SignUpService signUpService;
 
+    @Autowired
+    ResetPasswordService resetPasswordService;
 
     @PostMapping(value = "/login")
     public HashMap<String, Object> Login(@RequestBody UserAccountDto userAccountDto) throws JsonProcessingException {
@@ -52,24 +54,27 @@ public class AccountController {
 //            logLateMsrVwRepository.findAllByLgLateMsrVwEmail(email);
             //아이디(이메일)이 존재하지 않는 경우 여기서 catch로 넘어가게 될 것임
             Boolean result = loginService.Login(email, password);
-            resultMap.put("received_password", userAccountDto.getPassword());
-            resultMap.put("received_email", userAccountDto.getEmail());
+//            resultMap.put("received_password", userAccountDto.getPassword());
+//            resultMap.put("received_email", userAccountDto.getEmail());
             resultMap.put("name", userAccountVWRepository.findById(email).get().getLoginVwName());
             resultMap.put("result", logLateMsrVwRepository.findAllByLgLateMsrVwEmail(userAccountDto.getEmail()));
-            resultMap.put("match", result.toString());
+            resultMap.put("match", result);
+            resultMap.put("error", null);
         }
         // 아이디가 아예 존재하지 않는 경우
         catch(Exception ex){
-            resultMap.put("received_password", userAccountDto.getPassword());
-            resultMap.put("received_email", userAccountDto.getEmail());
+//            resultMap.put("received_password", userAccountDto.getPassword());
+//            resultMap.put("received_email", userAccountDto.getEmail());
             resultMap.put("name", null);
-            resultMap.put("match", "false");
+            resultMap.put("result", null);
+            resultMap.put("match", false);
+            resultMap.put("error", ex.toString());
         }
         return resultMap;
     }
 
-    @PostMapping(value = "/checkEmail")
-    public HashMap<String, Object> CheckEmail(@RequestBody UserAccountDto userAccountDto) throws JsonProcessingException {
+    @PostMapping(value = "/signUpCheckEmail")
+    public HashMap<String, Object> SignUpCheckEmail(@RequestBody UserAccountDto userAccountDto) throws JsonProcessingException {
         HashMap<String, Object> resultMap = new HashMap();
         String id = userAccountDto.getEmail();
 
@@ -77,19 +82,21 @@ public class AccountController {
         try{
             System.out.println(userAccountVWRepository.findById(id).get().getLoginVwEmail());
             //같은 아이디를 찾을 수 없다면 여기서 catch로 넘어가게 될 것임
-            resultMap.put("receivedEmail", userAccountDto.getEmail());
+//            resultMap.put("receivedEmail", userAccountDto.getEmail());
             resultMap.put("emailPresent", true);
+            resultMap.put("error", null);
         }
         // 중복 아이디가 없는 경우
         catch(Exception ex){
-            resultMap.put("receivedEmail", userAccountDto.getEmail());
+//            resultMap.put("receivedEmail", userAccountDto.getEmail());
             resultMap.put("emailPresent", false);
+            resultMap.put("error", ex.toString());
         }
         return resultMap;
     }
 
-    @PostMapping(value = "/sendMsg")
-    public HashMap<String, Object> SendMsg(@RequestBody UserAccountDto userAccountDto) throws JsonProcessingException {
+    @PostMapping(value = "/signUpSendMsg")
+    public HashMap<String, Object> SignUpSendMsg(@RequestBody UserAccountDto userAccountDto) throws JsonProcessingException {
         HashMap<String, Object> tmpMap = new HashMap();
         HashMap<String, Object> resultMap = new HashMap();
         SendMsgService_New sendMsgService_new = new SendMsgService_New();
@@ -102,6 +109,7 @@ public class AccountController {
             userAccountVWRepository.findByLoginVwPhone(phone).getLoginVwPhone();
             resultMap.put("phonePresent", true);
             resultMap.put("verificationNum", randNum);
+            resultMap.put("error", "isPresentError");
         }
         catch(Exception ex){
             System.out.println(ex);
@@ -118,6 +126,7 @@ public class AccountController {
 
             resultMap.put("phonePresent", false);
             resultMap.put("verificationNum", randNum);
+            resultMap.put("error", null);
         }
         return resultMap;
     }
@@ -148,80 +157,99 @@ public class AccountController {
         try{
             String findById = userAccountVWRepository.findById(userAccountDto.getEmail()).get().getLoginVwEmail();
             resultMap.put("findById", findById);
-            resultMap.put("result", "true");
+            resultMap.put("result", true);
+            resultMap.put("error", null);
         }
         catch(Exception ex){
             resultMap.put("findById", ex);
-            resultMap.put("result", "false");
+            resultMap.put("result", false);
+            resultMap.put("error", ex.toString());
         }
 
         return resultMap;
     }
 
-    @PostMapping(value = "/sendMail")
-    public SignUpDto SignUp(@RequestBody EmailDto emailDto) throws JsonProcessingException {
-        SignUpDto signupDto = new SignUpDto();
-        HashMap<String, Object> resultMap = new HashMap();
-
-        try{
-            Optional<UserTb> signUpDto = userTbRepository.findById(emailDto.getRecipient());
-        }
-        catch (Exception ex){
-            System.out.println(ex);
-        }
-        try{
-            emailService.sendMail(emailDto);
-        }
-        catch(Exception ex){
-            resultMap.put("findById", ex);
-            resultMap.put("result", "false");
-        }
-
-        return signupDto;
-    }
-
-    @PostMapping(value = "/checkEmPhoneNum")
-    public HashMap<String, Object> CheckEmPhoneNum(@RequestBody UserAccountDto userAccountDto) throws JsonProcessingException {
+    @PostMapping(value = "/resetCheckEmailPhone")
+    public HashMap<String, Object> ResetCheckEmailPhone(@RequestBody UserAccountDto userAccountDto) throws JsonProcessingException {
 
         HashMap<String, Object> resultMap = new HashMap();
         HashMap<String, Object> tmpMap = new HashMap();
         NumberGen numberGen = new NumberGen();
+        ObjectMapper mapper = new ObjectMapper();
         SendMsgService_New sendMsgService_new = new SendMsgService_New();
-        EmailPhoneCheckService emailPhoneCheckService = new EmailPhoneCheckService();
 
         String phone = userAccountDto.getPhone();
         String email = userAccountDto.getEmail();
-        ObjectMapper mapper = new ObjectMapper();
         String[] numbers = {"99999999999"};
         String randNum =  numberGen.four_digits(4, 1);
+
         try{
-            userAccountVWRepository.findById(email).isPresent();
-            if(emailPhoneCheckService.emailPhoneCheck(email, phone) == true){
-                numbers[0] = phone;
-                tmpMap.put("type", "SMS");
-                tmpMap.put("from", "01050055438");
-                tmpMap.put("to", numbers);
-                tmpMap.put("content", "인증번호 [" + randNum + "] 숫자 4자리를 입력해주세요 - 파워로그 모바일");
-                String json = mapper.writeValueAsString(tmpMap);
+            Boolean result = emailPhoneCheckService.emailPhoneCheck(email, phone);
 
-                sendMsgService_new.NewSend("https://api-sens.ncloud.com/v1/sms/services/ncp:sms:kr:258080742855:testpowerlog/messages", json);
+            numbers[0] = phone;
+            tmpMap.put("type", "SMS");
+            tmpMap.put("from", "01050055438");
+            tmpMap.put("to", numbers);
+            tmpMap.put("content", "인증번호 [" + randNum + "] 숫자 4자리를 입력해주세요 - 파워로그 모바일");
+            String json = mapper.writeValueAsString(tmpMap);
 
-                resultMap.put("phonePresent", true);
-                resultMap.put("verificationNum", randNum);
-                resultMap.put("match", true);
-                resultMap.put("error", null);
-            }
-            else{
-                resultMap.put("phonePresent", true);
-                resultMap.put("verificationNum", randNum);
-                resultMap.put("match", false);
-                resultMap.put("error", null);
-            }
+            sendMsgService_new.NewSend("https://api-sens.ncloud.com/v1/sms/services/ncp:sms:kr:258080742855:testpowerlog/messages", json);
+
+            resultMap.put("verificationNum", randNum);
+            resultMap.put("match", result);
+            resultMap.put("error", null);
         }
         catch(Exception ex){
-            resultMap.put("phonePresent", false);
             resultMap.put("verificationNum", randNum);
             resultMap.put("match", false);
+            resultMap.put("error", ex.toString());
+            System.out.println(ex);
+        }
+        return resultMap;
+    }
+
+    @PostMapping(value = "/resetCheckEmailQuestion")
+    public HashMap<String, Object> ResetCheckEmailQuestion(@RequestBody UserAccountDto userAccountDto) throws JsonProcessingException {
+
+        HashMap<String, Object> resultMap = new HashMap();
+        NumberGen numberGen = new NumberGen();
+
+        String email = userAccountDto.getEmail();
+        String questionCode = userAccountDto.getQuestionCode();
+        String questionAnswer = userAccountDto.getQuestionAnswer();
+        String randNum =  numberGen.four_digits(12, 1);
+
+        try{
+            Boolean result = emailQuestionCheckService.emailQuestionCheck(email,questionCode, questionAnswer, randNum);
+            resultMap.put("verificationNum", randNum);
+            resultMap.put("match", result);
+            resultMap.put("error", null);
+        }
+        catch(Exception ex){
+            resultMap.put("verificationNum", randNum);
+            resultMap.put("match", false);
+            resultMap.put("error", ex.toString());
+            System.out.println(ex);
+        }
+        return resultMap;
+    }
+
+    @PostMapping(value = "/resetPassword")
+    public HashMap<String, Object> ResetPassword(@RequestBody UserAccountDto userAccountDto) throws JsonProcessingException {
+
+        HashMap<String, Object> resultMap = new HashMap();
+
+        String email = userAccountDto.getEmail();
+        String password = userAccountDto.getPassword();
+
+        try{
+            Boolean result = resetPasswordService.ResetPassword(email, password);
+            resultMap.put("completed", result);
+            resultMap.put("error", null);
+        }
+        catch(Exception ex){
+//            resultMap.put("verificationNum", randNum);
+            resultMap.put("completed", false);
             resultMap.put("error", ex.toString());
             System.out.println(ex);
         }
@@ -236,5 +264,27 @@ public class AccountController {
     @GetMapping("/delete")
     public void delete(String id) {
         userAccountVWRepository.deleteById(id);
+
+        //    @PostMapping(value = "/resetSendMail") // 얘는 서비스로 옮겨야 한다.
+//    public SignUpDto ResetSendMail(@RequestBody EmailDto emailDto) throws JsonProcessingException {
+//        SignUpDto signupDto = new SignUpDto();
+//        HashMap<String, Object> resultMap = new HashMap();
+//
+//        try{
+//            Optional<UserTb> signUpDto = userTbRepository.findById(emailDto.getRecipient());
+//        }
+//        catch (Exception ex){
+//            System.out.println(ex);
+//        }
+//        try{
+//            emailService.sendMail(emailDto);
+//        }
+//        catch(Exception ex){
+//            resultMap.put("findById", ex);
+//            resultMap.put("result", "false");
+//        }
+//
+//        return signupDto;
+//    }
     }
 }

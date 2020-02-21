@@ -11,15 +11,16 @@ import java.util.Optional;
 public class EmailPhoneCheckService {
 
     @Autowired
-    private UserAccountVwRepository userAccountVWRepository;
+    private UserAccountVwRepository userAccountVwRepository;
 
     /*로그인 요청 처리*/
     public boolean emailPhoneCheck(String email, String phone) {
         boolean result = false;
-//        System.out.println(userAccountRepository.findById(email).get().getM_login_vw_email());
+        System.out.println(email + phone);
+//        System.out.println(userAccountVWRepository.findById(email).get().getLoginVwEmail());
         try {
-            System.out.println(userAccountVWRepository.findById(email));
-            Optional<UserAccountVw> record = userAccountVWRepository.findById(email);
+            System.out.println(userAccountVwRepository.findById(email));
+            Optional<UserAccountVw> record = userAccountVwRepository.findById(email);
 
             if (record.get().getLoginVwEmail().equals(email) && record.get().getLoginVwPhone().equals(phone)) {
                 System.out.println(record.get().getLoginVwEmail());
@@ -36,6 +37,4 @@ public class EmailPhoneCheckService {
         System.out.println("EmailPhoneCheckDone");
         return result;
     }
-
-//    public boolean EmailPresent(String )
 }
