@@ -22,7 +22,7 @@ public class ResetPasswordService {
 
     @Autowired
     private EmailService emailService;
-    
+
     @Autowired
     private SignUpService signUpService;
 
@@ -39,16 +39,11 @@ public class ResetPasswordService {
                     .verification(record.get().getUVerification()).phone(record.get().getUPhone())
                     .createdTime(record.get().getUCreatedTime()).updatedTime(record.get().getUUpdatedTime()).career(record.get().getUCareer()).build();
             signUpService.Signup(signUpDto); // save 실행
-            if (record.get().getUEmail().equals(email)) {
                 System.out.println(record.get().getUEmail());
                 signUpService.Signup(signUpDto); // save 실행
                 System.out.println("Correct");
                 result = true;
-            } else {
-                System.out.println(record.get().getUEmail());
-                System.out.println("Error");
-                result = false;
-            }//            return (record.get().getId() == testProductDto.getId() && record.get().getPassword() == testProductDto.getPassword()) ? true: false
+//                return (record.get().getId() == testProductDto.getId() && record.get().getPassword() == testProductDto.getPassword()) ? true: false
         } catch (Exception ex) {
             System.out.println(ex);
         }

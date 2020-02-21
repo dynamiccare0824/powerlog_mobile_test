@@ -185,16 +185,16 @@ public class AccountController {
 
         try{
             Boolean result = emailPhoneCheckService.emailPhoneCheck(email, phone);
+            if(result){
+                numbers[0] = phone;
+                tmpMap.put("type", "SMS");
+                tmpMap.put("from", "01050055438");
+                tmpMap.put("to", numbers);
+                tmpMap.put("content", "인증번호 [" + randNum + "] 숫자 4자리를 입력해주세요 - 파워로그 모바일");
+                String json = mapper.writeValueAsString(tmpMap);
 
-            numbers[0] = phone;
-            tmpMap.put("type", "SMS");
-            tmpMap.put("from", "01050055438");
-            tmpMap.put("to", numbers);
-            tmpMap.put("content", "인증번호 [" + randNum + "] 숫자 4자리를 입력해주세요 - 파워로그 모바일");
-            String json = mapper.writeValueAsString(tmpMap);
-
-            sendMsgService_new.NewSend("https://api-sens.ncloud.com/v1/sms/services/ncp:sms:kr:258080742855:testpowerlog/messages", json);
-
+                sendMsgService_new.NewSend("https://api-sens.ncloud.com/v1/sms/services/ncp:sms:kr:258080742855:testpowerlog/messages", json);
+            }
             resultMap.put("verificationNum", randNum);
             resultMap.put("match", result);
             resultMap.put("error", null);
@@ -221,12 +221,12 @@ public class AccountController {
 
         try{
             Boolean result = emailQuestionCheckService.emailQuestionCheck(email,questionCode, questionAnswer, randNum);
-            resultMap.put("verificationNum", randNum);
+            resultMap.put("emailPresent", true);
             resultMap.put("match", result);
             resultMap.put("error", null);
         }
         catch(Exception ex){
-            resultMap.put("verificationNum", randNum);
+            resultMap.put("emailPresent", null);
             resultMap.put("match", false);
             resultMap.put("error", ex.toString());
             System.out.println(ex);
