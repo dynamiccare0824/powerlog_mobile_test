@@ -3,6 +3,7 @@ package test.powerlog.mobile.springboot.web;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.h2.engine.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import test.powerlog.mobile.springboot.domain.products.*;
@@ -177,6 +178,54 @@ public class AccountController {
         }
 
         return signupDto;
+    }
+
+    @PostMapping(value = "/checkEmPhoneNum")
+    public HashMap<String, Object> CheckEmPhoneNum(@RequestBody UserAccountDto userAccountDto) throws JsonProcessingException {
+
+        HashMap<String, Object> resultMap = new HashMap();
+        HashMap<String, Object> tmpMap = new HashMap();
+        NumberGen numberGen = new NumberGen();
+        SendMsgService_New sendMsgService_new = new SendMsgService_New();
+        EmailPhoneCheckService emailPhoneCheckService = new EmailPhoneCheckService();
+
+        String phone = userAccountDto.getPhone();
+        String email = userAccountDto.getEmail();
+        ObjectMapper mapper = new ObjectMapper();
+        String[] numbers = {"99999999999"};
+        String randNum =  numberGen.four_digits(4, 1);
+        try{
+            userAccountVWRepository.findById(email).isPresent();
+            if(emailPhoneCheckService.emailPhoneCheck(email, phone) == true){
+                numbers[0] = phone;
+                tmpMap.put("type", "SMS");
+                tmpMap.put("from", "01050055438");
+                tmpMap.put("to", numbers);
+                tmpMap.put("content", "인증번호 [" + randNum + "] 숫자 4자리를 입력해주세요 - 파워로그 모바일");
+                String json = mapper.writeValueAsString(tmpMap);
+
+                sendMsgService_new.NewSend("https://api-sens.ncloud.com/v1/sms/services/ncp:sms:kr:258080742855:testpowerlog/messages", json);
+
+                resultMap.put("phonePresent", true);
+                resultMap.put("verificationNum", randNum);
+                resultMap.put("match", true);
+                resultMap.put("error", null);
+            }
+            else{
+                resultMap.put("phonePresent", true);
+                resultMap.put("verificationNum", randNum);
+                resultMap.put("match", false);
+                resultMap.put("error", null);
+            }
+        }
+        catch(Exception ex){
+            resultMap.put("phonePresent", false);
+            resultMap.put("verificationNum", randNum);
+            resultMap.put("match", false);
+            resultMap.put("error", ex.toString());
+            System.out.println(ex);
+        }
+        return resultMap;
     }
 
     @GetMapping("/create")
