@@ -1,23 +1,25 @@
-package test.powerlog.mobile.springboot.web;
+package test.powerlog.mobile.springboot.web.controller;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.h2.engine.User;
+import io.swagger.annotations.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import test.powerlog.mobile.springboot.domain.products.*;
-import test.powerlog.mobile.springboot.web.dto.EmailDto;
 import test.powerlog.mobile.springboot.service.*;
 import test.powerlog.mobile.springboot.web.dto.LogLateMsrDto;
 import test.powerlog.mobile.springboot.web.dto.SignUpDto;
 import test.powerlog.mobile.springboot.web.dto.UserAccountDto;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
 
+@Api(tags = {"1. UserAccount"})
+@RequiredArgsConstructor
 @RestController
+@RequestMapping("/v1")
 public class AccountController {
 
     @Autowired
@@ -53,11 +55,10 @@ public class AccountController {
     @Autowired
     DeleteAccountService deleteAccountService;
 
+    @ApiOperation(value = "회원 로그인", notes = "이메일 아이디와 비밀번호를 받아 로그인한다.")
     @PostMapping(value = "/login")
-    public HashMap<String, Object> Login(@RequestBody UserAccountDto userAccountDto) throws JsonProcessingException {
+    public HashMap<String, Object> Login(@RequestParam String email, @RequestParam String password) throws JsonProcessingException {
         HashMap<String, Object> resultMap = new HashMap();
-        String email = userAccountDto.getEmail();
-        String password =userAccountDto.getPassword();
         LogLateMsrDto logLateMsrDto = new LogLateMsrDto();
         try{
             // match 경우 있거나, 아이디는 존재하는데 비밀번호 틀린 경우
@@ -65,7 +66,7 @@ public class AccountController {
             //아이디(이메일)이 존재하지 않는 경우 여기서 catch로 넘어가게 될 것임
             Boolean result = loginService.Login(email, password);
             resultMap.put("name", userAccountVWRepository.findById(email).get().getLoginVwName());
-            resultMap.put("result", logLateMsrVwRepository.findAllByLgLateMsrVwEmail(userAccountDto.getEmail()));
+            resultMap.put("result", logLateMsrVwRepository.findAllByLgLateMsrVwEmail(email));
             resultMap.put("match", result);
             resultMap.put("error", null);
         }
@@ -141,8 +142,7 @@ public class AccountController {
         HashMap<String, Object> resultMap = new HashMap();
         NumberGen numberGen = new NumberGen();
 
-        java.util.Date utilDate = new java.util.Date();
-        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+        java.time.LocalDateTime localDateTime = LocalDateTime.now();
         String tmpUid = numberGen.four_digits(8, 1);
         int careerY = userAccountDto.getCareer_year();
         int careerM = userAccountDto.getCareer_month();
@@ -155,7 +155,7 @@ public class AccountController {
         SignUpDto signUpDto  = SignUpDto.builder().email(userAccountDto.getEmail()).password(userAccountDto.getPassword()).uid(tmpUid).name(userAccountDto.getName())
                 .gender(userAccountDto.getGender()).birth(userAccountDto.getBirth()).height(userAccountDto.getHeight()).weight(userAccountDto.getWeight())
                 .agreeFlag(userAccountDto.getAgreeFlag()).personalFlag(userAccountDto.getAgreeFlag()).shapeCode(userAccountDto.getShapeCode()).qAnswer(userAccountDto.getQuestionAnswer()).qCode(userAccountDto.getQuestionCode())
-                .verification(userAccountDto.getVerification()).phone(userAccountDto.getPhone()).createdTime(sqlDate).updatedTime(sqlDate).career(careerM + careerY * 12).build();
+                .verification(userAccountDto.getVerification()).phone(userAccountDto.getPhone()).createdTime(localDateTime).updatedTime(localDateTime).career(careerM + careerY * 12).build();
         signUpService.Signup(signUpDto); // save 실행
 
         try{
@@ -268,6 +268,7 @@ public class AccountController {
         String password = userAccountDto.getPassword();
 
         try{
+            System.out.println(password + "1");
             Boolean result = resetPasswordService.ResetPassword(email, password);
             resultMap.put("updated", result);
             resultMap.put("error", null);

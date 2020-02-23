@@ -7,6 +7,7 @@ import test.powerlog.mobile.springboot.domain.products.UserTb;
 import test.powerlog.mobile.springboot.domain.products.UserTbRepository;
 import test.powerlog.mobile.springboot.web.dto.SignUpDto;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -28,6 +29,7 @@ public class ResetUidService {
     public boolean ResetUid(String email, String randNum) {
         boolean result = false;
         try {
+            LocalDateTime localDateTime = LocalDateTime.now();
 
             Optional<UserTb> record = userTbRepository.findById(email);
 
@@ -35,7 +37,7 @@ public class ResetUidService {
                     .gender(record.get().getUGender()).birth(record.get().getUBirth()).height(record.get().getUHeight()).weight(record.get().getUWeight())
                     .agreeFlag(record.get().getUAgreeFlag()).personalFlag(record.get().getUAgreeFlag()).shapeCode(record.get().getUShapeCode()).qAnswer(record.get().getUQAnswer()).qCode(record.get().getUQCode())
                     .verification(record.get().getUVerification()).phone(record.get().getUPhone())
-                    .createdTime(record.get().getUCreatedTime()).updatedTime(record.get().getUUpdatedTime()).career(record.get().getUCareer()).build();
+                    .createdTime(record.get().getUCreatedTime()).updatedTime(localDateTime).career(record.get().getUCareer()).build();
             signUpService.Signup(signUpDto); // save 실행
             System.out.println(record.get().getUEmail());
             signUpService.Signup(signUpDto); // save 실행

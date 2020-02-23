@@ -6,8 +6,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.tomcat.jni.Local;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -59,10 +61,10 @@ public class UserTb {
     private String uVerification;
 
     @Column
-    private Date uCreatedTime;
+    private LocalDateTime uCreatedTime;
 
     @Column
-    private Date uUpdatedTime;
+    private LocalDateTime uUpdatedTime;
 
     @Column
     private String uQCode;
@@ -72,7 +74,7 @@ public class UserTb {
 
     @Builder
     public UserTb(String email, String password, String uid, String name, String gender, String birth, int height, int weight,
-                  String agreeFlag, String personalFlag, String shapeCode, String verification, Date createdTime, Date updatedTime, String phone, int career, String qCode, String qAnswer) {
+                  String agreeFlag, String personalFlag, String shapeCode, String verification, LocalDateTime createdTime, LocalDateTime updatedTime, String phone, int career, String qCode, String qAnswer) {
         this.uEmail = email;
         this.uPassword = password;
         this.uUid = uid;

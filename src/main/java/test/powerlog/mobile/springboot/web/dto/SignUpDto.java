@@ -3,8 +3,10 @@ package test.powerlog.mobile.springboot.web.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.tomcat.jni.Local;
 import test.powerlog.mobile.springboot.domain.products.UserTb;
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -25,15 +27,15 @@ public class SignUpDto {
     private String verification;
     private String agreeFlag;
     private String personalFlag;
-    private Date createdTime;
-    private Date updatedTime;
+    private LocalDateTime createdTime;
+    private LocalDateTime updatedTime;
     private String qCode;
     private String qAnswer;
 
 
     @Builder
     public SignUpDto(String email, String password, String uid, String name, String gender, String birth, int height, int weight,
-                     String agreeFlag, String personalFlag, String shapeCode, String verification, Date createdTime, Date updatedTime, String phone, int career, String qCode, String qAnswer) {
+                     String agreeFlag, String personalFlag, String shapeCode, String verification, LocalDateTime createdTime, LocalDateTime updatedTime, String phone, int career, String qCode, String qAnswer) {
         this.email = email;
         this.password = password;
         this.uid = uid;
