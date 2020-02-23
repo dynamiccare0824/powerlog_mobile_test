@@ -370,7 +370,7 @@ public class AccountController {
         return resultMap;
     }
 
-    @PostMapping(value = "/resetPhone")
+    @PutMapping(value = "/reset/{phone}")
     //중복검사 하는 것으로 만들어야 한다.
     public HashMap<String, Object> ResetPhone(@RequestBody UserAccountDto userAccountDto) throws JsonProcessingException {
         HashMap<String, Object> resultMap = new HashMap();

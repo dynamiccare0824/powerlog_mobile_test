@@ -32,7 +32,7 @@ public class ResetShapeCodeService {
             LocalDateTime localDateTime = LocalDateTime.now();
             Optional<UserTb> record = userTbRepository.findById(email);
 
-            SignUpDto signUpDto  = SignUpDto.builder().email(record.get().getUEmail()).password(record.get().getUEmail()).uid(record.get().getUUid()).name(record.get().getUName())
+            SignUpDto signUpDto  = SignUpDto.builder().email(record.get().getUEmail()).password(record.get().getUPassword()).uid(record.get().getUUid()).name(record.get().getUName())
                     .gender(record.get().getUGender()).birth(record.get().getUBirth()).height(record.get().getUHeight()).weight(record.get().getUWeight())
                     .agreeFlag(record.get().getUAgreeFlag()).personalFlag(record.get().getUAgreeFlag()).shapeCode(shapeCode).qAnswer(record.get().getUQAnswer()).qCode(record.get().getUQCode())
                     .verification(record.get().getUVerification()).phone(record.get().getUPhone())
