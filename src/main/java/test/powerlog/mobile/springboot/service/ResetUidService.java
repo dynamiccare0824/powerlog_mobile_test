@@ -31,7 +31,7 @@ public class ResetUidService {
 
             Optional<UserTb> record = userTbRepository.findById(email);
 
-            SignUpDto signUpDto  = SignUpDto.builder().email(record.get().getUEmail()).password(record.get().getUEmail()).uid(randNum).name(record.get().getUName())
+            SignUpDto signUpDto  = SignUpDto.builder().email(record.get().getUEmail()).password(record.get().getUPassword()).uid(randNum).name(record.get().getUName())
                     .gender(record.get().getUGender()).birth(record.get().getUBirth()).height(record.get().getUHeight()).weight(record.get().getUWeight())
                     .agreeFlag(record.get().getUAgreeFlag()).personalFlag(record.get().getUAgreeFlag()).shapeCode(record.get().getUShapeCode()).qAnswer(record.get().getUQAnswer()).qCode(record.get().getUQCode())
                     .verification(record.get().getUVerification()).phone(record.get().getUPhone())

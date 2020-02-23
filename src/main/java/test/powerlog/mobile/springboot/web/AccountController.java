@@ -418,36 +418,4 @@ public class AccountController {
         }
         return resultMap;
     }
-
-    @GetMapping("/create")
-    public void create(UserAccountVw product) {
-        userAccountVWRepository.save(product);
-    }
-
-    @GetMapping("/delete")
-    public void delete(String id) {
-        userAccountVWRepository.deleteById(id);
-
-        //    @PostMapping(value = "/resetSendMail") // 얘는 서비스로 옮겨야 한다.
-//    public SignUpDto ResetSendMail(@RequestBody EmailDto emailDto) throws JsonProcessingException {
-//        SignUpDto signupDto = new SignUpDto();
-//        HashMap<String, Object> resultMap = new HashMap();
-//
-//        try{
-//            Optional<UserTb> signUpDto = userTbRepository.findById(emailDto.getRecipient());
-//        }
-//        catch (Exception ex){
-//            System.out.println(ex);
-//        }
-//        try{
-//            emailService.sendMail(emailDto);
-//        }
-//        catch(Exception ex){
-//            resultMap.put("findById", ex);
-//            resultMap.put("result", "false");
-//        }
-//
-//        return signupDto;
-//    }
-    }
 }
