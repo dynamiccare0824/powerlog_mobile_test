@@ -13,7 +13,6 @@ public class EmailPhoneCheckService {
     @Autowired
     private UserAccountVwRepository userAccountVwRepository;
 
-    /*로그인 요청 처리*/
     public boolean emailPhoneCheck(String email, String phone) {
         boolean result = false;
         System.out.println(email + phone);
