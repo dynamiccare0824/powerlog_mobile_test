@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-public class ResetPhoneService {
+public class UpdatePhoneService {
     @Autowired
     private UserTbRepository userTbRepository;
 
@@ -18,7 +18,7 @@ public class ResetPhoneService {
     private SignUpService signUpService;
 
     /*로그인 요청 처리*/
-    public boolean ResetPhone(String email, String phone) {
+    public boolean UpdatePhone(String email, String phone) {
         boolean result = false;
         try {
             LocalDateTime localDateTime = LocalDateTime.now();

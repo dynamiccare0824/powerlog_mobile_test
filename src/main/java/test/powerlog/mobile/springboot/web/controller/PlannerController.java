@@ -46,7 +46,7 @@ public class PlannerController {
     ResetShapeCodeService resetShapeCodeService;
 
     @Autowired
-    ResetPhoneService resetPhoneService;
+    UpdatePhoneService updatePhoneService;
 
     @Autowired
     DeleteAccountService deleteAccountService;

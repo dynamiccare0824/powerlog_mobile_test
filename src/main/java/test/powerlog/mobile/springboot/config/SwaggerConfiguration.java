@@ -20,7 +20,7 @@ public class SwaggerConfiguration {
                 .paths(PathSelectors.any())//v1 pagackger를 controller 안에 따로 만들면 거기 있는 것만 가져올 수도 있음
                 //이 때 코드는 PathSelectors.ant("/v1/**") 당연히 v1 앞은 basepackage 패키지가 들어감
                 .build()
-                .useDefaultResponseMessages(false); // 기본으로 세팅되는 200,401,403,404 메시지를 표시 하지 않음
+                .useDefaultResponseMessages(true); // 기본으로 세팅되는 200,401,403,404 메시지를 표시 하지 않음
     }
 
     private ApiInfo swaggerInfo() {

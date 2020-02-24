@@ -1,11 +1,14 @@
 package test.powerlog.mobile.springboot.web.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import java.time.LocalDateTime;
 
 @Getter
+@ApiModel
 @RequiredArgsConstructor
 public class UserAccountDto {
 
@@ -26,7 +29,10 @@ public class UserAccountDto {
     private String personalFlag;
     private String questionCode;
     private String questionAnswer;
+
+    @ApiModelProperty(value = "phone", required = false, hidden = true)
     private LocalDateTime createdTime;
+
     private LocalDateTime updatedTime;
 
 
