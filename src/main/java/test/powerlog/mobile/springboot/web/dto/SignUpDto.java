@@ -3,9 +3,8 @@ package test.powerlog.mobile.springboot.web.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.apache.tomcat.jni.Local;
-import test.powerlog.mobile.springboot.domain.products.UserTb;
-import java.sql.Date;
+import test.powerlog.mobile.springboot.domain.table.UserTb;
+
 import java.time.LocalDateTime;
 
 @Getter

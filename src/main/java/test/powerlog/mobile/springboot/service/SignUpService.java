@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import test.powerlog.mobile.springboot.domain.products.UserTbRepository;
+import test.powerlog.mobile.springboot.domain.table.UserTbRepository;
 import test.powerlog.mobile.springboot.web.dto.SignUpDto;
 
 @RequiredArgsConstructor

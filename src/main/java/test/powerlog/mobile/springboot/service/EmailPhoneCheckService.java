@@ -2,8 +2,8 @@ package test.powerlog.mobile.springboot.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import test.powerlog.mobile.springboot.domain.products.UserAccountVw;
-import test.powerlog.mobile.springboot.domain.products.UserAccountVwRepository;
+import test.powerlog.mobile.springboot.domain.view.UserAccountVw;
+import test.powerlog.mobile.springboot.domain.view.UserAccountVwRepository;
 
 import java.util.Optional;
 

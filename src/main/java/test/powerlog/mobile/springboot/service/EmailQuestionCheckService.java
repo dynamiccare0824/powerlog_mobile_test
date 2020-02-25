@@ -2,9 +2,9 @@ package test.powerlog.mobile.springboot.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import test.powerlog.mobile.springboot.domain.products.UserAccountVw;
-import test.powerlog.mobile.springboot.domain.products.UserAccountVwRepository;
-import test.powerlog.mobile.springboot.web.dto.EmailDto;
+import test.powerlog.mobile.springboot.domain.view.UserAccountVw;
+import test.powerlog.mobile.springboot.domain.view.UserAccountVwRepository;
+import test.powerlog.mobile.springboot.web.dto.EmailFormDto;
 
 import java.util.Optional;
 
@@ -33,13 +33,13 @@ public class EmailQuestionCheckService {
                 System.out.println(record.get().getLoginVwEmail());
                 System.out.println("Correct");
 
-                EmailDto emailDto = new EmailDto();
-                emailDto.setSender("noreply.dynamiccare@gmail.com");
-                emailDto.setContent("파워로그 임시 비밀번호 " + number + " 입니다. \n로그인 후 비밀번호 재설정을 통해 비밀번호를 변경할 수 있습니다." +
+                EmailFormDto emailFormDto = new EmailFormDto();
+                emailFormDto.setSender("noreply.dynamiccare@gmail.com");
+                emailFormDto.setContent("파워로그 임시 비밀번호 " + number + " 입니다. \n로그인 후 비밀번호 재설정을 통해 비밀번호를 변경할 수 있습니다." +
                         "\n이 이메일 주소는 발신 전용 주소입니다. 회신이 불가능합니다." );
-                emailDto.setRecipient(email);
-                emailDto.setSubject("[파워로그] " + name + " 고객님, 안녕하세요! 발급된 임시 비밀번호를 확인하세요");
-                emailService.sendMail(emailDto);
+                emailFormDto.setRecipient(email);
+                emailFormDto.setSubject("[파워로그] " + name + " 고객님, 안녕하세요! 발급된 임시 비밀번호를 확인하세요");
+                emailService.sendMail(emailFormDto);
 
                 resetPasswordService.ResetPassword(email, number);
                 result = true;

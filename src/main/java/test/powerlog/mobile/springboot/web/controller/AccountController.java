@@ -7,10 +7,16 @@ import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import test.powerlog.mobile.springboot.domain.products.*;
+import test.powerlog.mobile.springboot.domain.view.LogLateMsrVw;
+import test.powerlog.mobile.springboot.domain.view.LogLateMsrVwRepository;
+import test.powerlog.mobile.springboot.domain.view.UserAccountVw;
+import test.powerlog.mobile.springboot.domain.view.UserAccountVwRepository;
 import test.powerlog.mobile.springboot.service.*;
-import test.powerlog.mobile.springboot.web.dto.*;
-import test.powerlog.mobile.springboot.web.response.SingleResult;
+import test.powerlog.mobile.springboot.web.dto.SignUpDto;
+import test.powerlog.mobile.springboot.web.dto.request.*;
+import test.powerlog.mobile.springboot.web.dto.response.BooleanResponseDto;
+import test.powerlog.mobile.springboot.web.dto.response.ListResult;
+import test.powerlog.mobile.springboot.web.dto.response.SingleResult;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -59,41 +65,33 @@ public class AccountController {
 
     @ApiOperation(value = "회원 로그인", notes = "이메일 아이디와 비밀번호를 받아 로그인한다.")
     @PostMapping(value = "/login")
-    public HashMap<String, Object> Login(@RequestBody UserAccountDto userAccountDto) throws JsonProcessingException {
+    public ListResult<LogLateMsrVw>Login(@RequestBody RequestEmailPwDto requestEmailPwDto) throws Exception {
         HashMap<String, Object> resultMap = new HashMap();
         LogLateMsrDto logLateMsrDto = new LogLateMsrDto();
+        String email = requestEmailPwDto.getEmail();
+        String password = requestEmailPwDto.getPassword();
         try{
-            // match 경우 있거나, 아이디는 존재하는데 비밀번호 틀린 경우
-            String email = userAccountDto.getEmail();
-            String password = userAccountDto.getPassword();
-
             //아이디(이메일)이 존재하지 않는 경우 여기서 catch로 넘어가게 될 것임
             Boolean result = loginService.Login(email, password);
-            resultMap.put("name", userAccountVWRepository.findById(email).get().getLoginVwName());
-            resultMap.put("result", logLateMsrVwRepository.findAllByLgLateMsrVwEmail(email));
-            resultMap.put("match", result);
-            resultMap.put("error", null);
+            return responseService.getListResult(logLateMsrVwRepository.findAllByLgLateMsrVwEmail(email));
         }
         // 아이디가 아예 존재하지 않는 경우
         catch(Exception ex){
-            resultMap.put("name", null);
-            resultMap.put("result", null);
-            resultMap.put("match", false);
-            resultMap.put("error", ex.toString());
+            return responseService.getListResult(logLateMsrVwRepository.findAllByLgLateMsrVwEmail(email));
         }
-        return resultMap;
     }
 
-    @ApiOperation(value = "이메일 중복 검사", notes = "(구)SignUpCheckEmail 회원가입 시, 이메일 아이디가 DB에 이미 존재하는지 여부를 검사한다.")
+    @ApiOperation(value = "이메일 중복 검사 (現)IsEmailPresent (前)SignUpCheckEmail", notes = "회원가입 시, 이메일 아이디가 DB에 이미 존재하는지 여부를 검사한다.")
     @PostMapping(value = "signup/dupcheck/email")
-    public SingleResult<Boolean> IfEmailPresent(@RequestBody EmailOnlyDto emailOnlyDto) throws JsonProcessingException {
-        HashMap<String, Object> resultMap = new HashMap();
-        String email = emailOnlyDto.getEmail();
+    public SingleResult<BooleanResponseDto> DupCheckEmail(@RequestBody AccountRequestDto accountRequestDto) throws JsonProcessingException {
+        String email = accountRequestDto.getEmail();
         if(userAccountVWRepository.findById(email).isPresent()) {
-            return responseService.getSingleResult(true);
+            BooleanResponseDto isPresentDto = BooleanResponseDto.builder().emailPresent(true).build();
+            return responseService.getSingleResult(isPresentDto);
         }
         else{
-            return responseService.getSingleResult(false);            }
+            BooleanResponseDto isPresentDto = BooleanResponseDto.builder().emailPresent(false).build();
+            return responseService.getSingleResult(isPresentDto);            }
     }
 
     @PostMapping(value = "signup/dupcheck/sendmsg")
@@ -104,7 +102,7 @@ public class AccountController {
         String phone = userAccountDto.getPhone();
         ObjectMapper mapper = new ObjectMapper();
         NumberGen numberGen = new NumberGen();
-        String randNum = numberGen.four_digits(4, 1);
+        String randNum = numberGen.Digits(4, 1);
         String[] numbers = {"99999999999"};
         try{
             userAccountVWRepository.findByLoginVwPhone(phone).getLoginVwPhone();
@@ -139,9 +137,9 @@ public class AccountController {
         NumberGen numberGen = new NumberGen();
 
         java.time.LocalDateTime localDateTime = LocalDateTime.now();
-        String tmpUid = numberGen.four_digits(8, 1);
-        int careerY = userAccountDto.getCareer_year();
-        int careerM = userAccountDto.getCareer_month();
+        String tmpUid = numberGen.Digits(8, 1);
+        int careerY = userAccountDto.getCareerYear();
+        int careerM = userAccountDto.getCareerMonth();
 
         System.out.println(userAccountDto.getQuestionCode());
         System.out.println(userAccountDto.getQuestionAnswer());
@@ -181,7 +179,7 @@ public class AccountController {
         String phone = userAccountDto.getPhone();
         String email = userAccountDto.getEmail();
         String[] numbers = {"99999999999"};
-        String randNum =  numberGen.four_digits(4, 1);
+        String randNum =  numberGen.Digits(4, 1);
 
         try{
             Boolean result = emailPhoneCheckService.emailPhoneCheck(email, phone);
@@ -217,7 +215,7 @@ public class AccountController {
         String email = userAccountDto.getEmail();
         String questionCode = userAccountDto.getQuestionCode();
         String questionAnswer = userAccountDto.getQuestionAnswer();
-        String randNum =  numberGen.four_digits(12, 1);
+        String randNum =  numberGen.Digits(12, 1);
 
         try{
             Boolean result = emailQuestionCheckService.emailQuestionCheck(email,questionCode, questionAnswer, randNum);
@@ -284,7 +282,7 @@ public class AccountController {
 
         String email = resetDto.getEmail();
         NumberGen numberGen = new NumberGen();
-        String randNum = numberGen.four_digits(10,1);
+        String randNum = numberGen.ComplicatedDigits(12,1);
 
         try{
             Boolean result = resetUidService.ResetUid(email, randNum);
@@ -329,7 +327,7 @@ public class AccountController {
         HashMap<String, Object> tmpMap = new HashMap();
         NumberGen numberGen = new NumberGen();
         String[] numbers = {"99999999999"};
-        String randNum =  numberGen.four_digits(4, 1);
+        String randNum =  numberGen.Digits(4, 1);
         String phone = resetDto.getPhone();
         ObjectMapper mapper = new ObjectMapper();
         SendMsgService_New sendMsgService_new = new SendMsgService_New();

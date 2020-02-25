@@ -2,7 +2,7 @@ package test.powerlog.mobile.springboot.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import test.powerlog.mobile.springboot.domain.products.UserTbRepository;
+import test.powerlog.mobile.springboot.domain.table.UserTbRepository;
 
 @Service
 public class DeleteAccountService {

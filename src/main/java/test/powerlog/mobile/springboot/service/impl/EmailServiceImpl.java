@@ -1,6 +1,6 @@
 package test.powerlog.mobile.springboot.service.impl;
 
-import test.powerlog.mobile.springboot.web.dto.EmailDto;
+import test.powerlog.mobile.springboot.web.dto.EmailFormDto;
 import test.powerlog.mobile.springboot.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -19,7 +19,7 @@ public class EmailServiceImpl implements EmailService {
     private JavaMailSender javaMailSender;
 
     @Override
-    public void sendMail(EmailDto email) throws MessagingException {
+    public void sendMail(EmailFormDto email) throws MessagingException {
         MimeMessage message = javaMailSender.createMimeMessage();
         message.setSubject(email.getSubject());
         message.setSender(new InternetAddress(email.getSender()));

@@ -1,9 +1,9 @@
 package test.powerlog.mobile.springboot.service;
 
 import org.springframework.stereotype.Service;
-import test.powerlog.mobile.springboot.web.response.CommonResult;
-import test.powerlog.mobile.springboot.web.response.ListResult;
-import test.powerlog.mobile.springboot.web.response.SingleResult;
+import test.powerlog.mobile.springboot.web.dto.response.CommonResult;
+import test.powerlog.mobile.springboot.web.dto.response.ListResult;
+import test.powerlog.mobile.springboot.web.dto.response.SingleResult;
 
 import java.util.List;
 
@@ -16,11 +16,11 @@ public class ResponseService {
         FAIL(-1, "api 요청 실패");
 
         int code;
-        String msg;
+        String message;
 
-        CommonResponse(int code, String msg) {
+        CommonResponse(int code, String message) {
             this.code = code;
-            this.msg = msg;
+            this.message = message;
         }
 
         public int getCode() {
@@ -28,7 +28,7 @@ public class ResponseService {
         }
 
         public String getMsg() {
-            return msg;
+            return message;
         }
     }
     // 단일건 결과를 처리하는 메소드
@@ -56,13 +56,13 @@ public class ResponseService {
         CommonResult result = new CommonResult();
         result.setSuccess(false);
         result.setCode(CommonResponse.FAIL.getCode());
-        result.setMsg(CommonResponse.FAIL.getMsg());
+        result.setMessage(CommonResponse.FAIL.getMsg());
         return result;
     }
     // 결과 모델에 api 요청 성공 데이터를 세팅해주는 메소드
     private void setSuccessResult(CommonResult result) {
         result.setSuccess(true);
         result.setCode(CommonResponse.SUCCESS.getCode());
-        result.setMsg(CommonResponse.SUCCESS.getMsg());
+        result.setMessage(CommonResponse.SUCCESS.getMsg());
     }
 }
