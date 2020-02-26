@@ -63,7 +63,7 @@ public class AccountController {
     @Autowired
     ResponseService responseService;
 
-    @ApiOperation(value = "회원 로그인", notes = "이메일 아이디와 비밀번호를 받아 로그인한다.")
+    @ApiOperation(value = "회원 로그인", notes = "이메일 아이디와 비밀번호를 받아 로그인한다!")
     @PostMapping(value = "/login")
     public ListResult<LogLateMsrVw>Login(@RequestBody RequestEmailPwDto requestEmailPwDto) throws Exception {
         HashMap<String, Object> resultMap = new HashMap();
