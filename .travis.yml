@@ -1,18 +1,18 @@
-  language: java
-  jdk:
-    - openjdk8
-  branches:
-    only:
-      -master
+language: java
+jdk:
+  - openjdk8
+branches:
+  only:
+    -master
 
-  #Travis CI 서버의 Home
-  cache:
-    directories:
-      - '$HOME/.m2/repository'
-      - '$HOME/.gradle'
-  script: "./gradlew clean build"
+#Travis CI 서버의 Home
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.gradle'
+script: "./gradlew clean build"
 
-  notifications:
-    email:
-      recipients:
-        - dynamiccare0824@gmail.com
+notifications:
+  email:
+    recipients:
+      - dynamiccare0824@gmail.com
