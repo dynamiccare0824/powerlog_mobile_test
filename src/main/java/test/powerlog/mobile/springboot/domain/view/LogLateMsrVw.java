@@ -28,4 +28,7 @@ public class LogLateMsrVw {
 
     @Column
     private String lgLateMsrVwXy;
+
+    @Column
+    private String lgLateMsrVwName;
 }
