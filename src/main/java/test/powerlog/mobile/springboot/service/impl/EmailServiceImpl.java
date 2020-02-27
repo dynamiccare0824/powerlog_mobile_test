@@ -15,9 +15,8 @@ import java.util.Date;
 @Service
 public class EmailServiceImpl implements EmailService {
 
-    @Autowired
+//    @Autowired
     private JavaMailSender javaMailSender;
-
     @Override
     public void sendMail(EmailFormDto email) throws MessagingException {
         MimeMessage message = javaMailSender.createMimeMessage();
