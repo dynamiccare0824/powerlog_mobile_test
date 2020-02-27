@@ -65,9 +65,6 @@ public class AccountController {
     ResponseService responseService;
 
     @Autowired
-    EmailService emailService;
-
-    @Autowired
     SendMsgService_New sendMsgService_new;
 
     @Autowired
