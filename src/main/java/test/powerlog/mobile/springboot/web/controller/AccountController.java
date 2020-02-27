@@ -81,7 +81,7 @@ public class AccountController {
         }
     }
 
-    @ApiOperation(value = "이메일 중복 검사 (現)IsEmailPresent (前)SignUpCheckEmail", notes = "회원가입 시, 이메일 아이디가 DB에 이미 존재하는지 여부를 검사한다.")
+    @ApiOperation(value = "이메일 중복 검사 (現)IsEmailPresent  (前)SignUpCheckEmail", notes = "회원가입 시, 이메일 아이디가 DB에 이미 존재하는지 여부를 검사한다.")
     @PostMapping(value = "signup/dupcheck/email")
     public SingleResult<BooleanResponseDto> DupCheckEmail(@RequestBody AccountRequestDto accountRequestDto) throws JsonProcessingException {
         String email = accountRequestDto.getEmail();
