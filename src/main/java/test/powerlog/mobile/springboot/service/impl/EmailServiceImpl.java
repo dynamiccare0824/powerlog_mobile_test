@@ -1,5 +1,6 @@
 package test.powerlog.mobile.springboot.service.impl;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import test.powerlog.mobile.springboot.web.dto.EmailFormDto;
 import test.powerlog.mobile.springboot.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,12 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Date;
 
+
+
 @Service
 public class EmailServiceImpl implements EmailService {
 
-    @Autowired
+
     private JavaMailSender javaMailSender;
 
     @Override
