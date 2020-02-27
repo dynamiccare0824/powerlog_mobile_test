@@ -1,11 +1,14 @@
 package test.powerlog.mobile.springboot.service;
 
+import org.springframework.stereotype.Service;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+@Service
 public class SendMsgService_New {
     public static String NewSend(String sendUrl, String jsonValue) throws IllegalStateException {
 

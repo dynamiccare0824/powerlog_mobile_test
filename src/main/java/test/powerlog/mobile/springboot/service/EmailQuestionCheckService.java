@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import test.powerlog.mobile.springboot.domain.view.UserAccountVw;
 import test.powerlog.mobile.springboot.domain.view.UserAccountVwRepository;
+import test.powerlog.mobile.springboot.service.impl.EmailServiceImpl;
 import test.powerlog.mobile.springboot.web.dto.EmailFormDto;
 
 import java.util.Optional;
@@ -15,7 +16,7 @@ public class EmailQuestionCheckService {
     private UserAccountVwRepository userAccountVwRepository;
 
     @Autowired
-    private EmailService emailService;
+    private EmailServiceImpl emailServiceImpl;
 
     @Autowired
     private ResetPasswordService resetPasswordService;
@@ -39,7 +40,7 @@ public class EmailQuestionCheckService {
                         "\n이 이메일 주소는 발신 전용 주소입니다. 회신이 불가능합니다." );
                 emailFormDto.setRecipient(email);
                 emailFormDto.setSubject("[파워로그] " + name + " 고객님, 안녕하세요! 발급된 임시 비밀번호를 확인하세요");
-                emailService.sendMail(emailFormDto);
+                emailServiceImpl.sendMail(emailFormDto);
 
                 resetPasswordService.ResetPassword(email, number);
                 result = true;

@@ -18,7 +18,7 @@ import java.util.Date;
 @Service
 public class EmailServiceImpl implements EmailService {
 
-
+    @Autowired
     private JavaMailSender javaMailSender;
 
     @Override
