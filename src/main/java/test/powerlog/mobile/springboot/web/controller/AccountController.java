@@ -206,31 +206,31 @@ public class AccountController {
         return resultMap;
     }
 
-    @PostMapping(value = "/validation/email-question")
-    public HashMap<String, Object> ValidateQuestionSendMail(@RequestBody UserAccountDto userAccountDto) throws JsonProcessingException {
-
-        HashMap<String, Object> resultMap = new HashMap();
-        NumberGen numberGen = new NumberGen();
-
-        String email = userAccountDto.getEmail();
-        String questionCode = userAccountDto.getQuestionCode();
-        String questionAnswer = userAccountDto.getQuestionAnswer();
-        String randNum =  numberGen.Digits(12, 1);
-
-        try{
-            Boolean result = emailQuestionCheckService.emailQuestionCheck(email,questionCode, questionAnswer, randNum);
-            resultMap.put("emailPresent", true);
-            resultMap.put("match", result);
-            resultMap.put("error", null);
-        }
-        catch(Exception ex){
-            resultMap.put("emailPresent", null);
-            resultMap.put("match", false);
-            resultMap.put("error", ex.toString());
-            System.out.println(ex);
-        }
-        return resultMap;
-    }
+//    @PostMapping(value = "/validation/email-question")
+//    public HashMap<String, Object> ValidateQuestionSendMail(@RequestBody UserAccountDto userAccountDto) throws JsonProcessingException {
+//
+//        HashMap<String, Object> resultMap = new HashMap();
+//        NumberGen numberGen = new NumberGen();
+//
+//        String email = userAccountDto.getEmail();
+//        String questionCode = userAccountDto.getQuestionCode();
+//        String questionAnswer = userAccountDto.getQuestionAnswer();
+//        String randNum =  numberGen.Digits(12, 1);
+//
+//        try{
+//            Boolean result = emailQuestionCheckService.emailQuestionCheck(email,questionCode, questionAnswer, randNum);
+//            resultMap.put("emailPresent", true);
+//            resultMap.put("match", result);
+//            resultMap.put("error", null);
+//        }
+//        catch(Exception ex){
+//            resultMap.put("emailPresent", null);
+//            resultMap.put("match", false);
+//            resultMap.put("error", ex.toString());
+//            System.out.println(ex);
+//        }
+//        return resultMap;
+//    }
 
     @PostMapping(value = "/validation/email-password")
     public HashMap<String, Object> ValidateAccount(@RequestBody ResetDto resetDto) throws JsonProcessingException {
