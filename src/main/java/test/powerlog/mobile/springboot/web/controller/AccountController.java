@@ -33,7 +33,6 @@ public class AccountController {
     @Autowired
     private LogLateMsrVwRepository logLateMsrVwRepository;
 
-    // Service
     @Autowired
     LoginService loginService;
 
@@ -64,17 +63,11 @@ public class AccountController {
     @Autowired
     ResponseService responseService;
 
-    @Autowired
-    SendMsgService_New sendMsgService_new;
-
-    @Autowired
-    NumberGen numberGen;
-
     @ApiOperation(value = "회원 로그인", notes = "이메일 아이디와 비밀번호를 받아 로그인한다!")
     @PostMapping(value = "/login")
     public ListResult<LogLateMsrVw>Login(@RequestBody RequestEmailPwDto requestEmailPwDto) throws Exception {
         HashMap<String, Object> resultMap = new HashMap();
-//        LogLateMsrDto logLateMsrDto = new LogLateMsrDto();
+        LogLateMsrDto logLateMsrDto = new LogLateMsrDto();
         String email = requestEmailPwDto.getEmail();
         String password = requestEmailPwDto.getPassword();
         try{
@@ -105,6 +98,7 @@ public class AccountController {
     public HashMap<String, Object> DupCheckSendMsg(@RequestBody UserAccountDto userAccountDto) throws JsonProcessingException {
         HashMap<String, Object> tmpMap = new HashMap();
         HashMap<String, Object> resultMap = new HashMap();
+        SendMsgService_New sendMsgService_new = new SendMsgService_New();
         String phone = userAccountDto.getPhone();
         ObjectMapper mapper = new ObjectMapper();
         NumberGen numberGen = new NumberGen();
@@ -180,6 +174,7 @@ public class AccountController {
         HashMap<String, Object> tmpMap = new HashMap();
         NumberGen numberGen = new NumberGen();
         ObjectMapper mapper = new ObjectMapper();
+        SendMsgService_New sendMsgService_new = new SendMsgService_New();
 
         String phone = userAccountDto.getPhone();
         String email = userAccountDto.getEmail();
@@ -215,6 +210,7 @@ public class AccountController {
     public HashMap<String, Object> ValidateQuestionSendMail(@RequestBody UserAccountDto userAccountDto) throws JsonProcessingException {
 
         HashMap<String, Object> resultMap = new HashMap();
+        NumberGen numberGen = new NumberGen();
 
         String email = userAccountDto.getEmail();
         String questionCode = userAccountDto.getQuestionCode();

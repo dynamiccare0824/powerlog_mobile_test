@@ -1,10 +1,7 @@
 package test.powerlog.mobile.springboot.service;
 
-import org.springframework.stereotype.Service;
-
 import java.util.Random;
 // 고유 번호와 문자 인증 번호를 만들어내기 위한 클래스
-@Service
 public class NumberGen {
 
     private int size;
