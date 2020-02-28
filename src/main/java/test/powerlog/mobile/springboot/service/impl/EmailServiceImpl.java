@@ -1,7 +1,6 @@
 package test.powerlog.mobile.springboot.service.impl;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import test.powerlog.mobile.springboot.web.dto.EmailFormDto;
+import test.powerlog.mobile.springboot.web.dto.request.EmailFormDto;
 import test.powerlog.mobile.springboot.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import test.powerlog.mobile.springboot.domain.view.UserAccountVwRepository;
 import test.powerlog.mobile.springboot.domain.table.UserTb;
 import test.powerlog.mobile.springboot.domain.table.UserTbRepository;
-import test.powerlog.mobile.springboot.web.dto.SignUpDto;
+import test.powerlog.mobile.springboot.web.dto.request.SignUpDto;
 
 import java.time.LocalDateTime;
 import java.util.Optional;

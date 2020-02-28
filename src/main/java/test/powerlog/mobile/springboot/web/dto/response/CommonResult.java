@@ -7,11 +7,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommonResult {
-    @ApiModelProperty(value = "응답 성공여부 : true/false")
-    private boolean success;
-
-    @ApiModelProperty(value = "응답 코드 번호 : >= 0 정상, < 0 비정상")
-    private int code;
+    @ApiModelProperty(value = "요청에 대해 정상 처리 되었는지의 여부")
+    private boolean isError;
 
     @ApiModelProperty(value = "응답 메시지")
     private String message;

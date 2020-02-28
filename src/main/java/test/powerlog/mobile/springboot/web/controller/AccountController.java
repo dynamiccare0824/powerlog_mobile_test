@@ -12,10 +12,11 @@ import test.powerlog.mobile.springboot.domain.view.LogLateMsrVwRepository;
 import test.powerlog.mobile.springboot.domain.view.UserAccountVw;
 import test.powerlog.mobile.springboot.domain.view.UserAccountVwRepository;
 import test.powerlog.mobile.springboot.service.*;
-import test.powerlog.mobile.springboot.web.dto.SignUpDto;
+import test.powerlog.mobile.springboot.web.dto.request.SignUpDto;
 import test.powerlog.mobile.springboot.web.dto.request.*;
 import test.powerlog.mobile.springboot.web.dto.response.BooleanResponseDto;
 import test.powerlog.mobile.springboot.web.dto.response.ListResult;
+import test.powerlog.mobile.springboot.web.dto.response.ResponseLoginDto;
 import test.powerlog.mobile.springboot.web.dto.response.SingleResult;
 
 import java.time.LocalDateTime;
@@ -72,23 +73,23 @@ public class AccountController {
 
     @ApiOperation(value = "회원 로그인", notes = "이메일 아이디와 비밀번호를 받아 로그인한다!")
     @PostMapping(value = "/login")
-    public ListResult<LogLateMsrVw>Login(@RequestBody RequestEmailPwDto requestEmailPwDto) throws Exception {
+    public ResponseLoginDto<LogLateMsrVw> Login(@RequestBody RequestLoginDto requestLoginDto) throws Exception {
         HashMap<String, Object> resultMap = new HashMap();
 //        LogLateMsrDto logLateMsrDto = new LogLateMsrDto();
-        String email = requestEmailPwDto.getEmail();
-        String password = requestEmailPwDto.getPassword();
+        String email = requestLoginDto.getEmail();
+        String password = requestLoginDto.getPassword();
         try{
             //아이디(이메일)이 존재하지 않는 경우 여기서 catch로 넘어가게 될 것임
             Boolean result = loginService.Login(email, password);
-            return responseService.getListResult(logLateMsrVwRepository.findAllByLgLateMsrVwEmail(email));
+            return responseService.getResponseLoginDto(logLateMsrVwRepository.findAllByLgLateMsrVwEmail(email), result);
         }
         // 아이디가 아예 존재하지 않는 경우
         catch(Exception ex){
-            return responseService.getListResult(logLateMsrVwRepository.findAllByLgLateMsrVwEmail(email));
+            return responseService.getResponseLoginDto(logLateMsrVwRepository.findAllByLgLateMsrVwEmail(email), false);
         }
     }
 
-    @ApiOperation(value = "이메일 중복 검사 (現)IsEmailPresent  (前)SignUpCheckEmail", notes = "회원가입 시, 이메일 아이디가 DB에 이미 존재하는지 여부를 검사한다.")
+    @ApiOperation(value = "이메일 중복 검사", notes = "회원가입 시, 이메일 아이디가 DB에 이미 존재하는지 여부를 검사한다.")
     @PostMapping(value = "signup/dupcheck/email")
     public SingleResult<BooleanResponseDto> DupCheckEmail(@RequestBody AccountRequestDto accountRequestDto) throws JsonProcessingException {
         String email = accountRequestDto.getEmail();

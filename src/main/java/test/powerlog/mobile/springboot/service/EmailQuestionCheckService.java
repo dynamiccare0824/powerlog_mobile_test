@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import test.powerlog.mobile.springboot.domain.view.UserAccountVw;
 import test.powerlog.mobile.springboot.domain.view.UserAccountVwRepository;
 import test.powerlog.mobile.springboot.service.impl.EmailServiceImpl;
-import test.powerlog.mobile.springboot.web.dto.EmailFormDto;
+import test.powerlog.mobile.springboot.web.dto.request.EmailFormDto;
 
 import java.util.Optional;
 
