@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @ApiModel(value = "", description = "키오스크에서 uid를 받아 계정을 특정하기 위한 객체")
 public class RspKioskLoginDto<T> extends CommonResponseDto {
-    @NotBlank(message = "고유번호 12자리를 공백없이 입력해주세요")
+    @NotBlank(message = "고유번호 12자리를 공백없이 입력해주세요.")
     @Size(min = 12, max = 12, message = "고유번호 12자리를 공백없이 입력해주세요.")
     @ApiModelProperty(value = "고유 번호", required = true, position = 1, example = "0123456789*#")
     private Boolean isPresent;
