@@ -13,18 +13,18 @@ import javax.validation.constraints.*;
 @AllArgsConstructor
 @ApiModel(value = "", description = "회원가입시 이메일 체크 하는 부분에서 필요한 객체")
 public class ReqDupCheckEmailDto {
-    @NotBlank(message = "이름 정보를 올바르게 입력하세요.")
-    @Size(min = 4, message = "이름 정보를 올바르게 입력하세요.")
+//    @NotBlank(message = "이름 정보를 올바르게 입력하세요.")
+//    @Size(min = 4, message = "이름 정보를 올바르게 입력하세요.")
     @ApiModelProperty(value = "이름", required = true, position = 1, example = "강승연")
     private String name;
 
-    @NotBlank(message = "이메일 정보를 올바르게 입력하세요.")
-    @Email(message = "이메일 정보를 올바르게 입력하세요.")
-    @Size(min = 12, max = 30, message = "이메일은 12자에서 30자 사이의 길이여야 합니다.")
+//    @NotBlank(message = "이메일 정보를 올바르게 입력하세요.")
+//    @Email(message = "이메일 정보를 올바르게 입력하세요.")
+//    @Size(min = 12, max = 30, message = "이메일은 12자에서 30자 사이의 길이여야 합니다.")
     @ApiModelProperty(value = "이메일 아이디", required = true, position = 2, example = "tmddusgood@gmail.com")
     private String email;
 
-    @NotBlank(message = "보안 질문을 선택하세요.")
+//    @NotBlank(message = "보안 질문을 선택하세요.")
     @ApiModelProperty(value = "보안 질문", required = true, position = 3, example = "C")
     private String questionCode;
 
