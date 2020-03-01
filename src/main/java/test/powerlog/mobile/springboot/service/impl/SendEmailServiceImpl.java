@@ -1,7 +1,7 @@
 package test.powerlog.mobile.springboot.service.impl;
 
 import test.powerlog.mobile.springboot.web.dto.request.EmailFormDto;
-import test.powerlog.mobile.springboot.service.EmailService;
+import test.powerlog.mobile.springboot.service.SendEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import java.util.Date;
 
 
 @Service
-public class EmailServiceImpl implements EmailService {
+public class SendEmailServiceImpl implements SendEmailService {
 
     @Autowired
     private JavaMailSender javaMailSender;

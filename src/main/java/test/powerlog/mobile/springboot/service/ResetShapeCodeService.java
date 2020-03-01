@@ -20,7 +20,7 @@ public class ResetShapeCodeService {
     private UserTbRepository userTbRepository;
 
     @Autowired
-    private EmailService emailService;
+    private SendEmailService sendEmailService;
 
     @Autowired
     private SignUpService signUpService;

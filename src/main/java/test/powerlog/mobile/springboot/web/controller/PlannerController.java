@@ -27,7 +27,7 @@ public class PlannerController {
     private LogTotalWrkotVwRepository logTotalWrkotVwRepository;
 
     @Autowired
-    LoginService loginService;
+    EmailPasswordCheckService emailPasswordCheckService;
 
     @Autowired
     EmailPhoneCheckService emailPhoneCheckService;

@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @ApiModel
-public class SingleResult<T> extends CommonResult {
-    @ApiModelProperty(value = "응답 결과")
-    private List<T> resultData;
+public class RspDupCheckEmailDto<T> extends CommonResult {
+    @ApiModelProperty(value = "true면 DB에 등록된 이메일이 이미 존재한다.")
+    private Boolean emailPresent;
 }

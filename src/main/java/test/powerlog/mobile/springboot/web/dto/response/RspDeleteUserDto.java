@@ -5,12 +5,10 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @ApiModel
-public class SingleResult<T> extends CommonResult {
-    @ApiModelProperty(value = "응답 결과")
-    private List<T> resultData;
+public class RspDeleteUserDto<T> extends CommonResult {
+    @ApiModelProperty(value = "로그인 이메일 아이디와 비밀번호 match 여부")
+    private Boolean isMatch;
 }

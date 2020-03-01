@@ -20,7 +20,7 @@ public class ResetUidService {
     private UserTbRepository userTbRepository;
 
     @Autowired
-    private EmailService emailService;
+    private SendEmailService sendEmailService;
 
     @Autowired
     private SignUpService signUpService;
