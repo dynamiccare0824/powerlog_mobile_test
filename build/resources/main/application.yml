@@ -1,4 +1,6 @@
 spring:
+  -Duser:
+    timezone=KST:
   mail:
     host: smtp.gmail.com
     port: 587

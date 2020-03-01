@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.*;
 import test.powerlog.mobile.springboot.domain.view.LogLateMsrVw;
 import test.powerlog.mobile.springboot.domain.view.LogLateMsrVwRepository;
 import test.powerlog.mobile.springboot.domain.view.UserAccountVwRepository;
-import test.powerlog.mobile.springboot.service.*;
-import test.powerlog.mobile.springboot.web.dto.request.SignUpDto;
-import test.powerlog.mobile.springboot.web.dto.request.*;
-import test.powerlog.mobile.springboot.web.dto.response.*;
+import test.powerlog.mobile.springboot.service.common.CommonResponseService;
+import test.powerlog.mobile.springboot.service.mobile.*;
+import test.powerlog.mobile.springboot.web.dto.mobile.request.*;
+import test.powerlog.mobile.springboot.web.dto.mobile.response.RspDupCheckEmailDto;
+import test.powerlog.mobile.springboot.web.dto.mobile.response.RspDupCheckSendMsg;
+import test.powerlog.mobile.springboot.web.dto.mobile.response.RspLoginDto;
 
 import javax.validation.*;
 import java.time.LocalDateTime;
@@ -63,7 +65,7 @@ public class AccountController {
     private DeleteAccountService deleteAccountService;
 
     @Autowired
-    private ResponseService responseService;
+    private CommonResponseService commonResponseService;
 
     @Autowired
     private DupCheckEmailService dupCheckEmailService;
@@ -90,7 +92,7 @@ public class AccountController {
             StringBuffer errorString = new StringBuffer();
             List<ObjectError> inValidParamList = bindingResult.getAllErrors();
             // 파라미터 오류 정보만 있고, map도 없을 것이고, 받아온 리스트도 없을 것
-            return responseService.getRspLoginDto(inValidParamList, null, null);
+            return commonResponseService.getRspLoginDto(inValidParamList, null, null);
         } else {
             // 파라미터 에러가 없으면 초기화
             String email = reqLoginDto.getEmail();
@@ -100,11 +102,11 @@ public class AccountController {
             //로그인 정보가 맞다면
             if (resultMap.get("error") == null && (Boolean) resultMap.get("isMatch") == true) {
                 List<LogLateMsrVw> record = logLateMsrVwRepository.findAllByLgLateMsrVwEmail(email);
-                return responseService.getRspLoginDto(null, record, resultMap);
+                return commonResponseService.getRspLoginDto(null, record, resultMap);
             }
             // 로그인 정보가 잘못되었다면
             else {
-                return responseService.getRspLoginDto(null, null, resultMap);
+                return commonResponseService.getRspLoginDto(null, null, resultMap);
             }
         }
     }
@@ -117,12 +119,12 @@ public class AccountController {
             StringBuffer errorString = new StringBuffer();
             List<ObjectError> invalidParamList = bindingResult.getAllErrors();
             // 파라미터 오류 정보만 있고, map도 없을 것
-            return responseService.getRspDupCheckEmailDto(invalidParamList, null);
+            return commonResponseService.getRspDupCheckEmailDto(invalidParamList, null);
         }
         else{
             String email = reqDupCheckEmailDto.getEmail();
             HashMap<String, Object> resultMap = dupCheckEmailService.DupCheckEmail(email);
-            return responseService.getRspDupCheckEmailDto(null, resultMap);
+            return commonResponseService.getRspDupCheckEmailDto(null, resultMap);
         }
     }
 
@@ -136,7 +138,7 @@ public class AccountController {
         if (bindingResult.hasErrors()) {
             StringBuffer errorString = new StringBuffer();
             List<ObjectError> invalidParamList = bindingResult.getAllErrors();
-            return responseService.getRspDupCheckSendMsgDto(invalidParamList, tmpMap);
+            return commonResponseService.getRspDupCheckSendMsgDto(invalidParamList, tmpMap);
         } else {
             String phone = reqDupCheckSendMsgDto.getPhone();
             NumberGenService numberGenService = new NumberGenService();
@@ -152,16 +154,16 @@ public class AccountController {
                 //핸드폰 번호가 DB에 없는 것은 맞는데 서버 오류로 문자가 보내지지 않는 문제가 발생했다면
                 catch (Exception ex) {
                     tmpMap.replace("error", ex.toString());
-                    return responseService.getRspDupCheckSendMsgDto(null, tmpMap);
+                    return commonResponseService.getRspDupCheckSendMsgDto(null, tmpMap);
                 }
             }
             //핸드폰 번호가 DB에 있다면
             else {
-                return responseService.getRspDupCheckSendMsgDto(null, tmpMap);
+                return commonResponseService.getRspDupCheckSendMsgDto(null, tmpMap);
             }
         }
         //핸드폰 번호가 DB에 없고 문자도 잘 보내졌다면
-        return responseService.getRspDupCheckSendMsgDto(null, tmpMap);
+        return commonResponseService.getRspDupCheckSendMsgDto(null, tmpMap);
     }
 
     @PostMapping(value = "signup/register")
