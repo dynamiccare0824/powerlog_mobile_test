@@ -7,19 +7,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import test.powerlog.mobile.springboot.web.dto.common.CommonResponseDto;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 import java.util.HashMap;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(value = "", description = "키오스크에서 uid를 받아 계정을 특정하기 위한 객체")
-public class RspKioskLoginDto<T> extends CommonResponseDto {
+public class RspKioskMainDto<T> extends CommonResponseDto {
 
-    @ApiModelProperty(value = "고유 번호", required = true, position = 1, example = "0123456789*#")
+    @ApiModelProperty(value = "고유 번호", required = true, position = 1, example = "Boolean")
     private Boolean isPresent;
 
     @ApiModelProperty(value = "로그인 성공 시 받는 이름", position = 2, example = "홍길동")

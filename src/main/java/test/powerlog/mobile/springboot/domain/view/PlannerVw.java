@@ -44,7 +44,12 @@ public class PlannerVw {
     private String plnVwRest;
 
     @Column
+    private String plnVwProgram;
+
+    @Column
     private String plnVwFlag;
+
+
 
 
 

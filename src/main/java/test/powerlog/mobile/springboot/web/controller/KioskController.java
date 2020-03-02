@@ -4,25 +4,27 @@ package test.powerlog.mobile.springboot.web.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import test.powerlog.mobile.springboot.domain.view.*;
 import test.powerlog.mobile.springboot.service.common.CommonResponseService;
 import test.powerlog.mobile.springboot.service.common.ParamValidCheckService;
+import test.powerlog.mobile.springboot.service.kiosk.OnDateWrkotService;
 import test.powerlog.mobile.springboot.service.kiosk.UidLoginService;
 import test.powerlog.mobile.springboot.service.mobile.*;
 import test.powerlog.mobile.springboot.web.dto.kiosk.request.ReqKioskLoginDto;
 import test.powerlog.mobile.springboot.web.dto.kiosk.response.RspKioskLoginDto;
 
 import javax.naming.Binding;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Api(tags = {"3. Kiosk"})
 @RestController
@@ -69,13 +71,16 @@ public class KioskController {
     private  CommonResponseService commonResponseService;
 
     @Autowired
-    ParamValidCheckService paramValidCheckService;
+    private OnDateWrkotService onDateWrkotService;
+
+    @Autowired
+    private ParamValidCheckService paramValidCheckService;
 
     @Autowired
     private UidLoginService uidLoginService;
 
     @Autowired
-    PlannerVwRepository plannerVwRepository;
+    private PlannerVwRepository plannerVwRepository;
 
     @PostMapping(value = "/uidlogin")
     public RspKioskLoginDto<PlannerVw> UidLogin(@RequestBody @Valid ReqKioskLoginDto reqKioskLoginDto, BindingResult bindingResult) throws JsonProcessingException {
@@ -94,8 +99,35 @@ public class KioskController {
         //if: 사용자가 DB에 존재한다면 email 가져와서 plannerVW 조회
         if((Boolean) uidLoginResult.get("isPresent")){
             String email = (String) uidLoginResult.get("email");
-            List<PlannerVw> record = plannerVwRepository.findAllByPlnVwEmail(email);
-            return commonResponseService.getRspKioskLoginDto(null, record, uidLoginResult);
+            HashMap<String, Object> onDateWrkotMap = onDateWrkotService.GetOnDateWrkot(email);
+            return commonResponseService.getRspKioskLoginDto(null, onDateWrkotMap, uidLoginResult);
+        }
+        //else: /사용자가 DB에 존재하지 않으면 결과 리턴
+        else{
+            return commonResponseService.getRspKioskLoginDto(null, null, uidLoginResult);
+        }
+    }
+
+    @PostMapping(value = "/uidlogin")
+    public RspKioskLoginDto<PlannerVw> Test(@RequestBody @Valid ReqKioskLoginDto reqKioskLoginDto, BindingResult bindingResult) throws JsonProcessingException {
+        HashMap<String, Object> uidLoginResult = new HashMap();
+        String uid = reqKioskLoginDto.getUid();
+//        userAccountVWRepository.findAll
+
+        List<ObjectError> invalidParamList = paramValidCheckService.getInvalidParamList(bindingResult);
+        // 파라미터 오류가 존재한다면
+        if(invalidParamList!= null){
+            return commonResponseService.getRspKioskLoginDto(invalidParamList, null, null);
+        }
+
+        // 파라미터 오류가 존재하지 않으면 db에 uid 존재 여부 조회
+        uidLoginResult = uidLoginService.getUidLoginResult(uidLoginResult, uid);
+
+        //if: 사용자가 DB에 존재한다면 email 가져와서 plannerVW 조회
+        if((Boolean) uidLoginResult.get("isPresent")){
+            String email = (String) uidLoginResult.get("email");
+            HashMap<String, Object> onDateWrkotMap = onDateWrkotService.GetOnDateWrkot(email);
+            return commonResponseService.getRspKioskLoginDto(null, onDateWrkotMap, uidLoginResult);
         }
         //else: /사용자가 DB에 존재하지 않으면 결과 리턴
         else{

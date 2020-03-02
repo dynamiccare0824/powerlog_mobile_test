@@ -127,21 +127,21 @@ public class CommonResponseService {
     }
 
     public <T> RspKioskLoginDto<T> getRspKioskLoginDto(List<ObjectError> invalidParamList,
-                                                       List<T> record,
+                                                       HashMap<String, Object> onDateWrkotMap,
                                                        HashMap<String, Object> uidLoginResult){
         RspKioskLoginDto<T> resultDto = new RspKioskLoginDto<>();
         if(invalidParamList != null){
             resultDto.setIsPresent(null);
             resultDto.setName(null);
+            resultDto.setResultData(onDateWrkotMap);
             resultDto.setIsError(true);
-            resultDto.setResultData(record);
             resultDto.setInvalidParamList(invalidParamList);
             resultDto.setMessage(invalidParamMessage);
         }
         else{
             resultDto.setIsPresent((Boolean) uidLoginResult.get("isPresent"));
             resultDto.setName((String) uidLoginResult.get("name"));
-            resultDto.setResultData(record);
+            resultDto.setResultData(onDateWrkotMap);
             resultDto.setIsError(false);
             resultDto.setInvalidParamList(invalidParamList);
             resultDto.setMessage(noErrorMessage);
@@ -149,31 +149,26 @@ public class CommonResponseService {
         return resultDto;
     }
 
-//    public CommonResult getFailResult(HashMap<String, Object> map) {
-//        CommonResult tmpDto = new CommonResult();
-//
-//        tmpDto.setIsError(true);
-//        tmpDto.setMessage((String) map.get("error"));
-//
-//        return tmpDto;
-//    }
-//
-//    public CommonResult getSuccessResult(HashMap<String, Object> map) {
-//        CommonResult tmpDto = new CommonResult();
-//
-//        tmpDto.setIsError(false);
-//        tmpDto.setMessage("Job is Done. Error: " + (String) map.get("error"));
-//
-//        return tmpDto;
-//    }
-//
-//    public <T> FailListResultDto<T> getFailListResult(List<T> list) {
-//        FailListResultDto tmpDto = new FailListResultDto();
-//
-//        tmpDto.setIsError(true);
-//        tmpDto.setResultData(list);
-//        tmpDto.setMessage("Invalid input value included.");
-//
-//        return tmpDto;
-//    }
+    public <T> RspKioskLoginDto<T> getRspKioskMainDto(List<ObjectError> invalidParamList,
+                                                       HashMap<String, Object> onDateWrkotMap,
+                                                       HashMap<String, Object> uidLoginResult){
+        RspKioskLoginDto<T> resultDto = new RspKioskLoginDto<>();
+        if(invalidParamList != null){
+            resultDto.setIsPresent(null);
+            resultDto.setName(null);
+            resultDto.setResultData(onDateWrkotMap);
+            resultDto.setIsError(true);
+            resultDto.setInvalidParamList(invalidParamList);
+            resultDto.setMessage(invalidParamMessage);
+        }
+        else{
+            resultDto.setIsPresent((Boolean) uidLoginResult.get("isPresent"));
+            resultDto.setName((String) uidLoginResult.get("name"));
+            resultDto.setResultData(onDateWrkotMap);
+            resultDto.setIsError(false);
+            resultDto.setInvalidParamList(invalidParamList);
+            resultDto.setMessage(noErrorMessage);
+        }
+        return resultDto;
+    }
 }
