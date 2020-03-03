@@ -4,7 +4,6 @@ package test.powerlog.mobile.springboot.web.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +16,7 @@ import test.powerlog.mobile.springboot.service.mobile.*;
 import test.powerlog.mobile.springboot.web.dto.kiosk.request.ReqKioskLoginDto;
 import test.powerlog.mobile.springboot.web.dto.kiosk.response.RspKioskLoginDto;
 
-import javax.naming.Binding;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
 import javax.validation.Valid;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Api(tags = {"3. Kiosk"})
@@ -41,7 +34,7 @@ public class KioskController {
     private LogTotalWrkotVwRepository logTotalWrkotVwRepository;
 
     @Autowired
-    private EmailPasswordCheckService emailPasswordCheckService;
+    private LoginService loginService;
 
     @Autowired
     private EmailPhoneCheckService emailPhoneCheckService;
@@ -108,7 +101,7 @@ public class KioskController {
         }
     }
 
-    @PostMapping(value = "/uidlogin")
+    @PostMapping(value = "/testuidlogin")
     public RspKioskLoginDto<PlannerVw> Test(@RequestBody @Valid ReqKioskLoginDto reqKioskLoginDto, BindingResult bindingResult) throws JsonProcessingException {
         HashMap<String, Object> uidLoginResult = new HashMap();
         String uid = reqKioskLoginDto.getUid();

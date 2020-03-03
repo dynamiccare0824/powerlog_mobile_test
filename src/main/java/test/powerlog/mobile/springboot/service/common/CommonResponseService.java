@@ -2,9 +2,12 @@ package test.powerlog.mobile.springboot.service.common;
 
 import org.springframework.stereotype.Service;
 import org.springframework.validation.ObjectError;
+import test.powerlog.mobile.springboot.domain.view.LogLateMsrVw;
+import test.powerlog.mobile.springboot.domain.view.WorkoutCodeVw;
 import test.powerlog.mobile.springboot.web.dto.kiosk.response.RspKioskLoginDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.response.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,34 +20,42 @@ public class CommonResponseService {
     //completed
     // 다중건 결과를 처리하는 메소드이기 때문에 getRspLoginDto 는 List를 받아서 보여줄 수 있게 되어있다.
     public <T> RspLoginDto<T> getRspLoginDto(List<ObjectError> invalidParamList,
-                                             List<T> list,
+                                             HashMap<String, Object> logRecordMap, HashMap<String, Object> logRecordFormMap,
                                              HashMap<String, Object> map) {
         RspLoginDto<T> tmpDto = new RspLoginDto<>();
+        ArrayList tempList = new ArrayList();
+
+
         if (invalidParamList != null) {
             tmpDto.setInvalidParamList(invalidParamList);
             tmpDto.setIsError(true);
             tmpDto.setIsMatch(null);
             tmpDto.setResultData(null);
             tmpDto.setName(null);
+            tmpDto.setResultList(tempList);
             tmpDto.setMessage(invalidParamMessage);
-        } else if (invalidParamList == null && list == null) {
+        } else if (logRecordMap == null) {
             tmpDto.setInvalidParamList(null);
             tmpDto.setIsError(false);
             tmpDto.setIsMatch(false);
             tmpDto.setResultData(null);
             tmpDto.setName(null);
+            tmpDto.setResultList(tempList);
             tmpDto.setMessage("No registered data existed.");
         } else {
             tmpDto.setIsMatch((Boolean) map.get("isMatch"));
             tmpDto.setName((String) map.get("name"));
             tmpDto.setIsError(false);
+            tmpDto.setResultList(tempList);
             tmpDto.setMessage(noErrorMessage);
-            if (!list.isEmpty()) {
-                tmpDto.setResultData(list);
+            if (!logRecordMap.isEmpty()) {
+                tmpDto.setResultData(logRecordMap);
             } else {
                 tmpDto.setResultData(null);
             }
         }
+
+        tmpDto.setResultList(tempList);
         return tmpDto;
     }
 

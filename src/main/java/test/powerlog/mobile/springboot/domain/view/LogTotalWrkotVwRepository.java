@@ -8,4 +8,6 @@ import java.util.List;
 @Repository
 public interface LogTotalWrkotVwRepository extends JpaRepository<LogTotalWrkotVw, String>{
     List<LogTotalWrkotVw> findAllByLgTotalWrkotVwEmail(String email);
+    List<LogTotalWrkotVw> findAllByLgTotalWrkotVwEmailAndLgTotalWrkotVwCommonCodeOrderByLgTotalWrkotVwDateAsc(String email, String commonCode);
+    List<LogTotalWrkotVw> findAllByLgTotalWrkotVwEmailOrderByLgTotalWrkotVwDateAsc(String email);
 }

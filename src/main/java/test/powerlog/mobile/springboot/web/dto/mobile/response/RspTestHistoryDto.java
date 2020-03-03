@@ -4,17 +4,15 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
-import test.powerlog.mobile.springboot.domain.view.LogLateMsrVw;
 import test.powerlog.mobile.springboot.web.dto.common.CommonResponseDto;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 @Getter
 @Setter
 @ApiModel
-public class RspLoginDto<T> extends CommonResponseDto {
+public class RspTestHistoryDto<T> extends CommonResponseDto {
 
     @ApiModelProperty(value = "로그인 이메일 아이디와 비밀번호 match 여부", position = 2, example = "true")
     private Boolean isMatch;
