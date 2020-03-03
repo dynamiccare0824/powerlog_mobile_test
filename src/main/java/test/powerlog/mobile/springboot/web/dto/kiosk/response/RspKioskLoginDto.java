@@ -25,6 +25,9 @@ public class RspKioskLoginDto<T> extends CommonResponseDto {
     @ApiModelProperty(value = "로그인 성공 시 받는 이름", position = 2, example = "홍길동")
     private String name;
 
-    @ApiModelProperty(value = "로그인 성공하고 현재 날짜의 운동 데이터가 있다면 데이터를 가져온다.", position = 3)
+    @ApiModelProperty(value = "", position = 3)
+    private HashMap<String, Object> wrkotCodeMap;
+
+    @ApiModelProperty(value = "로그인 성공하고 현재 날짜의 운동 데이터가 있다면 데이터를 가져온다.", position = 4)
     private HashMap<String, Object> resultData;
 }

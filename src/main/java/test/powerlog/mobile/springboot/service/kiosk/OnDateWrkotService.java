@@ -34,8 +34,18 @@ public class OnDateWrkotService {
                 }
             }
         }
-        resultMap.put("programList", programList);
-        resultMap.put("privateList", privateList);
+        if(!programList.isEmpty()){
+            resultMap.put("programList", programList);
+        }
+        else{
+            resultMap.put("programList", null);
+        }
+        if(!privateList.isEmpty()){
+            resultMap.put("privateList", privateList);
+        }
+        else{
+            resultMap.put("privateList", null);
+        }
         return resultMap;
     }
 }

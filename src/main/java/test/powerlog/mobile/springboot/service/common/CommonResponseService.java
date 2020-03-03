@@ -139,13 +139,15 @@ public class CommonResponseService {
 
     public <T> RspKioskLoginDto<T> getRspKioskLoginDto(List<ObjectError> invalidParamList,
                                                        HashMap<String, Object> onDateWrkotMap,
-                                                       HashMap<String, Object> uidLoginResult){
+                                                       HashMap<String, Object> uidLoginResult,
+                                                       HashMap<String, Object> wrkotCodeMap){
         RspKioskLoginDto<T> resultDto = new RspKioskLoginDto<>();
         if(invalidParamList != null){
             resultDto.setIsPresent(null);
             resultDto.setName(null);
             resultDto.setResultData(onDateWrkotMap);
             resultDto.setIsError(true);
+            resultDto.setWrkotCodeMap(wrkotCodeMap);
             resultDto.setInvalidParamList(invalidParamList);
             resultDto.setMessage(invalidParamMessage);
         }
@@ -154,6 +156,7 @@ public class CommonResponseService {
             resultDto.setName((String) uidLoginResult.get("name"));
             resultDto.setResultData(onDateWrkotMap);
             resultDto.setIsError(false);
+            resultDto.setWrkotCodeMap(wrkotCodeMap);
             resultDto.setInvalidParamList(invalidParamList);
             resultDto.setMessage(noErrorMessage);
         }
