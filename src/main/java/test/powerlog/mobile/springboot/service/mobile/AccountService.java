@@ -71,12 +71,12 @@ public class AccountService {
                 HashMap<String, Object> tmpMap2 = new HashMap<>();
                 String commonCode = logList.get().get(i).getLgLateMsrVwCommonCode();
 
-                if(commonCode.contains("01")){
+                if (commonCode.contains("01")) {
                     isWorkoutCode.add(logList.get().get(i).getLgLateMsrVwCommonCode());
                     HashMap<String, Object> codeDetailMap = (HashMap<String, Object>) workoutCodeMap.get((String) commonCode);
                     String workoutMax = logList.get().get(i).getLgLateMsrVwMax();
-                    codeDetailMap.replace("WorkoutMax", logList.get().get(i).getLgLateMsrVwMax());
-                    codeDetailMap.replace("WorkoutRank", String.format("%,.1f", random.nextFloat()*100));
+                    codeDetailMap.replace("WorkoutMax", workoutMax);
+                    codeDetailMap.replace("WorkoutRank", String.format("%,.1f", random.nextFloat() * 100));
                     workoutCodeMap.replace("commonCode", codeDetailMap);
                 }
             }

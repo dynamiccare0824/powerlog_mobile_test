@@ -112,7 +112,7 @@ public class AccountController {
             resultMap = accountService.EmailPasswordCheck(email, password);
 
             //로그인 정보가 맞든 틀리든.. formMap이 있어서 틀리면 그걸 활용해
-                HashMap<String, Object> logRecordMap = accountService.LgLateMsrVwEmailMap(email, logRecordFormMap);
+            HashMap<String, Object> logRecordMap = accountService.LgLateMsrVwEmailMap(email, logRecordFormMap);
             return commonResponseService.getRspLoginDto(null, logRecordMap, logRecordFormMap, resultMap);
         }
     }

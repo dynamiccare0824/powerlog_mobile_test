@@ -40,8 +40,13 @@ public class CommonResponseService {
             tmpDto.setName((String) map.get("name"));
             tmpDto.setIsError(false);
             tmpDto.setMessage(noErrorMessage);
-            presentWorkoutList = (ArrayList) logRecordMap.get("presentWorkoutcode");
-            tmpDto.setResultPresentList(presentWorkoutList);
+            presentWorkoutList = (ArrayList) logRecordMap.get("presentWorkoutCode");
+            if (presentWorkoutList.isEmpty()) {
+                tmpDto.setResultPresentList(null);
+            }
+            else{
+                tmpDto.setResultPresentList(presentWorkoutList);
+            }
             tmpDto.setTotalList((ArrayList) logRecordMap.get("LoginWorkoutCode"));
             logRecordMap.remove("presentWorkoutCode");
             logRecordMap.remove("LoginWorkoutCode");
