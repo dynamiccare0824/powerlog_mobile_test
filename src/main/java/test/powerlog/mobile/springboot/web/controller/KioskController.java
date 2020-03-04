@@ -12,12 +12,11 @@ import test.powerlog.mobile.springboot.service.common.CommonResponseService;
 import test.powerlog.mobile.springboot.service.common.ParamValidCheckService;
 import test.powerlog.mobile.springboot.service.kiosk.OnDateWrkotService;
 import test.powerlog.mobile.springboot.service.kiosk.UidLoginService;
-import test.powerlog.mobile.springboot.service.mobile.*;
+import test.powerlog.mobile.springboot.service.mobile.old.*;
 import test.powerlog.mobile.springboot.web.dto.kiosk.request.ReqKioskLoginDto;
 import test.powerlog.mobile.springboot.web.dto.kiosk.response.RspKioskLoginDto;
 
 import javax.validation.Valid;
-import java.lang.reflect.Array;
 import java.util.*;
 
 @Api(tags = {"3. Kiosk"})
@@ -41,13 +40,13 @@ public class KioskController {
     private EmailPhoneCheckService emailPhoneCheckService;
 
     @Autowired
-    private  EmailQuestionCheckService emailQuestionCheckService;
+    private EmailQuestionCheckService emailQuestionCheckService;
 
     @Autowired
     private SignUpService signUpService;
 
     @Autowired
-    private  ResetPasswordService resetPasswordService;
+    private ResetPasswordService resetPasswordService;
 
     @Autowired
     private  ResetUidService resetUidService;
@@ -59,7 +58,7 @@ public class KioskController {
     private  UpdatePhoneService updatePhoneService;
 
     @Autowired
-    private  DeleteAccountService deleteAccountService;
+    private DeleteAccountService deleteAccountService;
 
     @Autowired
     private  CommonResponseService commonResponseService;

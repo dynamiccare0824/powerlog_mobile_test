@@ -1,4 +1,4 @@
-package test.powerlog.mobile.springboot.service.mobile;
+package test.powerlog.mobile.springboot.service.mobile.old;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,4 +25,6 @@ public class DupCheckEmailService {
         }
         return tmpMap;
     }
+
+
 }

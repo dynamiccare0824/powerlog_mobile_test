@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import test.powerlog.mobile.springboot.domain.view.*;
 import test.powerlog.mobile.springboot.service.common.CommonResponseService;
 import test.powerlog.mobile.springboot.service.mobile.*;
+import test.powerlog.mobile.springboot.service.mobile.old.*;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.*;
 import test.powerlog.mobile.springboot.web.dto.mobile.response.RspDupCheckEmailDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.response.RspDupCheckSendMsg;
@@ -86,12 +87,16 @@ public class AccountController {
     @Autowired
     private SendEmailService sendEmailService;
 
+    @Autowired
+    private AccountService accountService;
+
     //Completed
+    //회원정보 틀렸을 때 오류
     @ApiOperation(value = "회원 로그인", notes = "이메일 아이디와 비밀번호를 받아 로그인한다!")
     @PostMapping(value = "/login")
     public RspLoginDto<LogLateMsrVw> Login(@RequestBody @Valid ReqLoginDto reqLoginDto, BindingResult bindingResult) throws Exception {
         HashMap<String, Object> resultMap;
-        HashMap<String, Object> logRecordFormMap = workoutCodeService.WorkoutCodeVwMap();
+        HashMap<String, Object> logRecordFormMap = workoutCodeService.WorkoutCodeVwLoginMap();
         // 파라미터 에러가 발생했다면
         if (bindingResult.hasErrors()) {
             StringBuffer errorString = new StringBuffer();
@@ -104,14 +109,11 @@ public class AccountController {
             String password = reqLoginDto.getPassword();
 
             // 파라미터를 가지고 resultMap 초기화
-            resultMap = loginService.EmailPasswordCheck(email, password);
+            resultMap = accountService.EmailPasswordCheck(email, password);
 
-            //로그인 정보가 맞다면
-            if ((Boolean) resultMap.get("isMatch") == true) {
-                HashMap<String, Object> logRecordMap = loginService.LgLateMsrVwEmailMap(email, logRecordFormMap);
-                return commonResponseService.getRspLoginDto(null, logRecordMap, logRecordFormMap, resultMap);
-            }
-            return commonResponseService.getRspLoginDto(null, null, logRecordFormMap, resultMap);
+            //로그인 정보가 맞든 틀리든.. formMap이 있어서 틀리면 그걸 활용해
+                HashMap<String, Object> logRecordMap = accountService.LgLateMsrVwEmailMap(email, logRecordFormMap);
+            return commonResponseService.getRspLoginDto(null, logRecordMap, logRecordFormMap, resultMap);
         }
     }
 

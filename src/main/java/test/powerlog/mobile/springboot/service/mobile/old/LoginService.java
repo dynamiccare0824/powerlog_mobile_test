@@ -1,4 +1,4 @@
-package test.powerlog.mobile.springboot.service.mobile;
+package test.powerlog.mobile.springboot.service.mobile.old;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,7 +64,7 @@ public class LoginService {
                 String commonCode = logList.get().get(i).getLgLateMsrVwCommonCode();
                 HashMap<String, Object> codeDetailMap = (HashMap<String, Object>) workoutCodeMap.get((String) commonCode);
                 codeDetailMap.replace("WorkoutMax", logList.get().get(i).getLgLateMsrVwMax());
-                codeDetailMap.replace("Rank", random.nextInt(100));
+                codeDetailMap.put("WorkoutRank", "왜 안나오는 거야");
                 workoutCodeMap.replace("commonCode", codeDetailMap);
 
 //                tmpMap.put("WorkoutMax", logList.get(i).getLgLateMsrVwMax());

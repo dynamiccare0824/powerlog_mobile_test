@@ -9,9 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import test.powerlog.mobile.springboot.domain.view.*;
-import test.powerlog.mobile.springboot.service.mobile.*;
+import test.powerlog.mobile.springboot.service.mobile.old.*;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.ReqTestHistoryDto;
-import test.powerlog.mobile.springboot.web.dto.mobile.request.UserAccountDto;
 
 import java.util.ArrayList;
 import java.util.HashMap;

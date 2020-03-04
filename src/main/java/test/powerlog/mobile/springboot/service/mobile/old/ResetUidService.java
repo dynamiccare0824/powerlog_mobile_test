@@ -1,17 +1,18 @@
-package test.powerlog.mobile.springboot.service.mobile;
+package test.powerlog.mobile.springboot.service.mobile.old;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import test.powerlog.mobile.springboot.domain.view.UserAccountVwRepository;
 import test.powerlog.mobile.springboot.domain.table.UserTb;
 import test.powerlog.mobile.springboot.domain.table.UserTbRepository;
+import test.powerlog.mobile.springboot.service.mobile.SendEmailService;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.SignUpDto;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-public class ResetShapeCodeService {
+public class ResetUidService {
 
     @Autowired
     private UserAccountVwRepository userAccountVwRepository;
@@ -26,15 +27,16 @@ public class ResetShapeCodeService {
     private SignUpService signUpService;
 
     /*로그인 요청 처리*/
-    public boolean ResetShapeCode(String email, String shapeCode) {
+    public boolean ResetUid(String email, String randNum) {
         boolean result = false;
         try {
             LocalDateTime localDateTime = LocalDateTime.now();
+
             Optional<UserTb> record = userTbRepository.findById(email);
 
-            SignUpDto signUpDto  = SignUpDto.builder().email(record.get().getUEmail()).password(record.get().getUPassword()).uid(record.get().getUUid()).name(record.get().getUName())
+            SignUpDto signUpDto  = SignUpDto.builder().email(record.get().getUEmail()).password(record.get().getUPassword()).uid(randNum).name(record.get().getUName())
                     .gender(record.get().getUGender()).birth(record.get().getUBirth()).height(record.get().getUHeight()).weight(record.get().getUWeight())
-                    .agreeFlag(record.get().getUAgreeFlag()).personalFlag(record.get().getUAgreeFlag()).shapeCode(shapeCode).qAnswer(record.get().getUQAnswer()).qCode(record.get().getUQCode())
+                    .agreeFlag(record.get().getUAgreeFlag()).personalFlag(record.get().getUAgreeFlag()).shapeCode(record.get().getUShapeCode()).qAnswer(record.get().getUQAnswer()).qCode(record.get().getUQCode())
                     .verification(record.get().getUVerification()).phone(record.get().getUPhone())
                     .createdTime(record.get().getUCreatedTime()).updatedTime(localDateTime).career(record.get().getUCareer()).build();
             signUpService.Signup(signUpDto); // save 실행

@@ -2,11 +2,10 @@ package test.powerlog.mobile.springboot.service.common;
 
 import org.springframework.stereotype.Service;
 import org.springframework.validation.ObjectError;
-import test.powerlog.mobile.springboot.domain.view.LogLateMsrVw;
-import test.powerlog.mobile.springboot.domain.view.WorkoutCodeVw;
 import test.powerlog.mobile.springboot.web.dto.kiosk.response.RspKioskLoginDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.response.*;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,39 +22,32 @@ public class CommonResponseService {
                                              HashMap<String, Object> logRecordMap, HashMap<String, Object> logRecordFormMap,
                                              HashMap<String, Object> map) {
         RspLoginDto<T> tmpDto = new RspLoginDto<>();
-        ArrayList tempList = new ArrayList();
-
+        ArrayList presentWorkoutList = new ArrayList();
 
         if (invalidParamList != null) {
             tmpDto.setInvalidParamList(invalidParamList);
             tmpDto.setIsError(true);
-            tmpDto.setIsMatch(null);
-            tmpDto.setResultData(null);
-            tmpDto.setName(null);
-            tmpDto.setResultList(tempList);
             tmpDto.setMessage(invalidParamMessage);
-        } else if (logRecordMap == null) {
-            tmpDto.setInvalidParamList(null);
+        }
+        // Request valid but no record
+        else if (logRecordMap == null) {
             tmpDto.setIsError(false);
             tmpDto.setIsMatch(false);
-            tmpDto.setResultData(null);
-            tmpDto.setName(null);
-            tmpDto.setResultList(tempList);
+            tmpDto.setTotalList((ArrayList) logRecordFormMap.get("LoginWorkoutCode"));
             tmpDto.setMessage("No registered data existed.");
         } else {
             tmpDto.setIsMatch((Boolean) map.get("isMatch"));
             tmpDto.setName((String) map.get("name"));
             tmpDto.setIsError(false);
-            tmpDto.setResultList(tempList);
             tmpDto.setMessage(noErrorMessage);
-            if (!logRecordMap.isEmpty()) {
-                tmpDto.setResultData(logRecordMap);
-            } else {
-                tmpDto.setResultData(null);
-            }
-        }
+            presentWorkoutList = (ArrayList) logRecordMap.get("presentWorkoutcode");
+            tmpDto.setResultPresentList(presentWorkoutList);
+            tmpDto.setTotalList((ArrayList) logRecordMap.get("LoginWorkoutCode"));
+            logRecordMap.remove("presentWorkoutCode");
+            logRecordMap.remove("LoginWorkoutCode");
+            tmpDto.setResultData(logRecordMap);
 
-        tmpDto.setResultList(tempList);
+        }
         return tmpDto;
     }
 
@@ -140,9 +132,9 @@ public class CommonResponseService {
     public <T> RspKioskLoginDto<T> getRspKioskLoginDto(List<ObjectError> invalidParamList,
                                                        HashMap<String, Object> onDateWrkotMap,
                                                        HashMap<String, Object> uidLoginResult,
-                                                       HashMap<String, Object> wrkotCodeMap){
+                                                       HashMap<String, Object> wrkotCodeMap) {
         RspKioskLoginDto<T> resultDto = new RspKioskLoginDto<>();
-        if(invalidParamList != null){
+        if (invalidParamList != null) {
             resultDto.setIsPresent(null);
             resultDto.setName(null);
             resultDto.setResultData(onDateWrkotMap);
@@ -150,8 +142,7 @@ public class CommonResponseService {
             resultDto.setWrkotCodeMap(wrkotCodeMap);
             resultDto.setInvalidParamList(invalidParamList);
             resultDto.setMessage(invalidParamMessage);
-        }
-        else{
+        } else {
             resultDto.setIsPresent((Boolean) uidLoginResult.get("isPresent"));
             resultDto.setName((String) uidLoginResult.get("name"));
             resultDto.setResultData(onDateWrkotMap);
@@ -164,18 +155,17 @@ public class CommonResponseService {
     }
 
     public <T> RspKioskLoginDto<T> getRspKioskMainDto(List<ObjectError> invalidParamList,
-                                                       HashMap<String, Object> onDateWrkotMap,
-                                                       HashMap<String, Object> uidLoginResult){
+                                                      HashMap<String, Object> onDateWrkotMap,
+                                                      HashMap<String, Object> uidLoginResult) {
         RspKioskLoginDto<T> resultDto = new RspKioskLoginDto<>();
-        if(invalidParamList != null){
+        if (invalidParamList != null) {
             resultDto.setIsPresent(null);
             resultDto.setName(null);
             resultDto.setResultData(onDateWrkotMap);
             resultDto.setIsError(true);
             resultDto.setInvalidParamList(invalidParamList);
             resultDto.setMessage(invalidParamMessage);
-        }
-        else{
+        } else {
             resultDto.setIsPresent((Boolean) uidLoginResult.get("isPresent"));
             resultDto.setName((String) uidLoginResult.get("name"));
             resultDto.setResultData(onDateWrkotMap);
