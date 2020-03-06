@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.ObjectError;
 import test.powerlog.mobile.springboot.domain.view.UserAccountVwRepository;
+import test.powerlog.mobile.springboot.web.dto.common.CommonResponseDto;
 import test.powerlog.mobile.springboot.web.dto.kiosk.response.RspKioskLoginDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.response.*;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
 @Service // 해당 Class가 Service임을 명시합니다.
 public class CommonResponseService {
 
-    String noErrorMessage = "Valid request received. Check result";
+    String validParamMessage = "Valid request received. Check result";
     String invalidParamMessage = "Invalid parameter included.";
     @Autowired
     UserAccountVwRepository userAccountVwRepository;
@@ -44,7 +44,7 @@ public class CommonResponseService {
             tmpDto.setIsMatch((Boolean) map.get("isMatch"));
             tmpDto.setName((String) map.get("name"));
             tmpDto.setIsError(false);
-            tmpDto.setMessage(noErrorMessage);
+            tmpDto.setMessage(validParamMessage);
             presentWorkoutList = (ArrayList) logRecordMap.get("presentWorkoutCode");
             if (presentWorkoutList.isEmpty()) {
                 tmpDto.setResultPresentList(null);
@@ -72,7 +72,7 @@ public class CommonResponseService {
         } else {
             tmpDto.setEmailPresent((Boolean) map.get("emailPresent"));
             tmpDto.setIsError(false);
-            tmpDto.setMessage(noErrorMessage);
+            tmpDto.setMessage(validParamMessage);
 
         }
         return tmpDto;
@@ -99,13 +99,13 @@ public class CommonResponseService {
                 tmpDto.setVerificationNum((String) map.get("verificationNum"));
                 tmpDto.setSendMsgResult((String) map.get("sendMsgResult"));
                 tmpDto.setInvalidParamList(null);
-                tmpDto.setMessage(noErrorMessage);
+                tmpDto.setMessage(validParamMessage);
             }
         }
         return tmpDto;
     }
 
-    public <T> RspEmailPasswordCheckDto<T> getRspEmailPasswordCheckDto(List<T> errorList, HashMap<String, Object> map) {
+    public <T> RspEmailPasswordCheckDto<T> getRspEmailPasswordCheckDto(List<ObjectError> errorList, HashMap<String, Object> map) {
         RspEmailPasswordCheckDto<T> tmpDto = new RspEmailPasswordCheckDto<>();
         if (errorList != null) {
             tmpDto.setInvalidParamList(errorList);
@@ -119,7 +119,7 @@ public class CommonResponseService {
                 tmpDto.setMessage((String) map.get("error"));
             } else {
                 tmpDto.setIsError(false);
-                tmpDto.setMessage(noErrorMessage);
+                tmpDto.setMessage(validParamMessage);
             }
         }
         return tmpDto;
@@ -134,7 +134,7 @@ public class CommonResponseService {
             tmpDto.setMessage((String) map.get("error"));
         } else {
             tmpDto.setIsError(false);
-            tmpDto.setMessage(noErrorMessage);
+            tmpDto.setMessage(validParamMessage);
         }
         return tmpDto;
     }
@@ -150,7 +150,7 @@ public class CommonResponseService {
             tmpDto.setInvalidParamList(null);
             tmpDto.setIsError(false);
             tmpDto.setIsPresent(userAccountVwRepository.findById(email).isPresent());
-            tmpDto.setMessage(noErrorMessage);
+            tmpDto.setMessage(validParamMessage);
         }
         return tmpDto;
     }
@@ -175,7 +175,7 @@ public class CommonResponseService {
             resultDto.setIsError(false);
             resultDto.setWrkotCodeMap(wrkotCodeMap);
             resultDto.setInvalidParamList(invalidParamList);
-            resultDto.setMessage(noErrorMessage);
+            resultDto.setMessage(validParamMessage);
         }
         return resultDto;
     }
@@ -197,8 +197,26 @@ public class CommonResponseService {
             resultDto.setResultData(onDateWrkotMap);
             resultDto.setIsError(false);
             resultDto.setInvalidParamList(invalidParamList);
-            resultDto.setMessage(noErrorMessage);
+            resultDto.setMessage(validParamMessage);
         }
         return resultDto;
     }
+
+    public CommonResponseDto getCommonResponse(List inValidParamList, HashMap<String, Object> map) {
+        CommonResponseDto tmpDto = new CommonResponseDto();
+        if (inValidParamList != null) {
+            tmpDto.setInvalidParamList(inValidParamList);
+            tmpDto.setIsError(true);
+            tmpDto.setMessage(invalidParamMessage);
+        } else {
+
+            tmpDto.setIsError(false);
+            tmpDto.setInvalidParamList(null);
+            tmpDto.setMessage(validParamMessage);
+        }
+        return tmpDto;
+    }
+
+//    public RspEmailPasswordCheckDto getRspEmailPasswordCheckDto(HashMap checkResultMap) {
+//    }
 }
