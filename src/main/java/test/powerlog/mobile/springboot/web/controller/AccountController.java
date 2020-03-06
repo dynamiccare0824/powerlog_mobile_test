@@ -324,15 +324,15 @@ public class AccountController {
         return resultMap;
     }
 
-    @ApiOperation(value = "계정 본인 확인",
-            notes = "더보기 메뉴에서 계정 본인 확인을 위해서 비밀번호 재검사, 이메일과 패스워드 isMatch 체크하여 리턴한다.")
-    @PostMapping(value = "more/validation/email-password")
-    public RspEmailPasswordCheckDto ValidateAccount(@RequestBody ReqEmailPasswordCheckDto emailPasswordCheckDto) throws JsonProcessingException {
-        String email = emailPasswordCheckDto.getEmail();
-        String password = emailPasswordCheckDto.getPassword();
-        HashMap checkResultMap = accountService.EmailPasswordCheck(email, password);
-        return commonResponseService.getRspEmailPasswordCheckDto(checkResultMap);
-    }
+//    @ApiOperation(value = "계정 본인 확인",
+//            notes = "더보기 메뉴에서 계정 본인 확인을 위해서 비밀번호 재검사, 이메일과 패스워드 isMatch 체크하여 리턴한다.")
+//    @PostMapping(value = "more/validation/email-password")
+//    public RspEmailPasswordCheckDto ValidateAccount(@RequestBody ReqEmailPasswordCheckDto emailPasswordCheckDto) throws JsonProcessingException {
+//        String email = emailPasswordCheckDto.getEmail();
+//        String password = emailPasswordCheckDto.getPassword();
+//        HashMap checkResultMap = accountService.EmailPasswordCheck(email, password);
+//        return commonResponseService.getRspEmailPasswordCheckDto(checkResultMap);
+//    }
 
     @ApiOperation(value = "비밀번호 새로 설정",
             notes = "로그인과 같은 방식으로 이메일 비밀번호 체크")
