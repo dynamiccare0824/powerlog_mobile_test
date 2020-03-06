@@ -16,6 +16,7 @@ import test.powerlog.mobile.springboot.web.dto.mobile.request.*;
 import test.powerlog.mobile.springboot.web.dto.mobile.response.RspDupCheckEmailDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.response.RspDupCheckSendMsg;
 import test.powerlog.mobile.springboot.web.dto.mobile.response.RspLoginDto;
+import test.powerlog.mobile.springboot.web.dto.mobile.response.RspRegisterDto;
 
 import javax.validation.*;
 import java.time.LocalDateTime;
@@ -90,6 +91,9 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
+    @Autowired
+    private CheckService checkService;
+
     //Completed
     //회원정보 틀렸을 때 오류
     @ApiOperation(value = "회원 로그인", notes = "이메일 아이디와 비밀번호를 받아 로그인한다!")
@@ -117,94 +121,77 @@ public class AccountController {
         }
     }
 
-//Completed
-@ApiOperation(value = "이메일 중복 검사", notes = "회원가입 시, 이메일 아이디가 DB에 이미 존재하는지 여부를 검사한다.")
-@PostMapping(value = "signup/dupcheck/email")
-public RspDupCheckEmailDto DupCheckEmail(@RequestBody @Valid ReqDupCheckEmailDto reqDupCheckEmailDto,BindingResult bindingResult)throws JsonProcessingException{
-        if(bindingResult.hasErrors()){
-        StringBuffer errorString=new StringBuffer();
-        List<ObjectError> invalidParamList=bindingResult.getAllErrors();
-        // 파라미터 오류 정보만 있고, map도 없을 것
-        return commonResponseService.getRspDupCheckEmailDto(invalidParamList,null);
-        }else{
-        String email=reqDupCheckEmailDto.getEmail();
-        HashMap<String, Object> resultMap=dupCheckEmailService.DupCheckEmail(email);
-        return commonResponseService.getRspDupCheckEmailDto(null,resultMap);
+    //Completed
+    @ApiOperation(value = "이메일 중복 검사", notes = "회원가입 시, 이메일 아이디가 DB에 이미 존재하는지 여부를 검사한다.")
+    @PostMapping(value = "signup/dupcheck/email")
+    public RspDupCheckEmailDto DupCheckEmail(@RequestBody @Valid ReqDupCheckEmailDto reqDupCheckEmailDto, BindingResult bindingResult) throws JsonProcessingException {
+        if (bindingResult.hasErrors()) {
+            StringBuffer errorString = new StringBuffer();
+            List<ObjectError> invalidParamList = bindingResult.getAllErrors();
+            // 파라미터 오류 정보만 있고, map도 없을 것
+            return commonResponseService.getRspDupCheckEmailDto(invalidParamList, null);
+        } else {
+            String email = reqDupCheckEmailDto.getEmail();
+            HashMap<String, Object> resultMap = checkService.DupCheckEmail(email);
+            return commonResponseService.getRspDupCheckEmailDto(null, resultMap);
         }
-        }
+    }
 
-//completed
-@ApiOperation(value = "핸드폰 중복 검사 + 조건 충족 시 인증번호 발송",
-        notes = "회원가입 시, 핸드폰 번호가 DB에 이미 존재하는지 여부를 검사하고 없다면 인증번호 4자리를 포함한 메시지를 발송한다.")
-@PostMapping(value = "signup/dupcheck/sendmsg")
-public RspDupCheckSendMsg DupCheckSendMsg(@RequestBody @Valid ReqDupCheckSendMsgDto reqDupCheckSendMsgDto,BindingResult bindingResult)throws JsonProcessingException{
-        HashMap<String, Object> tmpMap=new HashMap<>();
+    //completed
+    @ApiOperation(value = "핸드폰 중복 검사 + 조건 충족 시 인증번호 발송",
+            notes = "회원가입 시, 핸드폰 번호가 DB에 이미 존재하는지 여부를 검사하고 없다면 인증번호 4자리를 포함한 메시지를 발송한다.")
+    @PostMapping(value = "signup/dupcheck/sendmsg")
+    public RspDupCheckSendMsg DupCheckSendMsg(@RequestBody @Valid ReqDupCheckSendMsgDto reqDupCheckSendMsgDto, BindingResult bindingResult) throws JsonProcessingException {
+        HashMap<String, Object> tmpMap = new HashMap<>();
 
-        if(bindingResult.hasErrors()){
-        StringBuffer errorString=new StringBuffer();
-        List<ObjectError> invalidParamList=bindingResult.getAllErrors();
-        return commonResponseService.getRspDupCheckSendMsgDto(invalidParamList,tmpMap);
-        }else{
-        String phone=reqDupCheckSendMsgDto.getPhone();
-        NumberGenService numberGenService=new NumberGenService();
-        String randNum=numberGenService.Digits(4,1);
-        tmpMap=dupCheckPhoneService.DupCheckPhone(phone);
-        //핸드폰 번호가 DB에 없다면
-        if(!(Boolean)tmpMap.get("phonePresent")){
-        try{
-        String sendMsgResult=sendMsgService.buildJsonSendMsg(phone,randNum,tmpMap);
-        tmpMap.put("verificationNum",randNum);
-        tmpMap.put("sendMsgResult",sendMsgResult);
-        }
-        //핸드폰 번호가 DB에 없는 것은 맞는데 서버 오류로 문자가 보내지지 않는 문제가 발생했다면
-        catch(Exception ex){
-        tmpMap.replace("error",ex.toString());
-        return commonResponseService.getRspDupCheckSendMsgDto(null,tmpMap);
-        }
-        }
-        //핸드폰 번호가 DB에 있다면
-        else{
-        return commonResponseService.getRspDupCheckSendMsgDto(null,tmpMap);
-        }
+        if (bindingResult.hasErrors()) {
+            StringBuffer errorString = new StringBuffer();
+            List<ObjectError> invalidParamList = bindingResult.getAllErrors();
+            return commonResponseService.getRspDupCheckSendMsgDto(invalidParamList, tmpMap);
+        } else {
+            String phone = reqDupCheckSendMsgDto.getPhone();
+            NumberGenService numberGenService = new NumberGenService();
+            String randNum = numberGenService.Digits(4, 1);
+            tmpMap = checkService.DupCheckPhone(phone);
+            //핸드폰 번호가 DB에 없다면
+            if (!(Boolean) tmpMap.get("phonePresent")) {
+                try {
+                    String sendMsgResult = sendMsgService.buildJsonSendMsg(phone, randNum, tmpMap);
+                    tmpMap.put("verificationNum", randNum);
+                    tmpMap.put("sendMsgResult", sendMsgResult);
+                }
+                //핸드폰 번호가 DB에 없는 것은 맞는데 서버 오류로 문자가 보내지지 않는 문제가 발생했다면
+                catch (Exception ex) {
+                    tmpMap.replace("error", ex.toString());
+                    return commonResponseService.getRspDupCheckSendMsgDto(null, tmpMap);
+                }
+            }
+            //핸드폰 번호가 DB에 있다면
+            else {
+                return commonResponseService.getRspDupCheckSendMsgDto(null, tmpMap);
+            }
         }
         //핸드폰 번호가 DB에 없고 문자도 잘 보내졌다면
-        return commonResponseService.getRspDupCheckSendMsgDto(null,tmpMap);
+        return commonResponseService.getRspDupCheckSendMsgDto(null, tmpMap);
+    }
+
+    @PostMapping(value = "signup/register")
+    public RspRegisterDto Register(@RequestBody @Valid ReqRegisterDto reqRegisterDto, BindingResult bindingResult) throws JsonProcessingException {
+
+
+        HashMap<String, Object> tmpMap = new HashMap();
+
+        if (bindingResult.hasErrors()) {
+            StringBuffer errorString = new StringBuffer();
+            List<ObjectError> invalidParamList = bindingResult.getAllErrors();
+            return commonResponseService.getRspRegisterDto(invalidParamList, null);
+        } else {
+            HashMap<String, Object> resultMap = new HashMap();
+            SignUpDto signUpDto = accountService.ToRegisterForm(reqRegisterDto);
+            accountService.Signup(signUpDto); // save 실행
+            return commonResponseService.getRspRegisterDto(null, reqRegisterDto.getEmail());
         }
-
-@PostMapping(value = "signup/register")
-public HashMap<String, Object> Register(@RequestBody UserAccountDto userAccountDto)throws JsonProcessingException{
-
-        HashMap<String, Object> resultMap=new HashMap();
-        NumberGenService numberGenService=new NumberGenService();
-
-        java.time.LocalDateTime localDateTime=LocalDateTime.now();
-        String tmpUid=numberGenService.Digits(12,1);
-        int careerY=userAccountDto.getCareerYear();
-        int careerM=userAccountDto.getCareerMonth();
-
-        System.out.println(userAccountDto.getQuestionCode());
-        System.out.println(userAccountDto.getQuestionAnswer());
-
-
-        SignUpDto signUpDto=SignUpDto.builder().email(userAccountDto.getEmail()).password(userAccountDto.getPassword()).uid(tmpUid).name(userAccountDto.getName())
-        .gender(userAccountDto.getGender()).birth(userAccountDto.getBirth()).height(userAccountDto.getHeight()).weight(userAccountDto.getWeight())
-        .agreeFlag(userAccountDto.getAgreeFlag()).personalFlag(userAccountDto.getAgreeFlag()).shapeCode(userAccountDto.getShapeCode()).qAnswer(userAccountDto.getQuestionAnswer()).qCode(userAccountDto.getQuestionCode())
-        .verification(userAccountDto.getVerification()).phone(userAccountDto.getPhone()).createdTime(localDateTime).updatedTime(localDateTime).career(careerM+careerY*12).build();
-        signUpService.Signup(signUpDto); // save 실행
-
-        try{
-        String findById=userAccountVWRepository.findById(userAccountDto.getEmail()).get().getLoginVwEmail();
-        resultMap.put("findById",findById);
-        resultMap.put("result",true);
-        resultMap.put("error",null);
-        }catch(Exception ex){
-        resultMap.put("findById",ex);
-        resultMap.put("result",false);
-        resultMap.put("error",ex.toString());
-        }
-
-        return resultMap;
-        }
+    }
 
 //    @PostMapping(value = "/validation/email-phone")
 //    public HashMap<String, Object> ValidatePhoneSendMsg(@RequestBody ReqEmailPasswordCheckDto emailPasswordCheckDto) throws JsonProcessingException {
@@ -432,5 +419,5 @@ public HashMap<String, Object> Register(@RequestBody UserAccountDto userAccountD
 //            return responseService.getRspDeleteUserDto(checkResultMap);
 //        }
 //    }
-        }
+}
 

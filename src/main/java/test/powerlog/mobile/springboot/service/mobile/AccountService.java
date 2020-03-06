@@ -10,6 +10,7 @@ import test.powerlog.mobile.springboot.domain.view.LogLateMsrVwRepository;
 import test.powerlog.mobile.springboot.domain.view.UserAccountVw;
 import test.powerlog.mobile.springboot.domain.view.UserAccountVwRepository;
 import test.powerlog.mobile.springboot.service.mobile.old.SignUpService;
+import test.powerlog.mobile.springboot.web.dto.mobile.request.ReqRegisterDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.SignUpDto;
 
 import java.time.LocalDateTime;
@@ -24,6 +25,8 @@ public class AccountService {
     private UserAccountVwRepository userAccountVwRepository;
     @Autowired
     private SendEmailService sendEmailService;
+    @Autowired
+    private NumberGenService numberGenService;
     @Autowired
     private SignUpService signUpService;
     @Autowired
@@ -110,10 +113,26 @@ public class AccountService {
         return dic;
     }
 
+
+
     /*회원가입 요청 처리*/
     @Transactional
     public String Signup(SignUpDto signUpDto) {
         return userTbRepository.save(signUpDto.toEntity()).getUEmail();
+    }
+//
+    public SignUpDto ToRegisterForm(ReqRegisterDto reqRegisterDto) {
+
+        LocalDateTime localDateTime = LocalDateTime.now();
+        String tmpUid = numberGenService.ComplicatedDigits(12, 1);
+        int careerY = reqRegisterDto.getCareerYear();
+        int careerM = reqRegisterDto.getCareerMonth();
+
+        SignUpDto signUpDto = SignUpDto.builder().email(reqRegisterDto.getEmail()).password(reqRegisterDto.getPassword()).uid(tmpUid).name(reqRegisterDto.getName())
+                .gender(reqRegisterDto.getGender()).birth(reqRegisterDto.getBirth()).height(reqRegisterDto.getHeight()).weight(reqRegisterDto.getWeight())
+                .agreeFlag("true").personalFlag("true").shapeCode(reqRegisterDto.getShapeCode()).qAnswer(reqRegisterDto.getQuestionAnswer()).qCode(reqRegisterDto.getQuestionCode())
+                .verification("true").phone(reqRegisterDto.getPhone()).createdTime(localDateTime).updatedTime(localDateTime).career(careerM + careerY * 12).build();
+        return signUpDto;
     }
 
     public HashMap<String, Object> DeleteAccount(HashMap<String, Object> map, String email) {
@@ -133,8 +152,6 @@ public class AccountService {
         boolean result = false;
         try {
             LocalDateTime localDateTime = LocalDateTime.now();
-            System.out.println(password + "1");
-            System.out.println(userTbRepository.findById(email));
             Optional<UserTb> record = userTbRepository.findById(email);
 
             SignUpDto signUpDto = SignUpDto.builder().email(record.get().getUEmail()).password(password).uid(record.get().getUUid()).name(record.get().getUName())
@@ -142,17 +159,13 @@ public class AccountService {
                     .agreeFlag(record.get().getUAgreeFlag()).personalFlag(record.get().getUAgreeFlag()).shapeCode(record.get().getUShapeCode()).qAnswer(record.get().getUQAnswer()).qCode(record.get().getUQCode())
                     .verification(record.get().getUVerification()).phone(record.get().getUPhone())
                     .createdTime(record.get().getUCreatedTime()).updatedTime(localDateTime).career(record.get().getUCareer()).build();
-            System.out.println(signUpDto.getPassword() + "2");
             signUpService.Signup(signUpDto); // save 실행
-            System.out.println(record.get().getUEmail());
             signUpService.Signup(signUpDto); // save 실행
-            System.out.println("Correct");
             result = true;
 //                return (record.get().getId() == testProductDto.getId() && record.get().getPassword() == testProductDto.getPassword()) ? true: false
         } catch (Exception ex) {
             System.out.println(ex);
         }
-        System.out.println("EmailQuestionCheckDone");
         return result;
     }
 

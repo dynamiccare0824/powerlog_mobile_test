@@ -47,7 +47,6 @@ public class NumberGenService {
 
             //0~9 까지 난수 + *과 # 포함 생성
             String ran = Integer.toString(rand.nextInt(12));
-            System.out.println(ran);
 
 
             if(dupCd==1) {
@@ -61,7 +60,6 @@ public class NumberGenService {
                 else{
                     numStr += ran;
                 }
-                System.out.println(numStr);
             }
             else if(dupCd==2) {
                 //중복을 허용하지 않을시 중복된 값이 있는지 검사한다

@@ -1,7 +1,9 @@
 package test.powerlog.mobile.springboot.service.common;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.ObjectError;
+import test.powerlog.mobile.springboot.domain.view.UserAccountVwRepository;
 import test.powerlog.mobile.springboot.web.dto.kiosk.response.RspKioskLoginDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.response.*;
 
@@ -10,11 +12,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+
 @Service // 해당 Class가 Service임을 명시합니다.
 public class CommonResponseService {
 
     String noErrorMessage = "Valid request received. Check result";
     String invalidParamMessage = "Invalid parameter included.";
+    @Autowired
+    UserAccountVwRepository userAccountVwRepository;
 
     //completed
     // 다중건 결과를 처리하는 메소드이기 때문에 getRspLoginDto 는 List를 받아서 보여줄 수 있게 되어있다.
@@ -43,8 +48,7 @@ public class CommonResponseService {
             presentWorkoutList = (ArrayList) logRecordMap.get("presentWorkoutCode");
             if (presentWorkoutList.isEmpty()) {
                 tmpDto.setResultPresentList(null);
-            }
-            else{
+            } else {
                 tmpDto.setResultPresentList(presentWorkoutList);
             }
             tmpDto.setTotalList((ArrayList) logRecordMap.get("LoginWorkoutCode"));
@@ -55,6 +59,7 @@ public class CommonResponseService {
         }
         return tmpDto;
     }
+
 
     //completed
     public <T> RspDupCheckEmailDto<T> getRspDupCheckEmailDto(List<ObjectError> invalidParamList, HashMap<String, Object> map) {
@@ -129,6 +134,22 @@ public class CommonResponseService {
             tmpDto.setMessage((String) map.get("error"));
         } else {
             tmpDto.setIsError(false);
+            tmpDto.setMessage(noErrorMessage);
+        }
+        return tmpDto;
+    }
+
+    public RspRegisterDto getRspRegisterDto(List<ObjectError> invalidParamList, String email) {
+        RspRegisterDto tmpDto = new RspRegisterDto();
+        if (invalidParamList != null) {
+            tmpDto.setInvalidParamList(invalidParamList);
+            tmpDto.setIsError(true);
+            tmpDto.setIsPresent(null);
+            tmpDto.setMessage("Invalid parameter included.");
+        } else {
+            tmpDto.setInvalidParamList(null);
+            tmpDto.setIsError(false);
+            tmpDto.setIsPresent(userAccountVwRepository.findById(email).isPresent());
             tmpDto.setMessage(noErrorMessage);
         }
         return tmpDto;
