@@ -8,5 +8,5 @@ import java.util.List;
 @Repository
 public interface LogTotalMsrVwRepository extends JpaRepository<LogTotalMsrVw, String>{
     List<LogTotalMsrVw> findAllByLgTotalMsrVwEmail(String email);
-    List<LogTotalMsrVw> findAllByLgTotalMsrVwEmailAndLgTotalMsrVwCommonCodeOrderByLgTotalMsrVwLogDateDesc(String email, String commonCode);
+    List<LogTotalMsrVw> findAllByLgTotalMsrVwEmailAndLgTotalMsrVwCommonCodeOrderByLgTotalMsrVwDateTimeDesc(String email, String commonCode);
 }

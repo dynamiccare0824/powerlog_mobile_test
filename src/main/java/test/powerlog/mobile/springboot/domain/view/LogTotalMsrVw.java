@@ -25,7 +25,7 @@ public class LogTotalMsrVw {
     private String lgTotalMsrVwName;
 
     @Column
-    private String lgTotalMsrVwLogDate;
+    private String lgTotalMsrVwDateTime;
 
     @Column
     private String lgTotalMsrVwAge;

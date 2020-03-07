@@ -115,6 +115,14 @@ public class KioskController {
         }
     }
 
+    @PostMapping(value = "/save/workout")
+    public RspKioskLoginDto<PlannerVw> SaveWorkout(@RequestBody @Valid ReqKioskLoginDto reqKioskLoginDto, BindingResult bindingResult) throws JsonProcessingException {
+        HashMap<String, Object> commonMap = commonResponseService.getCommonHashMap();
+
+
+        return null;
+    }
+
 //    @PostMapping(value = "/testuidlogin")
 //    public RspKioskLoginDto<PlannerVw> Test(@RequestBody @Valid ReqKioskLoginDto reqKioskLoginDto, BindingResult bindingResult) throws JsonProcessingException {
 //        HashMap<String, Object> uidLoginResult = new HashMap();

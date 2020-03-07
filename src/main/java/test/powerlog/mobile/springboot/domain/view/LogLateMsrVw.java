@@ -18,7 +18,7 @@ public class LogLateMsrVw {
     private String lgLateMsrVwEmail;
 
     @Column
-    private String lgLateMsrVwLogDate;
+    private String lgLateMsrVwDateTime;
 
     @Column
     private String lgLateMsrVwCommonCode;

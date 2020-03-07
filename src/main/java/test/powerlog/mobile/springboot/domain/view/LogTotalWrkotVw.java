@@ -22,7 +22,7 @@ public class LogTotalWrkotVw {
     private String lgTotalWrkotVwEmail;
 
     @Column
-    private String lgTotalWrkotVwDate;
+    private String lgTotalWrkotVwDateTime;
 
     @Column
     private String lgTotalWrkotVwCommonCode;

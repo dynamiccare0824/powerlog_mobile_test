@@ -2,16 +2,13 @@ package test.powerlog.mobile.springboot.web.dto.kiosk.response;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import test.powerlog.mobile.springboot.web.dto.common.CommonResponseDto;
 
 import java.util.HashMap;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 @ApiModel(value = "", description = "키오스크에서 uid를 받아 계정을 특정하기 위한 객체")
 public class RspKioskMainDto<T> extends CommonResponseDto {
 

@@ -217,6 +217,17 @@ public class CommonResponseService {
         return tmpDto;
     }
 
+    public HashMap<String, Object> getCommonHashMap() {
+        HashMap<String, Object> tmpMap = new HashMap<>();
+        tmpMap.put("phonePresent", null);
+        tmpMap.put("emailPresent", null);
+        tmpMap.put("isPresent", null);
+        tmpMap.put("isError", null);
+        tmpMap.put("isMatch", null);
+        tmpMap.put("message", null);
+        return tmpMap;
+    }
+
 //    public RspEmailPasswordCheckDto getRspEmailPasswordCheckDto(HashMap checkResultMap) {
 //    }
 }

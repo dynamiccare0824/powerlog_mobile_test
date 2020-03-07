@@ -105,7 +105,7 @@ public class PlannerController {
 
         try{
             for (int i = 0; i < codeList1.size(); i++) {
-                List<LogTotalMsrVw> tmpList = logTotalMsrVwRepository.findAllByLgTotalMsrVwEmailAndLgTotalMsrVwCommonCodeOrderByLgTotalMsrVwLogDateDesc(email,
+                List<LogTotalMsrVw> tmpList = logTotalMsrVwRepository.findAllByLgTotalMsrVwEmailAndLgTotalMsrVwCommonCodeOrderByLgTotalMsrVwDateTimeDesc(email,
                         codeList1.get(i));
                 if(!tmpList.isEmpty()){
                     resultMap.put(codeList1.get(i), tmpList);
@@ -116,7 +116,7 @@ public class PlannerController {
 
             }
             for (int i = 0; i < codeList2.size(); i++) {
-                List<LogTotalMsrVw> tmpList = logTotalMsrVwRepository.findAllByLgTotalMsrVwEmailAndLgTotalMsrVwCommonCodeOrderByLgTotalMsrVwLogDateDesc(email,
+                List<LogTotalMsrVw> tmpList = logTotalMsrVwRepository.findAllByLgTotalMsrVwEmailAndLgTotalMsrVwCommonCodeOrderByLgTotalMsrVwDateTimeDesc(email,
                         codeList2.get(i));
                 if(!tmpList.isEmpty()){
                     resultMap.put(codeList2.get(i), tmpList);
