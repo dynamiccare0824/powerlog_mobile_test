@@ -9,10 +9,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import test.powerlog.mobile.springboot.domain.view.*;
+import test.powerlog.mobile.springboot.service.common.CommonResponseService;
 import test.powerlog.mobile.springboot.service.mobile.old.*;
+import test.powerlog.mobile.springboot.web.dto.common.CommonResponseDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.ReqTestHistoryDto;
+import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqProgramDetailDto;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -60,6 +64,9 @@ public class PlannerController {
     @Autowired
     LogTotalMsrVwRepository logTotalMsrVwRepository;
 
+    @Autowired
+    CommonResponseService commonResponseService;
+
 //    @PostMapping(value = "/plannerByMonth")
 //    public HashMap<String, Object> PlannerByMonth(@RequestBody UserAccountDto userAccountDto) throws JsonProcessingException {
 //        HashMap<String, Object> resultMap = new HashMap();
@@ -77,30 +84,18 @@ public class PlannerController {
 //        return resultMap;
 //    }
 
+    //ing 예외처리가 되어있지 않다.
     @PostMapping(value = "/historytest")
     public HashMap<String, Object> testHistory(@RequestBody ReqTestHistoryDto reqTestHistoryDto) throws JsonProcessingException {
         HashMap<String, Object> resultMap = new HashMap();
         HashMap<String, Object> resultMap2 = new HashMap();
+        //
         String email = reqTestHistoryDto.getEmail();
-        ArrayList<String> codeList1 =  new ArrayList<>();
-        codeList1.add("A01");
-        codeList1.add("B01");
-        codeList1.add("C01");
-        codeList1.add("D01");
-        codeList1.add("E01");
-        codeList1.add("F01");
-        codeList1.add("G01");
-        codeList1.add("H01");
+        ArrayList<String> codeList1 =  new ArrayList<String>(
+                Arrays.asList("A01", "B01", "C01", "D01", "F01", "G01", "H01"));
 
-        ArrayList<String> codeList2 =  new ArrayList<>();
-        codeList2.add("A03");
-        codeList2.add("B03");
-        codeList2.add("C03");
-        codeList2.add("D03");
-        codeList2.add("E03");
-        codeList2.add("F03");
-        codeList2.add("G03");
-        codeList2.add("H03");
+        ArrayList<String> codeList2 =  new ArrayList<String>(
+                Arrays.asList("A03", "B03", "C03", "D03", "E03", "F03", "G03", "H03"));
 
 
         try{
@@ -141,4 +136,9 @@ public class PlannerController {
         return resultMap2;
     }
 
+    @PostMapping(value = "/planner/program/detail")
+    public HashMap<String, Object> ProgramDetail(@RequestBody ReqProgramDetailDto reqProgramDetailDto) throws JsonProcessingException {
+        HashMap<String, Object> resultMap = commonResponseService.getCommonHashMap();
+        return null;
+    }
 }
