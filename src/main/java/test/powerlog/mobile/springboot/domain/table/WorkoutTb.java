@@ -4,11 +4,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.tomcat.jni.Local;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -18,95 +17,52 @@ import java.time.LocalDateTime;
 public class WorkoutTb {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String wIndex;
 
     @Column
     private String wEmail;
 
     @Column
-    private String wDate;
+    private LocalDateTime wDateTime;
+
+    @Column
+    private LocalDate wDate;
 
     @Column
     private String wCommonCode;
 
     @Column
-    private String wWeight;
+    private int wWeight;
 
     @Column
-    private String wCount;
+    private int wCount;
 
     @Column
-    private String wSet;
+    private int wSet;
 
     @Column
-    private String wLevel;
+    private int wLevel;
 
     @Column
-    private String wRest;
+    private int wRest;
 
     @Column
     private String wDevice;
 
-//    @Builder
-//    public WorkoutTb(String wIndex, String wEmail, String wDate, String wCommonCode, String wWeight, String wCount, int wSet, int wLevel,
-//                     String wRest, String wDevice) {
-//        this.uEmail = email;
-//        this.uPassword = password;
-//        this.uUid = uid;
-//        this.uName = name;
-//        this.uGender = gender;
-//        this.uBirth = birth;
-//        this.uHeight = height;
-//        this.uWeight = weight;
-//        this.uAgreeFlag = agreeFlag;
-//        this.uPersonalFlag = personalFlag;
-//        this.uShapeCode = shapeCode;
-//        this.uVerification = verification;
-//        this.uCreatedTime = createdTime;
-//        this.uUpdatedTime = updatedTime;
-//        this.uPhone = phone;
-//        this.uCareer = career;
-//        this.uQCode = qCode;
-//        this.uQAnswer = qAnswer;
-//    }
+    @Builder
+    public WorkoutTb(String wIndex, String wEmail, LocalDateTime wDateTime, String wCommonCode, int wWeight, int wCount, int wSet, int wLevel,
+                     int wRest, String wDevice, LocalDate wDate) {
+        this.wIndex = wIndex;
+        this.wEmail = wEmail;
+        this.wDateTime = wDateTime;
+        this.wCommonCode = wCommonCode;
+        this.wWeight = wWeight;
+        this.wCount = wCount;
+        this.wSet = wSet;
+        this.wLevel = wLevel;
+        this.wRest = wRest;
+        this.wDevice = wDevice;
+        this.wDate = wDate;
+    }
 }
-
-//    @Id
-//    @GeneratedValue // Auto IncId Generator
-//    private Long id;
-//
-//    @Id
-//    @Column(length = 20, nullable = false)
-//    private String name;
-//
-//    @Column(columnDefinition = "TEXT", nullable = true)
-//    private Integer price;
-//    private String memo;
-//    private String memo2;
-//
-//    @Builder
-//    public Product(String name, Integer price, String memo,String memo2) {
-//        this.name = name;
-//        this.price = price;
-//        this.memo = memo;
-//        this.memo2 = memo2;
-//    }
-
-//package test.powerlog.mobile.springboot.domain.products;
-//import javax.persistence.*;
-//import lombok.*;
-
-//import java.util.Date;
-//
-//@NoArgsConstructor(access = AccessLevel.PROTECTED)
-//@Getter
-//@Entity
-//@Table(name="test_view")
-//public class Product2 {
-//    @Id
-//    private Long uid;
-//
-//    @Column
-//    @Temporal(TemporalType.DATE)
-//    private Date udate;
-// }

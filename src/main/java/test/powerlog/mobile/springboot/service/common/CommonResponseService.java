@@ -6,6 +6,7 @@ import org.springframework.validation.ObjectError;
 import test.powerlog.mobile.springboot.domain.view.UserAccountVwRepository;
 import test.powerlog.mobile.springboot.web.dto.common.CommonResponseDto;
 import test.powerlog.mobile.springboot.web.dto.kiosk.response.RspKioskLoginDto;
+import test.powerlog.mobile.springboot.web.dto.kiosk.response.RspKioskWorkoutDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.response.*;
 
 import java.util.ArrayList;
@@ -180,23 +181,26 @@ public class CommonResponseService {
         return resultDto;
     }
 
-    public <T> RspKioskLoginDto<T> getRspKioskMainDto(List<ObjectError> invalidParamList,
-                                                      HashMap<String, Object> onDateWrkotMap,
-                                                      HashMap<String, Object> uidLoginResult) {
-        RspKioskLoginDto<T> resultDto = new RspKioskLoginDto<>();
+    public RspKioskWorkoutDto getRspKioskWorkoutDto(List<ObjectError> invalidParamList,
+                                                                   HashMap<String, Object> commonMap) {
+        RspKioskWorkoutDto resultDto = new RspKioskWorkoutDto();
         if (invalidParamList != null) {
-            resultDto.setIsPresent(null);
-            resultDto.setName(null);
-            resultDto.setResultData(onDateWrkotMap);
             resultDto.setIsError(true);
+            resultDto.setIsDone(false);
             resultDto.setInvalidParamList(invalidParamList);
             resultDto.setMessage(invalidParamMessage);
-        } else {
-            resultDto.setIsPresent((Boolean) uidLoginResult.get("isPresent"));
-            resultDto.setName((String) uidLoginResult.get("name"));
-            resultDto.setResultData(onDateWrkotMap);
+        }
+        else if(invalidParamList==null && (Boolean) commonMap.get("isError")) {
             resultDto.setIsError(false);
-            resultDto.setInvalidParamList(invalidParamList);
+            resultDto.setIsDone(true);
+            resultDto.setInvalidParamList(null);
+            resultDto.setMessage(validParamMessage);
+        }
+        // invalidParamList==null && (Boolean) commonMap.get("isError")==false
+        else{
+            resultDto.setIsError(true);
+            resultDto.setIsDone(false);
+            resultDto.setInvalidParamList(null);
             resultDto.setMessage(validParamMessage);
         }
         return resultDto;
@@ -224,6 +228,7 @@ public class CommonResponseService {
         tmpMap.put("isPresent", null);
         tmpMap.put("isError", null);
         tmpMap.put("isMatch", null);
+        tmpMap.put("isDone", null);
         tmpMap.put("message", null);
         return tmpMap;
     }

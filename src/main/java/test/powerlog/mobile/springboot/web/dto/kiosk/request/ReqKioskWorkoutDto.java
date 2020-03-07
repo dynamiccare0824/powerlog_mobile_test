@@ -14,11 +14,9 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @ApiModel(value = "", description = "키오스크에서 운동 기록을 받아 save 하기 위한 객체")
 public class ReqKioskWorkoutDto {
-    @NotBlank(message = "공백이 없어야 합니다")
     @ApiModelProperty(position = 1)
     private Boolean onSchedule;
 
-    @NotBlank(message = "공백이 없어야 합니다")
     @ApiModelProperty(position = 2)
     private Boolean isProgram;
 
@@ -30,27 +28,27 @@ public class ReqKioskWorkoutDto {
     @ApiModelProperty(position = 4, example = "A01")
     private String commonCode;
 
-    @NotBlank(message = "공백이 없어야 합니다")
+//    @NotBlank(message = "공백이 없어야 합니다")
     @ApiModelProperty(position = 5)
     private int weight;
 
-    @NotBlank(message = "공백이 없어야 합니다")
+//    @NotBlank(message = "공백이 없어야 합니다")
     @ApiModelProperty(position = 6)
     private int height;
 
-    @NotBlank(message = "공백이 없어야 합니다")
+//    @NotBlank(message = "공백이 없어야 합니다")
     @ApiModelProperty(position = 7)
     private int count;
 
-    @NotBlank(message = "공백이 없어야 합니다")
+//    @NotBlank(message = "공백이 없어야 합니다")
     @ApiModelProperty(position = 8)
     private int set;
 
-    @NotBlank(message = "공백이 없어야 합니다")
+//    @NotBlank(message = "공백이 없어야 합니다")
     @ApiModelProperty(position = 9)
     private int level;
 
-    @NotBlank(message = "공백이 없어야 합니다")
+//    @NotBlank(message = "공백이 없어야 합니다")
     @ApiModelProperty(position = 10)
     private int rest;
 

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-@Api(tags = {"3. Planner/History Controller"})
+@Api(tags = {"2. Planner/History Controller"})
 @RestController
 @RequestMapping("/plannerhistory")
 public class PlannerController {

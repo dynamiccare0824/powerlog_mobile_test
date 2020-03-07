@@ -7,14 +7,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import test.powerlog.mobile.springboot.domain.table.WorkoutTb;
 import test.powerlog.mobile.springboot.domain.view.*;
 import test.powerlog.mobile.springboot.service.common.CommonResponseService;
 import test.powerlog.mobile.springboot.service.common.ParamValidCheckService;
 import test.powerlog.mobile.springboot.service.kiosk.OnDateWrkotService;
+import test.powerlog.mobile.springboot.service.kiosk.SaveWorkoutService;
 import test.powerlog.mobile.springboot.service.kiosk.UidLoginService;
 import test.powerlog.mobile.springboot.service.mobile.old.*;
 import test.powerlog.mobile.springboot.web.dto.kiosk.request.ReqKioskLoginDto;
+import test.powerlog.mobile.springboot.web.dto.kiosk.request.ReqKioskWorkoutDto;
 import test.powerlog.mobile.springboot.web.dto.kiosk.response.RspKioskLoginDto;
+import test.powerlog.mobile.springboot.web.dto.kiosk.response.RspKioskWorkoutDto;
 
 import javax.validation.Valid;
 import java.util.*;
@@ -78,6 +82,9 @@ public class KioskController {
     @Autowired
     private WorkoutCodeVwRepository workoutCodeVwRepository;
 
+    @Autowired
+    private SaveWorkoutService saveWorkoutService;
+
     @PostMapping(value = "/uidlogin")
     public RspKioskLoginDto<PlannerVw> UidLogin(@RequestBody @Valid ReqKioskLoginDto reqKioskLoginDto, BindingResult bindingResult) throws JsonProcessingException {
         HashMap<String, Object> uidLoginResult = new HashMap();
@@ -115,11 +122,30 @@ public class KioskController {
         }
     }
 
+    // ing
+    // isProgram과 onSchedule 반영되지 않음
     @PostMapping(value = "/save/workout")
-    public RspKioskLoginDto<PlannerVw> SaveWorkout(@RequestBody @Valid ReqKioskLoginDto reqKioskLoginDto, BindingResult bindingResult) throws JsonProcessingException {
+    public RspKioskWorkoutDto SaveWorkout(@RequestBody @Valid ReqKioskWorkoutDto reqKioskWorkoutDto, BindingResult bindingResult) throws JsonProcessingException {
         HashMap<String, Object> commonMap = commonResponseService.getCommonHashMap();
-
-
+        List<ObjectError> invalidParamList = paramValidCheckService.getInvalidParamList(bindingResult);
+        if(invalidParamList!=null){
+            commonMap.replace("isError", true);
+            commonMap.replace("message", invalidParamList.get(0).getDefaultMessage());
+            return commonResponseService.getRspKioskWorkoutDto(invalidParamList, commonMap);
+        }
+        else{
+            WorkoutTb tmpWorkoutTb = saveWorkoutService.ToSaveRecordForm(reqKioskWorkoutDto);
+            try{
+                commonMap.replace("isError", false);
+                System.out.println(commonMap.toString() + "1");
+                saveWorkoutService.SaveRecord(tmpWorkoutTb);
+            }
+            catch(Exception ex){
+                commonMap.replace("isError", true);
+                commonMap.replace("message", ex.toString());
+            }
+        }
+        System.out.println(commonMap);
         return null;
     }
 
