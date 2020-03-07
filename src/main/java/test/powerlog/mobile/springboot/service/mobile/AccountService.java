@@ -10,8 +10,8 @@ import test.powerlog.mobile.springboot.domain.view.LogLateMsrVwRepository;
 import test.powerlog.mobile.springboot.domain.view.UserAccountVw;
 import test.powerlog.mobile.springboot.domain.view.UserAccountVwRepository;
 import test.powerlog.mobile.springboot.service.mobile.old.SignUpService;
-import test.powerlog.mobile.springboot.web.dto.mobile.request.ReqRegisterDto;
-import test.powerlog.mobile.springboot.web.dto.mobile.request.SignUpDto;
+import test.powerlog.mobile.springboot.web.dto.mobile.request.account.ReqRegisterDto;
+import test.powerlog.mobile.springboot.web.dto.mobile.request.account.SignUpDto;
 
 import java.time.LocalDateTime;
 import java.util.*;

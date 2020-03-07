@@ -1,4 +1,4 @@
-package test.powerlog.mobile.springboot.web.dto.mobile.request;
+package test.powerlog.mobile.springboot.web.dto.mobile.request.account;
 
 import lombok.Builder;
 import lombok.Getter;
