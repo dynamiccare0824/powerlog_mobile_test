@@ -13,5 +13,5 @@ public class RspLostValidPhoneDto<T> extends CommonResponseDto {
     @ApiModelProperty(value = "로그인 이메일 아이디와 비밀번호 match 여부")
     private Boolean isMatch;
     @ApiModelProperty(value = "인증번호")
-    private Boolean verificationNum;
+    private String verificationNum;
 }

@@ -14,6 +14,7 @@ import test.powerlog.mobile.springboot.service.common.ParamValidCheckService;
 import test.powerlog.mobile.springboot.service.mobile.*;
 import test.powerlog.mobile.springboot.service.mobile.old.*;
 import test.powerlog.mobile.springboot.web.dto.common.CommonResponseDto;
+import test.powerlog.mobile.springboot.web.dto.mobile.request.ReqLostValidPhoneDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.account.*;
 import test.powerlog.mobile.springboot.web.dto.mobile.response.*;
 
@@ -207,42 +208,42 @@ public class AccountController {
         }
     }
 //
-//    @ApiOperation(value = "핸드폰 번호로 비밀번호 찾기",
-//            notes = "이메일과 핸드폰 번호를 이용한다")
-//    @PostMapping(value = "lost/validation/phone")
-//    public RspEmailPasswordCheckDto<Object> ValidatePhoneSendMsg(@RequestBody @Valid ReqLostValidPhoneDto reqLostValidPhoneDto, BindingResult bindingResult) throws JsonProcessingException {
-//        HashMap<String, Object> tmpMap = new HashMap<>();
-//
-//        if (bindingResult.hasErrors()) {
-//            StringBuffer errorString = new StringBuffer();
-//            List<ObjectError> invalidParamList = bindingResult.getAllErrors();
-//            return commonResponseService.getRspEmailPasswordCheckDto(invalidParamList, null);
-//        } else {
-//
-//            HashMap<String, Object> resultMap = new HashMap();
-//            String email = reqLostValidPhoneDto.getEmail();
-//            String phone = reqLostValidPhoneDto.getPhone();
-//            //이 이메일과 핸드폰 번호가 맞는 번호인지 체크한다
-//            if (checkService.emailPhoneCheck(email, phone)) {
-//                //맞다면 핸드폰으로 인증번호 전송
-//                NumberGenService numberGenService = new NumberGenService();
-//                String randNum = numberGenService.Digits(4, 1);
-//                try {
-//                    String sendMsgResult = sendMsgService.buildJsonSendMsg(phone, randNum, tmpMap);
-//                    tmpMap.put("verificationNum", randNum);
-//                    tmpMap.put("sendMsgResult", sendMsgResult);
-//                }
-//                //핸드폰 번호가 DB에 없는 것은 맞는데 서버 오류로 문자가 보내지지 않는 문제가 발생했다면
-//                catch (Exception ex) {
-//                    tmpMap.replace("error", ex.toString());
-////                    return commonResponseService.getRspDupCheckSendMsgDto(null, tmpMap);
-//                }
-//            } else {
-//                return null;
-//            }
-//            return null;
-//        }
-//    }
+    @ApiOperation(value = "핸드폰 번호로 비밀번호 찾기",
+            notes = "이메일과 핸드폰 번호를 이용한다")
+    @PostMapping(value = "lost/validation/phone")
+    public RspLostValidPhoneDto ValidatePhoneSendMsg(@RequestBody @Valid ReqLostValidPhoneDto reqLostValidPhoneDto, BindingResult bindingResult) throws JsonProcessingException {
+        HashMap<String, Object> commonMap = commonResponseService.getCommonHashMap();
+
+        if (bindingResult.hasErrors()) {
+            StringBuffer errorString = new StringBuffer();
+            List<ObjectError> invalidParamList = bindingResult.getAllErrors();
+            return commonResponseService.getRspLostValidPhoneDto(invalidParamList, null);
+        } else {
+            HashMap<String, Object> resultMap = new HashMap();
+            String email = reqLostValidPhoneDto.getEmail();
+            String phone = reqLostValidPhoneDto.getPhone();
+            //이 이메일과 핸드폰 번호가 맞는 번호인지 체크한다
+            if (checkService.emailPhoneCheck(email, phone)) {
+                //맞다면 핸드폰으로 인증번호 전송
+                commonMap.replace("isMatch", true);
+                NumberGenService numberGenService = new NumberGenService();
+                String randNum = numberGenService.Digits(4, 1);
+                try {
+                    String sendMsgResult = sendMsgService.buildJsonSendMsg(phone, randNum, commonMap);
+                    commonMap.replace("verificationNum", randNum);
+                }
+                //핸드폰 번호가 DB에 없는 것은 맞는데 서버 오류로 문자가 보내지지 않는 문제가 발생했다면
+                catch (Exception ex) {
+                    commonMap.replace("error", ex.toString());
+                    return commonResponseService.getRspLostValidPhoneDto(null, commonMap);
+                }
+            } else {
+                commonMap.replace("isMatch", false);
+                return commonResponseService.getRspLostValidPhoneDto(null, commonMap);
+            }
+        }
+        return commonResponseService.getRspLostValidPhoneDto(null, commonMap);
+    }
 
 
 

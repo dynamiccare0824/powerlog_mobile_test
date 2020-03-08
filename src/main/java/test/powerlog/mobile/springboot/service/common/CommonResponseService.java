@@ -126,6 +126,33 @@ public class CommonResponseService {
         return tmpDto;
     }
 
+    public RspLostValidPhoneDto getRspLostValidPhoneDto(List<ObjectError> errorList, HashMap<String, Object> commonMap) {
+        RspLostValidPhoneDto tmpDto = new RspLostValidPhoneDto();
+        if (errorList != null) {
+            tmpDto.setInvalidParamList(errorList);
+            tmpDto.setIsMatch(null);
+            tmpDto.setIsError(true);
+            tmpDto.setVerificationNum(null);
+            tmpDto.setMessage("Invalid parameter included.");
+        } else {
+            tmpDto.setIsMatch((Boolean) commonMap.get("isMatch"));
+            if ((Boolean) commonMap.get("isMatch")) {
+                tmpDto.setInvalidParamList(null);
+                tmpDto.setIsMatch(true);
+                tmpDto.setIsError(false);
+                tmpDto.setVerificationNum((String)commonMap.get("verificationNum"));
+                tmpDto.setMessage(validParamMessage);
+            } else {
+                tmpDto.setInvalidParamList(null);
+                tmpDto.setIsMatch(false);
+                tmpDto.setIsError(false);
+                tmpDto.setVerificationNum((String) commonMap.get("verificationNum"));
+                tmpDto.setMessage(validParamMessage);
+            }
+        }
+        return tmpDto;
+    }
+
     public <T> RspDeleteUserDto<T> getRspDeleteUserDto(List<ObjectError> invalidParamList, HashMap<String, Object> map) {
         RspDeleteUserDto<T> tmpDto = new RspDeleteUserDto<>();
         tmpDto.setIsMatch((Boolean) map.get("isMatch"));
