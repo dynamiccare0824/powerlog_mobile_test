@@ -295,6 +295,8 @@ public class AccountController {
         }
     }
 
+    @ApiOperation(value = "비밀번호 변경",
+            notes = "더보기 메뉴에서 계정 본인 확인이 끝난 후 비밀번호 재설정")
     @PostMapping(value = "/update/newpassword")
     public HashMap<String, Object> UpdatePassword(@RequestBody ResetDto resetDto) throws JsonProcessingException {
 
