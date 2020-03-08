@@ -434,6 +434,32 @@ public class AccountController {
         return resultMap;
     }
 
+
+    @ApiOperation(value = "신체 정보 변경 [더보기]")
+    @PostMapping(value = "more/bodydetail/update")
+    public HashMap<String, Object> UpdateBodyDetail(@RequestBody @Valid ReqUpdateBodyDetailDto reqUpdateBodyDetailDto, BindingResult bindingResult) throws JsonProcessingException {
+        HashMap<String, Object> resultMap = new HashMap<>();
+        if (bindingResult.hasErrors()) {
+            StringBuffer errorString = new StringBuffer();
+            List<ObjectError> invalidParamList = bindingResult.getAllErrors();
+            resultMap.put("error", invalidParamList);
+            resultMap.put("isError", true);
+            resultMap.put("isUpdated", false);
+            // 파라미터 오류 정보만 있고, map도 없을 것
+        } else {
+            if(accountService.UpdateBodyDetail(reqUpdateBodyDetailDto)){
+                resultMap.put("error", null);
+                resultMap.put("isError", false);
+            }
+            else{
+                resultMap.put("error", "unknown error or cannot find qualified data");
+                resultMap.put("isError", true);
+            }
+            resultMap.put("isUpdated", accountService.UpdateBodyDetail(reqUpdateBodyDetailDto));
+        }
+        return resultMap;
+    }
+
     @ApiOperation(value = "회원 탈퇴 [더보기]")
     @PostMapping(value = "more/user/delete")
     public HashMap<String, Object> DeleteUser(@RequestBody ReqDeleteUserDto reqDeleteUserDto) throws JsonProcessingException {

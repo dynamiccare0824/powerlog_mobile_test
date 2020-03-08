@@ -10,6 +10,7 @@ import test.powerlog.mobile.springboot.domain.view.LogLateMsrVwRepository;
 import test.powerlog.mobile.springboot.domain.view.UserAccountVw;
 import test.powerlog.mobile.springboot.domain.view.UserAccountVwRepository;
 import test.powerlog.mobile.springboot.service.mobile.old.SignUpService;
+import test.powerlog.mobile.springboot.web.dto.mobile.request.ReqUpdateBodyDetailDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.account.ReqRegisterDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.account.SignUpDto;
 
@@ -84,8 +85,7 @@ public class AccountService {
                 }
             }
             workoutCodeMap.put("presentWorkoutCode", isWorkoutCode);
-        }
-        else{
+        } else {
             workoutCodeMap.put("presentWorkoutCode", null);
         }
         return workoutCodeMap;
@@ -114,19 +114,19 @@ public class AccountService {
     }
 
 
-
     /*회원가입 요청 처리*/
     @Transactional
     public String Signup(SignUpDto signUpDto) {
         return userTbRepository.save(signUpDto.toEntity()).getUEmail();
     }
-//
+
+    //
     public SignUpDto ToRegisterForm(ReqRegisterDto reqRegisterDto) {
 
         LocalDateTime localDateTime = LocalDateTime.now();
         String tmpUid = numberGenService.ComplicatedDigits(12, 1);
-        int careerY =Integer.parseInt(reqRegisterDto.getCareerYear());
-        int careerM =Integer.parseInt(reqRegisterDto.getCareerMonth());
+        int careerY = Integer.parseInt(reqRegisterDto.getCareerYear());
+        int careerM = Integer.parseInt(reqRegisterDto.getCareerMonth());
 
         SignUpDto signUpDto = SignUpDto.builder().email(reqRegisterDto.getEmail()).password(reqRegisterDto.getPassword()).uid(tmpUid).name(reqRegisterDto.getName())
                 .gender(reqRegisterDto.getGender()).birth(reqRegisterDto.getBirth()).height(Integer.parseInt(reqRegisterDto.getHeight())).weight(Integer.parseInt(reqRegisterDto.getWeight()))
@@ -144,6 +144,43 @@ public class AccountService {
             }
         }
         return map;
+    }
+
+    public boolean UpdateBodyDetail(ReqUpdateBodyDetailDto updateBodyDetailDto) {
+        boolean result;
+        LocalDateTime localDateTime = LocalDateTime.now();
+
+        Optional<UserTb> record = userTbRepository.findById(updateBodyDetailDto.getEmail());
+        if (record.isPresent()) {
+            SignUpDto signUpDto = SignUpDto.builder()
+                    .email(record.get().getUEmail())
+                    .password(record.get().getUPassword())
+                    .uid(record.get().getUUid())
+                    .name(record.get().getUName())
+                    //여기서부터 바꾼다
+                    .gender(updateBodyDetailDto.getGender())
+                    .birth(updateBodyDetailDto.getBirth())
+
+                    .height(Integer.parseInt(updateBodyDetailDto.getHeight()))
+                    .weight(Integer.parseInt(updateBodyDetailDto.getWeight()))
+                    //바꾼다 끝
+                    .agreeFlag(record.get().getUAgreeFlag())
+                    .personalFlag(record.get().getUAgreeFlag())
+                    .shapeCode(record.get().getUShapeCode())
+                    .qAnswer(record.get().getUQAnswer())
+                    .qCode(record.get().getUQCode())
+                    .verification(record.get().getUVerification())
+                    .phone(record.get().getUPhone())
+                    .createdTime(record.get().getUCreatedTime())
+                    .updatedTime(localDateTime)
+                    .career(record.get().getUCareer()).build();
+            signUpService.Signup(signUpDto); // save 실행
+            System.out.println("Correct");
+            result = true;
+        } else {
+            result = false;
+        }
+        return result;
     }
 
 
@@ -216,6 +253,7 @@ public class AccountService {
         System.out.println("EmailQuestionCheckDone");
         return result;
     }
+
 
     /*로그인 요청 처리*/
     public boolean UpdatePhone(String email, String phone) {
