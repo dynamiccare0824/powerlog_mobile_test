@@ -250,6 +250,7 @@ public class CommonResponseService {
 
     public HashMap<String, Object> getCommonHashMap() {
         HashMap<String, Object> tmpMap = new HashMap<>();
+        tmpMap.put("verificationNum", null);
         tmpMap.put("phonePresent", null);
         tmpMap.put("emailPresent", null);
         tmpMap.put("isPresent", null);
