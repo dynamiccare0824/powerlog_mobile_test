@@ -435,7 +435,7 @@ public class AccountController {
     }
 
     @ApiOperation(value = "회원 탈퇴 [더보기]")
-    @PostMapping(value = "/delete/user")
+    @PostMapping(value = "more/user/delete")
     public HashMap<String, Object> DeleteUser(@RequestBody ReqDeleteUserDto reqDeleteUserDto) throws JsonProcessingException {
 
         HashMap<String, Object> resultMap= new HashMap<>();
