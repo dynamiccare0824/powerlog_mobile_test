@@ -253,7 +253,7 @@ public class AccountController {
     //ing
     @ApiOperation(value = "등록된 이메일로 임시 비밀번호 발송",
             notes = "이메일이 존재하는지 검사하고, 있다면 임시 비밀번호를 발송한다")
-    @PostMapping(value = "/validation/email-question")
+    @PostMapping(value = "lost/validation/email-question")
     public HashMap<String, Object> ValidateQuestionSendMail(@RequestBody ReqEmailQuestionDto emailQuestionDto) throws JsonProcessingException {
 
         HashMap<String, Object> resultMap = new HashMap();
@@ -279,7 +279,7 @@ public class AccountController {
 
     @ApiOperation(value = "계정 본인 확인",
             notes = "더보기 메뉴에서 계정 본인 확인을 위해서 비밀번호 재검사, 이메일과 패스워드 isMatch 체크하여 리턴한다.")
-    @PostMapping(value = "/validation/email-password")
+    @PostMapping(value = "more/update/validation/email-password")
     public RspEmailPasswordCheckDto ValidateAccount(@RequestBody @Valid ReqEmailPasswordCheckDto emailPasswordCheckDto, BindingResult bindingResult) throws JsonProcessingException {
         HashMap<String, Object> tmpMap = new HashMap();
         List<ObjectError> invalidParamList = paramValidCheckService.getInvalidParamList(bindingResult);
@@ -297,7 +297,7 @@ public class AccountController {
 
     @ApiOperation(value = "비밀번호 변경",
             notes = "더보기 메뉴에서 계정 본인 확인이 끝난 후 비밀번호 재설정")
-    @PostMapping(value = "/update/newpassword")
+    @PostMapping(value = "more/update/newpassword")
     public HashMap<String, Object> UpdatePassword(@RequestBody ResetDto resetDto) throws JsonProcessingException {
 
         HashMap<String, Object> resultMap = new HashMap();
