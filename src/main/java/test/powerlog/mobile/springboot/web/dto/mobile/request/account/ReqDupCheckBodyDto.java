@@ -16,17 +16,23 @@ public class ReqDupCheckBodyDto {
     private String gender;
 
     @NotBlank(message = "공백없이 입력하세요.")
-    @DecimalMin(value = "19000000")
-    @DecimalMax(value = "20200306")
+    @DecimalMin(value = "19000000", message = "올바른 생년월일을 입력해주세요.")
+    @DecimalMax(value = "20200306", message = "올바른 생년월일을 입력해주세요.")
+    @Pattern(regexp="(?=.*[0-9]){8}",
+            message = "올바른 값을 입력해주세요")
     @ApiModelProperty(value = "생년월일", required = true, position = 2, example = "tmddusgood@gmail.com")
     private String birth;
 
+    @Pattern(regexp="(?=.*[0-9]){2,3}",
+            message = "올바른 값을 입력해주세요")
     @DecimalMin(value = "50")
     @DecimalMax(value = "300")
     private int height;
 
-    @DecimalMin(value = "10")
-    @DecimalMax(value = "500")
+    @Pattern(regexp="(?=.*[0-9]){2,3}",
+            message = "올바른 값을 입력해주세요.")
+    @DecimalMin(value = "10", message = "올바른 값을 입력해주세요.")
+    @DecimalMax(value = "999")
     @ApiModelProperty(value = "몸무게", required = true, position = 5, example = "111111")
     private int weight;
 }
