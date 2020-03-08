@@ -16,6 +16,7 @@ import test.powerlog.mobile.springboot.service.mobile.old.*;
 import test.powerlog.mobile.springboot.web.dto.common.CommonResponseDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.ReqEmailQuestionDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.ReqLostValidPhoneDto;
+import test.powerlog.mobile.springboot.web.dto.mobile.request.ReqUidDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.ReqUpdatePasswordDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.account.*;
 import test.powerlog.mobile.springboot.web.dto.mobile.response.*;
@@ -277,7 +278,7 @@ public class AccountController {
 
     @ApiOperation(value = "계정 본인 확인",
             notes = "더보기 메뉴에서 계정 본인 확인을 위해서 비밀번호 재검사, 이메일과 패스워드 isMatch 체크하여 리턴한다.")
-    @PostMapping(value = "more/update/validation/email-password")
+    @PostMapping(value = "more/password/validation/email-password")
     public RspEmailPasswordCheckDto ValidateAccount(@RequestBody @Valid ReqEmailPasswordCheckDto emailPasswordCheckDto, BindingResult bindingResult) throws JsonProcessingException {
         HashMap<String, Object> tmpMap = new HashMap();
         List<ObjectError> invalidParamList = paramValidCheckService.getInvalidParamList(bindingResult);
@@ -295,7 +296,7 @@ public class AccountController {
 
     @ApiOperation(value = "비밀번호 변경",
             notes = "더보기 메뉴 혹은 비밀번호 찾기에서 계정 확인이 끝난 후 비밀번호 재설정")
-    @PostMapping(value = "more/update/newpassword")
+    @PostMapping(value = "more/password/update")
     public HashMap<String, Object> UpdatePassword(@RequestBody ReqUpdatePasswordDto reqUpdatePasswordDto) throws JsonProcessingException {
 
         HashMap<String, Object> resultMap = new HashMap();
@@ -318,29 +319,49 @@ public class AccountController {
         return resultMap;
     }
 //
-//    @PostMapping(value = "/update/newuid")
-//    //중복검사 하는 것으로 만들어야 한다.
-//    public HashMap<String, Object> UpdateUid(@RequestBody ResetDto resetDto) throws JsonProcessingException {
-//        HashMap<String, Object> resultMap = new HashMap();
-//
-//        String email = resetDto.getEmail();
-//        NumberGenService numberGenService = new NumberGenService();
-//        String randNum = numberGenService.ComplicatedDigits(12, 1);
-//
-//        try {
-//            Boolean result = resetUidService.ResetUid(email, randNum);
-//            resultMap.put("updated", result);
-//            resultMap.put("uid", randNum);
-//            resultMap.put("error", null);
-//        } catch (Exception ex) {
-////            resultMap.put("verificationNum", randNum);
-//            resultMap.put("updated", false);
-//            resultMap.put("uid", randNum);
-//            resultMap.put("error", ex.toString());
-//            System.out.println(ex);
-//        }
-//        return resultMap;
-//    }
+
+    @PostMapping(value = "/more/uid/get")
+    @ApiOperation(value = "고유번호 확인")
+    public HashMap<String, Object> GetUid(@RequestBody ReqUidDto reqUidDto) throws JsonProcessingException {
+        HashMap<String, Object> resultMap = new HashMap();
+
+        String email = reqUidDto.getEmail();
+        try {
+            userAccountVWRepository.findById(email).get().getLoginVwUid();
+            resultMap.put("uid", userAccountVWRepository.findById(email).get().getLoginVwUid());
+            resultMap.put("isError", false);
+            resultMap.put("error", null);
+        } catch (Exception ex) {
+            resultMap.put("uid", null);
+            resultMap.put("isError", true);
+            resultMap.put("error", ex.toString());
+            System.out.println(ex);
+        }
+        return resultMap;
+    }
+
+    @PostMapping(value = "/more/uid/update")
+    @ApiOperation(value = "고유번호 새로고침")
+    //중복검사 하는 것으로 만들어야 한다.
+    public HashMap<String, Object> UpdateUid(@RequestBody ReqUidDto reqUidDto) throws JsonProcessingException {
+        HashMap<String, Object> resultMap = new HashMap();
+
+        String email = reqUidDto.getEmail();
+        NumberGenService numberGenService = new NumberGenService();
+        String randNum = numberGenService.ComplicatedDigits(12, 1);
+        Boolean result = resetUidService.ResetUid(email, randNum);
+        if(result) {
+            resultMap.put("isUpdated", result);
+            resultMap.put("uid", randNum);
+            resultMap.put("isError", false);
+        }
+        else{
+            resultMap.put("isUpdated", false);
+            resultMap.put("uid", null);
+            resultMap.put("isError", true);
+        }
+        return resultMap;
+    }
 //
 //    @PostMapping(value = "/update/newshapecode")
 //    public HashMap<String, Object> UpdateShapeCode(@RequestBody ResetDto resetDto) throws JsonProcessingException {
