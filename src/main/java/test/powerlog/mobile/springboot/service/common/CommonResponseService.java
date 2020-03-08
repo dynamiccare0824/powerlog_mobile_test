@@ -153,8 +153,8 @@ public class CommonResponseService {
         return tmpDto;
     }
 
-    public <T> RspDeleteUserDto<T> getRspDeleteUserDto(List<ObjectError> invalidParamList, HashMap<String, Object> map) {
-        RspDeleteUserDto<T> tmpDto = new RspDeleteUserDto<>();
+    public <T> RspDeleteUserDto getRspDeleteUserDto(List<ObjectError> invalidParamList, HashMap<String, Object> map) {
+        RspDeleteUserDto tmpDto = new RspDeleteUserDto();
         tmpDto.setIsMatch((Boolean) map.get("isMatch"));
         //Common Part
         if (map.get("error") != null) {
