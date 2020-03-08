@@ -125,11 +125,11 @@ public class AccountService {
 
         LocalDateTime localDateTime = LocalDateTime.now();
         String tmpUid = numberGenService.ComplicatedDigits(12, 1);
-        int careerY = reqRegisterDto.getCareerYear();
-        int careerM = reqRegisterDto.getCareerMonth();
+        int careerY =Integer.parseInt(reqRegisterDto.getCareerYear());
+        int careerM =Integer.parseInt(reqRegisterDto.getCareerMonth());
 
         SignUpDto signUpDto = SignUpDto.builder().email(reqRegisterDto.getEmail()).password(reqRegisterDto.getPassword()).uid(tmpUid).name(reqRegisterDto.getName())
-                .gender(reqRegisterDto.getGender()).birth(reqRegisterDto.getBirth()).height(reqRegisterDto.getHeight()).weight(reqRegisterDto.getWeight())
+                .gender(reqRegisterDto.getGender()).birth(reqRegisterDto.getBirth()).height(Integer.parseInt(reqRegisterDto.getHeight())).weight(Integer.parseInt(reqRegisterDto.getWeight()))
                 .agreeFlag("true").personalFlag("true").shapeCode(reqRegisterDto.getShapeCode()).qAnswer(reqRegisterDto.getQuestionAnswer()).qCode(reqRegisterDto.getQuestionCode())
                 .verification("true").phone(reqRegisterDto.getPhone()).createdTime(localDateTime).updatedTime(localDateTime).career(careerM + careerY * 12).build();
         return signUpDto;
