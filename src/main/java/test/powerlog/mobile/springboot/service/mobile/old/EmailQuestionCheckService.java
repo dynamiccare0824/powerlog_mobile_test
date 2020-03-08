@@ -29,8 +29,7 @@ public class EmailQuestionCheckService {
             Optional<UserAccountVw> record = userAccountVwRepository.findById(email);
             String name = record.get().getLoginVwName();
 
-            if (record.get().getLoginVwEmail().equals(email) && record.get().getLoginVwQCode().equals(questionCode)
-            && record.get().getLoginVwQAnswer().equals(questionAnswer)) {
+            if (record.get().getLoginVwQCode().equals(questionCode) && record.get().getLoginVwQAnswer().equals(questionAnswer)) {
                 System.out.println(record.get().getLoginVwEmail());
                 System.out.println("Correct");
 

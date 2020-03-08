@@ -14,6 +14,8 @@ import test.powerlog.mobile.springboot.service.common.ParamValidCheckService;
 import test.powerlog.mobile.springboot.service.mobile.*;
 import test.powerlog.mobile.springboot.service.mobile.old.*;
 import test.powerlog.mobile.springboot.web.dto.common.CommonResponseDto;
+import test.powerlog.mobile.springboot.web.dto.mobile.request.EmailFormDto;
+import test.powerlog.mobile.springboot.web.dto.mobile.request.ReqEmailQuestionDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.ReqLostValidPhoneDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.account.*;
 import test.powerlog.mobile.springboot.web.dto.mobile.response.*;
@@ -245,61 +247,29 @@ public class AccountController {
         return commonResponseService.getRspLostValidPhoneDto(null, commonMap);
     }
 
+    @PostMapping(value = "/validation/email-question")
+    public HashMap<String, Object> ValidateQuestionSendMail(@RequestBody ReqEmailQuestionDto emailQuestionDto) throws JsonProcessingException {
 
+        HashMap<String, Object> resultMap = new HashMap();
 
+        String email = emailQuestionDto.getEmail();
+        String questionCode = emailQuestionDto.getQuestionCode();
+        String questionAnswer = emailQuestionDto.getQuestionAnswer();
+        String randNum = numberGenService.Digits(12, 1);
 
-//            // 파라미터를 가지고 resultMap 초기화
-//            resultMap = accountService.EmailPasswordCheck(email, password);
-//            return commonResponseService.getRspRegisterDto(null, reqRegisterDto.getEmail());
-//        }
-//        if(emailPasswordCheckResultMap.get("error") != null && (Boolean) emailPasswordCheckResultMap.get("result")){
-//            try{
-//                return responseService.getRspLoginDto(logLateMsrVwRepository.findAllByLgLateMsrVwEmail(email), resultMap);
-//            }
-//            // 아이디가 아예 존재하지 않는 경우
-//            catch(Exception ex){
-//                resultMap.replace("error", ex.toString());
-//                return responseService.getRspLoginDto(null, resultMap);
-//            }
-//        }
-//        else{
-//            return responseService.getRspLoginDto(null, resultMap);
-//        }
-//
-//        HashMap<String, Object> resultMap = new HashMap();
-//        HashMap<String, Object> tmpMap = new HashMap();
-//        NumberGenService numberGenService = new NumberGenService();
-//        ObjectMapper mapper = new ObjectMapper();
-//
-//        String phone = userAccountDto.getPhone();
-//        String email = userAccountDto.getEmail();
-//        String[] numbers = {"99999999999"};
-//        String randNum =  numberGenService.Digits(4, 1);
-//
-//        try{
-//            Boolean result = emailPhoneCheckService.emailPhoneCheck(email, phone);
-//            if(result){
-//                numbers[0] = phone;
-//                tmpMap.put("type", "SMS");
-//                tmpMap.put("from", "01050055438");
-//                tmpMap.put("to", numbers);
-//                tmpMap.put("content", "인증번호 [" + randNum + "] 숫자 4자리를 입력해주세요 - 파워로그 모바일");
-//                String json = mapper.writeValueAsString(tmpMap);
-//
-//                sendMsgService_new.NewSend("https://api-sens.ncloud.com/v1/sms/services/ncp:sms:kr:258080742855:testpowerlog/messages", json);
-//            }
-//            resultMap.put("verificationNum", randNum);
-//            resultMap.put("match", result);
-//            resultMap.put("error", null);
-//        }
-//        catch(Exception ex){
-//            resultMap.put("verificationNum", randNum);
-//            resultMap.put("match", false);
-//            resultMap.put("error", ex.toString());
-//            System.out.println(ex);
-//        }
-//        return resultMap;
-
+        try {
+            Boolean result = emailQuestionCheckService.emailQuestionCheck(email, questionCode, questionAnswer, randNum);
+            resultMap.put("emailPresent", true);
+            resultMap.put("isMatch", result);
+            resultMap.put("error", null);
+        } catch (Exception ex) {
+            resultMap.put("emailPresent", false);
+            resultMap.put("isMatch", false);
+            resultMap.put("error", ex.toString());
+            System.out.println(ex);
+        }
+        return resultMap;
+    }
 }
 
 
