@@ -7,12 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResetDto {
+public class ReqUpdatePasswordDto {
     private String email;
 
     private String password;
-
-    private String shapeCode;
-
-    private String phone;
 }

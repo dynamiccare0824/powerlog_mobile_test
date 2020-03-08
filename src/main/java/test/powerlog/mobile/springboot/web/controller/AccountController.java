@@ -14,14 +14,12 @@ import test.powerlog.mobile.springboot.service.common.ParamValidCheckService;
 import test.powerlog.mobile.springboot.service.mobile.*;
 import test.powerlog.mobile.springboot.service.mobile.old.*;
 import test.powerlog.mobile.springboot.web.dto.common.CommonResponseDto;
-import test.powerlog.mobile.springboot.web.dto.mobile.request.EmailFormDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.ReqEmailQuestionDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.ReqLostValidPhoneDto;
-import test.powerlog.mobile.springboot.web.dto.mobile.request.ResetDto;
+import test.powerlog.mobile.springboot.web.dto.mobile.request.ReqUpdatePasswordDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.account.*;
 import test.powerlog.mobile.springboot.web.dto.mobile.response.*;
 
-import javax.naming.Binding;
 import javax.validation.*;
 import java.util.HashMap;
 import java.util.List;
@@ -296,14 +294,14 @@ public class AccountController {
     }
 
     @ApiOperation(value = "비밀번호 변경",
-            notes = "더보기 메뉴에서 계정 본인 확인이 끝난 후 비밀번호 재설정")
+            notes = "더보기 메뉴 혹은 비밀번호 찾기에서 계정 확인이 끝난 후 비밀번호 재설정")
     @PostMapping(value = "more/update/newpassword")
-    public HashMap<String, Object> UpdatePassword(@RequestBody ResetDto resetDto) throws JsonProcessingException {
+    public HashMap<String, Object> UpdatePassword(@RequestBody ReqUpdatePasswordDto reqUpdatePasswordDto) throws JsonProcessingException {
 
         HashMap<String, Object> resultMap = new HashMap();
 
-        String email = resetDto.getEmail();
-        String password = resetDto.getPassword();
+        String email = reqUpdatePasswordDto.getEmail();
+        String password = reqUpdatePasswordDto.getPassword();
 
         try {
             Boolean result = resetPasswordService.ResetPassword(email, password);
