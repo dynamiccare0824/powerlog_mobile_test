@@ -17,9 +17,11 @@ import test.powerlog.mobile.springboot.web.dto.common.CommonResponseDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.EmailFormDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.ReqEmailQuestionDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.ReqLostValidPhoneDto;
+import test.powerlog.mobile.springboot.web.dto.mobile.request.ResetDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.account.*;
 import test.powerlog.mobile.springboot.web.dto.mobile.response.*;
 
+import javax.naming.Binding;
 import javax.validation.*;
 import java.util.HashMap;
 import java.util.List;
@@ -209,7 +211,8 @@ public class AccountController {
             return commonResponseService.getRspRegisterDto(null, reqRegisterDto.getEmail());
         }
     }
-//
+
+    //ing
     @ApiOperation(value = "핸드폰 번호로 비밀번호 찾기",
             notes = "이메일과 핸드폰 번호를 이용한다")
     @PostMapping(value = "lost/validation/phone")
@@ -247,6 +250,9 @@ public class AccountController {
         return commonResponseService.getRspLostValidPhoneDto(null, commonMap);
     }
 
+    //ing
+    @ApiOperation(value = "등록된 이메일로 임시 비밀번호 발송",
+            notes = "이메일이 존재하는지 검사하고, 있다면 임시 비밀번호를 발송한다")
     @PostMapping(value = "/validation/email-question")
     public HashMap<String, Object> ValidateQuestionSendMail(@RequestBody ReqEmailQuestionDto emailQuestionDto) throws JsonProcessingException {
 
@@ -270,6 +276,165 @@ public class AccountController {
         }
         return resultMap;
     }
+
+    @ApiOperation(value = "계정 본인 확인",
+            notes = "더보기 메뉴에서 계정 본인 확인을 위해서 비밀번호 재검사, 이메일과 패스워드 isMatch 체크하여 리턴한다.")
+    @PostMapping(value = "/validation/email-password")
+    public RspEmailPasswordCheckDto ValidateAccount(@RequestBody @Valid ReqEmailPasswordCheckDto emailPasswordCheckDto, BindingResult bindingResult) throws JsonProcessingException {
+        HashMap<String, Object> tmpMap = new HashMap();
+        List<ObjectError> invalidParamList = paramValidCheckService.getInvalidParamList(bindingResult);
+
+        if (invalidParamList != null) {
+            return commonResponseService.getRspEmailPasswordCheckDto(invalidParamList, null);
+        }
+        else{
+            String email = emailPasswordCheckDto.getEmail();
+            String password = emailPasswordCheckDto.getPassword();
+            HashMap checkResultMap = checkService.EmailPasswordCheck(email, password);
+            return commonResponseService.getRspEmailPasswordCheckDto(null, checkResultMap);
+        }
+    }
+
+    @PostMapping(value = "/update/newpassword")
+    public HashMap<String, Object> UpdatePassword(@RequestBody ResetDto resetDto) throws JsonProcessingException {
+
+        HashMap<String, Object> resultMap = new HashMap();
+
+        String email = resetDto.getEmail();
+        String password = resetDto.getPassword();
+
+        try {
+            Boolean result = resetPasswordService.ResetPassword(email, password);
+            resultMap.put("isUpdated", result);
+            resultMap.put("isError", false);
+            resultMap.put("error", null);
+        } catch (Exception ex) {
+//            resultMap.put("verificationNum", randNum);
+            resultMap.put("isUpdated", false);
+            resultMap.put("isError", true);
+            resultMap.put("error", ex.toString());
+            System.out.println(ex);
+        }
+        return resultMap;
+    }
+//
+//    @PostMapping(value = "/update/newuid")
+//    //중복검사 하는 것으로 만들어야 한다.
+//    public HashMap<String, Object> UpdateUid(@RequestBody ResetDto resetDto) throws JsonProcessingException {
+//        HashMap<String, Object> resultMap = new HashMap();
+//
+//        String email = resetDto.getEmail();
+//        NumberGenService numberGenService = new NumberGenService();
+//        String randNum = numberGenService.ComplicatedDigits(12, 1);
+//
+//        try {
+//            Boolean result = resetUidService.ResetUid(email, randNum);
+//            resultMap.put("updated", result);
+//            resultMap.put("uid", randNum);
+//            resultMap.put("error", null);
+//        } catch (Exception ex) {
+////            resultMap.put("verificationNum", randNum);
+//            resultMap.put("updated", false);
+//            resultMap.put("uid", randNum);
+//            resultMap.put("error", ex.toString());
+//            System.out.println(ex);
+//        }
+//        return resultMap;
+//    }
+//
+//    @PostMapping(value = "/update/newshapecode")
+//    public HashMap<String, Object> UpdateShapeCode(@RequestBody ResetDto resetDto) throws JsonProcessingException {
+//        HashMap<String, Object> resultMap = new HashMap();
+//
+//        String email = resetDto.getEmail();
+//        String shapeCode = resetDto.getShapeCode();
+//
+//        try {
+//            Boolean result = resetShapeCodeService.ResetShapeCode(email, shapeCode);
+//            resultMap.put("updated", result);
+//            resultMap.put("error", null);
+//        } catch (Exception ex) {
+////            resultMap.put("verificationNum", randNum);
+//            resultMap.put("updated", false);
+//            resultMap.put("error", ex.toString());
+//            System.out.println(ex);
+//        }
+//        return resultMap;
+//    }
+
+//    @PostMapping(value = "/update/validation/newphone")
+//    public HashMap<String, Object> UpdateValidatePhone(@RequestBody ResetDto resetDto) throws JsonProcessingException {
+//        HashMap<String, Object> resultMap = new HashMap();
+//        HashMap<String, Object> tmpMap = new HashMap();
+//        NumberGenService numberGenService = new NumberGenService();
+//        String[] numbers = {"99999999999"};
+//        String randNum =  numberGenService.Digits(4, 1);
+//        String phone = resetDto.getPhone();
+//        ObjectMapper mapper = new ObjectMapper();
+//        SendMsgService_New sendMsgService_new = new SendMsgService_New();
+//
+//        try{
+//            UserAccountVw result = userAccountVWRepository.findByLoginVwPhone(phone);
+//            if(result.getLoginVwEmail() == resetDto.getEmail()){
+//                resultMap.put("error", "input phone number is already used by current owner: no need to change");
+//            }
+//            else{
+//                resultMap.put("error", "cannot use input phone number due to [phonePresent = true]");
+//            }
+//            resultMap.put("verificationNum", randNum);
+//            resultMap.put("phonePresent", true);
+//        }
+//        catch(Exception ex){
+//            numbers[0] = phone;
+//            tmpMap.put("type", "SMS");
+//            tmpMap.put("from", "01050055438");
+//            tmpMap.put("to", numbers);
+//            tmpMap.put("content", "인증번호 [" + randNum + "] 숫자 4자리를 입력해주세요 - 파워로그 모바일");
+//            String json = mapper.writeValueAsString(tmpMap);
+//
+//            sendMsgService_new.NewSend("https://api-sens.ncloud.com/v1/sms/services/ncp:sms:kr:258080742855:testpowerlog/messages", json);
+//
+//            resultMap.put("verificationNum", randNum);
+//            resultMap.put("phonePresent", false);
+//            resultMap.put("error", "Normal when NullPointerException:" + ex.toString());
+//            System.out.println(ex);
+//        }
+//        return resultMap;
+//    }
+
+//    @PostMapping(value = "/update/newphone")
+//    public HashMap<String, Object> UpdatePhone(@RequestBody ResetDto resetDto) throws JsonProcessingException {
+//        HashMap<String, Object> resultMap = new HashMap();
+//        String email = resetDto.getEmail();
+//        String phone = resetDto.getPhone();
+//        try {
+//            Boolean result = updatePhoneService.UpdatePhone(email, phone);
+//            resultMap.put("updated", result);
+//            resultMap.put("error", null);
+//        } catch (Exception ex) {
+////            resultMap.put("verificationNum", randNum);
+//            resultMap.put("updated", false);
+//            resultMap.put("error", ex.toString());
+//            System.out.println(ex);
+//        }
+//        return resultMap;
+//    }
+
+//    @ApiOperation(value = "회원 탈퇴", notes = "회원 정보를 UserTb에서 찾아 삭제한다")
+//    @PostMapping(value = "/delete/user")
+//    public RspDeleteUserDto<Object> DeleteUser(@RequestBody ReqDeleteUserDto reqDeleteUserDto) throws JsonProcessingException {
+//
+//        String email = reqDeleteUserDto.getEmail();
+//        String password = reqDeleteUserDto.getPassword();
+//
+//        HashMap<String, Object> checkResultMap = emailPasswordCheckService.EmailPasswordCheck(email, password);
+//        if (checkResultMap.get("error") == null) {
+//            HashMap<String, Object> deleteResultMap = deleteAccountService.DeleteAccount(checkResultMap, email);
+//            return responseService.getRspDeleteUserDto(deleteResultMap);
+//        } else {
+//            return responseService.getRspDeleteUserDto(checkResultMap);
+//        }
+//    }
 }
 
 
