@@ -7,15 +7,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import test.powerlog.mobile.springboot.domain.table.LogTb;
+import test.powerlog.mobile.springboot.domain.table.LogTbRepository;
 import test.powerlog.mobile.springboot.domain.table.WorkoutTb;
 import test.powerlog.mobile.springboot.domain.view.*;
 import test.powerlog.mobile.springboot.service.common.CommonResponseService;
 import test.powerlog.mobile.springboot.service.common.ParamValidCheckService;
 import test.powerlog.mobile.springboot.service.kiosk.OnDateWrkotService;
+import test.powerlog.mobile.springboot.service.kiosk.SaveMeasureService;
 import test.powerlog.mobile.springboot.service.kiosk.SaveWorkoutService;
 import test.powerlog.mobile.springboot.service.kiosk.UidLoginService;
-import test.powerlog.mobile.springboot.service.mobile.old.*;
+import test.powerlog.mobile.springboot.service.mobile.account.DeleteAccountService;
+import test.powerlog.mobile.springboot.service.mobile.account.EmailPhoneCheckService;
+import test.powerlog.mobile.springboot.service.mobile.account.EmailQuestionCheckService;
+import test.powerlog.mobile.springboot.service.mobile.account.LoginService;
+import test.powerlog.mobile.springboot.service.mobile.account.ResetPasswordService;
+import test.powerlog.mobile.springboot.service.mobile.account.ResetShapeCodeService;
+import test.powerlog.mobile.springboot.service.mobile.account.ResetUidService;
+import test.powerlog.mobile.springboot.service.mobile.account.SignUpService;
+import test.powerlog.mobile.springboot.service.mobile.account.UpdatePhoneService;
 import test.powerlog.mobile.springboot.web.dto.kiosk.request.ReqKioskLoginDto;
+import test.powerlog.mobile.springboot.web.dto.kiosk.request.ReqKioskMeasureDto;
 import test.powerlog.mobile.springboot.web.dto.kiosk.request.ReqKioskWorkoutDto;
 import test.powerlog.mobile.springboot.web.dto.kiosk.response.RspKioskLoginDto;
 import test.powerlog.mobile.springboot.web.dto.kiosk.response.RspKioskWorkoutDto;
@@ -27,43 +39,6 @@ import java.util.*;
 @RestController
 @RequestMapping("/kiosk")
 public class KioskController {
-
-    @Autowired
-    private UserAccountVwRepository userAccountVWRepository;
-
-    @Autowired
-    private LogLateMsrVwRepository logLateMsrVwRepository;
-
-    @Autowired
-    private LogTotalWrkotVwRepository logTotalWrkotVwRepository;
-
-    @Autowired
-    private LoginService loginService;
-
-    @Autowired
-    private EmailPhoneCheckService emailPhoneCheckService;
-
-    @Autowired
-    private EmailQuestionCheckService emailQuestionCheckService;
-
-    @Autowired
-    private SignUpService signUpService;
-
-    @Autowired
-    private ResetPasswordService resetPasswordService;
-
-    @Autowired
-    private  ResetUidService resetUidService;
-
-    @Autowired
-    private   ResetShapeCodeService resetShapeCodeService;
-
-    @Autowired
-    private  UpdatePhoneService updatePhoneService;
-
-    @Autowired
-    private DeleteAccountService deleteAccountService;
-
     @Autowired
     private  CommonResponseService commonResponseService;
 
@@ -77,13 +52,16 @@ public class KioskController {
     private UidLoginService uidLoginService;
 
     @Autowired
-    private PlannerVwRepository plannerVwRepository;
+    private LogTbRepository logTbRepository;
 
     @Autowired
     private WorkoutCodeVwRepository workoutCodeVwRepository;
 
     @Autowired
     private SaveWorkoutService saveWorkoutService;
+
+    @Autowired
+    private SaveMeasureService saveMeasureService;
 
     @PostMapping(value = "/uidlogin")
     public RspKioskLoginDto<PlannerVw> UidLogin(@RequestBody @Valid ReqKioskLoginDto reqKioskLoginDto, BindingResult bindingResult) throws JsonProcessingException {
@@ -139,6 +117,31 @@ public class KioskController {
                 commonMap.replace("isError", false);
                 System.out.println(commonMap.toString() + "1");
                 saveWorkoutService.SaveRecord(tmpWorkoutTb);
+            }
+            catch(Exception ex){
+                commonMap.replace("isError", true);
+                commonMap.replace("message", ex.toString());
+            }
+        }
+        System.out.println(commonMap);
+        return null;
+    }
+
+    @PostMapping(value = "/save/measure")
+    public RspKioskWorkoutDto SaveMeasure(@RequestBody @Valid ReqKioskMeasureDto reqKioskMeasureDto, BindingResult bindingResult) throws JsonProcessingException {
+        HashMap<String, Object> commonMap = commonResponseService.getCommonHashMap();
+        List<ObjectError> invalidParamList = paramValidCheckService.getInvalidParamList(bindingResult);
+        if(invalidParamList!=null){
+            commonMap.replace("isError", true);
+            commonMap.replace("message", invalidParamList.get(0).getDefaultMessage());
+            return commonResponseService.getRspKioskMeasureDto(invalidParamList, commonMap);
+        }
+        else{
+            LogTb tmpLogTb = saveMeasureService.ToSaveRecordForm(reqKioskMeasureDto);
+            try{
+                commonMap.replace("isError", false);
+                System.out.println(commonMap.toString() + "1");
+                saveMeasureService.SaveRecord(tmpLogTb);
             }
             catch(Exception ex){
                 commonMap.replace("isError", true);

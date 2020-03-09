@@ -233,6 +233,31 @@ public class CommonResponseService {
         return resultDto;
     }
 
+    public RspKioskWorkoutDto getRspKioskMeasureDto(List<ObjectError> invalidParamList,
+                                                    HashMap<String, Object> commonMap) {
+        RspKioskWorkoutDto resultDto = new RspKioskWorkoutDto();
+        if (invalidParamList != null) {
+            resultDto.setIsError(true);
+            resultDto.setIsDone(false);
+            resultDto.setInvalidParamList(invalidParamList);
+            resultDto.setMessage(invalidParamMessage);
+        }
+        else if(invalidParamList==null && (Boolean) commonMap.get("isError")) {
+            resultDto.setIsError(false);
+            resultDto.setIsDone(true);
+            resultDto.setInvalidParamList(null);
+            resultDto.setMessage(validParamMessage);
+        }
+        // invalidParamList==null && (Boolean) commonMap.get("isError")==false
+        else{
+            resultDto.setIsError(true);
+            resultDto.setIsDone(false);
+            resultDto.setInvalidParamList(null);
+            resultDto.setMessage(validParamMessage);
+        }
+        return resultDto;
+    }
+
     public CommonResponseDto getCommonResponse(List inValidParamList, HashMap<String, Object> map) {
         CommonResponseDto tmpDto = new CommonResponseDto();
         if (inValidParamList != null) {

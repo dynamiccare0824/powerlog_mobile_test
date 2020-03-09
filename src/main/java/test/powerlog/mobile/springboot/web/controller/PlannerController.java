@@ -4,17 +4,30 @@ package test.powerlog.mobile.springboot.web.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import test.powerlog.mobile.springboot.domain.view.*;
 import test.powerlog.mobile.springboot.service.common.CommonResponseService;
-import test.powerlog.mobile.springboot.service.mobile.old.*;
-import test.powerlog.mobile.springboot.web.dto.common.CommonResponseDto;
+import test.powerlog.mobile.springboot.service.common.ParamValidCheckService;
+import test.powerlog.mobile.springboot.service.mobile.account.DeleteAccountService;
+import test.powerlog.mobile.springboot.service.mobile.account.EmailPhoneCheckService;
+import test.powerlog.mobile.springboot.service.mobile.account.EmailQuestionCheckService;
+import test.powerlog.mobile.springboot.service.mobile.account.LoginService;
+import test.powerlog.mobile.springboot.service.mobile.account.ResetPasswordService;
+import test.powerlog.mobile.springboot.service.mobile.account.ResetShapeCodeService;
+import test.powerlog.mobile.springboot.service.mobile.account.ResetUidService;
+import test.powerlog.mobile.springboot.service.mobile.account.SignUpService;
+import test.powerlog.mobile.springboot.service.mobile.account.UpdatePhoneService;
+import test.powerlog.mobile.springboot.service.mobile.planner.PlannerService;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.ReqTestHistoryDto;
-import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqProgramDetailDto;
+import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqProgramGenerateDto;
 
+import javax.validation.Valid;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -66,6 +79,12 @@ public class PlannerController {
 
     @Autowired
     CommonResponseService commonResponseService;
+
+    @Autowired
+    ParamValidCheckService paramValidCheckService;
+
+    @Autowired
+    PlannerService plannerService;
 
 //    @PostMapping(value = "/plannerByMonth")
 //    public HashMap<String, Object> PlannerByMonth(@RequestBody UserAccountDto userAccountDto) throws JsonProcessingException {
@@ -136,9 +155,12 @@ public class PlannerController {
         return resultMap2;
     }
 
-    @PostMapping(value = "/planner/program/detail")
-    public HashMap<String, Object> ProgramDetail(@RequestBody ReqProgramDetailDto reqProgramDetailDto) throws JsonProcessingException {
-        HashMap<String, Object> resultMap = commonResponseService.getCommonHashMap();
+    @PostMapping(value = "/planner/program/generate")
+    public HashMap<String, Object> ProgramGenerate(@RequestBody @Valid ReqProgramGenerateDto reqProgramGenerateDto, BindingResult bindingResult) throws ParseException {
+        List<ObjectError> invalidParamList = paramValidCheckService.getInvalidParamList(bindingResult);
+        if(invalidParamList==null){
+            return plannerService.getProgramDetail(reqProgramGenerateDto);
+        }
         return null;
     }
 }
