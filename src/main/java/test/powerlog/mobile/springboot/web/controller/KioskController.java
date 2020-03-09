@@ -103,13 +103,13 @@ public class KioskController {
     // ing
     // isProgram과 onSchedule 반영되지 않음
     @PostMapping(value = "/save/workout")
-    public RspKioskWorkoutDto SaveWorkout(@RequestBody @Valid ReqKioskWorkoutDto reqKioskWorkoutDto, BindingResult bindingResult) throws JsonProcessingException {
+    public HashMap<String, Object> SaveWorkout(@RequestBody @Valid ReqKioskWorkoutDto reqKioskWorkoutDto, BindingResult bindingResult) throws JsonProcessingException {
         HashMap<String, Object> commonMap = commonResponseService.getCommonHashMap();
         List<ObjectError> invalidParamList = paramValidCheckService.getInvalidParamList(bindingResult);
         if(invalidParamList!=null){
             commonMap.replace("isError", true);
             commonMap.replace("message", invalidParamList.get(0).getDefaultMessage());
-            return commonResponseService.getRspKioskWorkoutDto(invalidParamList, commonMap);
+//            return commonResponseService.getRspKioskWorkoutDto(invalidParamList, commonMap);
         }
         else{
             WorkoutTb tmpWorkoutTb = saveWorkoutService.ToSaveRecordForm(reqKioskWorkoutDto);
@@ -124,17 +124,17 @@ public class KioskController {
             }
         }
         System.out.println(commonMap);
-        return null;
+        return commonMap;
     }
 
     @PostMapping(value = "/save/measure")
-    public RspKioskWorkoutDto SaveMeasure(@RequestBody @Valid ReqKioskMeasureDto reqKioskMeasureDto, BindingResult bindingResult) throws JsonProcessingException {
+    public HashMap<String, Object>  SaveMeasure(@RequestBody @Valid ReqKioskMeasureDto reqKioskMeasureDto, BindingResult bindingResult) throws JsonProcessingException {
         HashMap<String, Object> commonMap = commonResponseService.getCommonHashMap();
         List<ObjectError> invalidParamList = paramValidCheckService.getInvalidParamList(bindingResult);
         if(invalidParamList!=null){
             commonMap.replace("isError", true);
             commonMap.replace("message", invalidParamList.get(0).getDefaultMessage());
-            return commonResponseService.getRspKioskMeasureDto(invalidParamList, commonMap);
+//            return commonResponseService.getRspKioskMeasureDto(invalidParamList, commonMap);
         }
         else{
             LogTb tmpLogTb = saveMeasureService.ToSaveRecordForm(reqKioskMeasureDto);
@@ -149,7 +149,7 @@ public class KioskController {
             }
         }
         System.out.println(commonMap);
-        return null;
+        return commonMap;
     }
 
 //    @PostMapping(value = "/testuidlogin")
