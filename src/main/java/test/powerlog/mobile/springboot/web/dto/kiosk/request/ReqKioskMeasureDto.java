@@ -18,30 +18,26 @@ import java.util.Date;
 @ApiModel(value = "", description = "키오스크에서 운동 기록을 받아 save 하기 위한 객체")
 public class ReqKioskMeasureDto {
     @NotBlank(message = "공백이 없어야 합니다")
-    @ApiModelProperty(position = 3, example = "gjgustjd70@naver.com")
+    @ApiModelProperty(position = 1, example = "gjgustjd70@naver.com")
     private String email;
 
     @NotBlank(message = "공백이 없어야 합니다")
-    @ApiModelProperty(position = 4, example = "A01")
+    @ApiModelProperty(position = 2, example = "A01")
     private String commonCode;
 
-    @NotBlank(message = "공백이 없어야 합니다")
-    @ApiModelProperty(position = 4, example = "A01")
+    @ApiModelProperty(position = 3)
     private int start;
 
-    @NotBlank(message = "공백이 없어야 합니다")
-    @ApiModelProperty(position = 4, example = "A01")
+    @ApiModelProperty(position = 4)
     private int average;
 
-    @NotBlank(message = "공백이 없어야 합니다")
-    @ApiModelProperty(position = 4, example = "A01")
+    @ApiModelProperty(position = 5)
     private int max;
 
-    @NotBlank(message = "공백이 없어야 합니다")
-    @ApiModelProperty(position = 4, example = "A01")
+    @ApiModelProperty(position = 6)
     private int min;
 
     @NotBlank(message = "공백이 없어야 합니다")
-    @ApiModelProperty(position = 11, example = "109239212938")
+    @ApiModelProperty(position = 7, example = "109239212938")
     private String device;
 }
