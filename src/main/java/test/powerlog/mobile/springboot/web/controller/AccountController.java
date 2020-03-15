@@ -25,7 +25,7 @@ import test.powerlog.mobile.springboot.service.mobile.account.SignUpService;
 import test.powerlog.mobile.springboot.service.mobile.account.UpdatePhoneService;
 import test.powerlog.mobile.springboot.web.dto.common.CommonResponseDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.account.*;
-import test.powerlog.mobile.springboot.web.dto.mobile.response.*;
+import test.powerlog.mobile.springboot.web.dto.mobile.response.account.*;
 
 import javax.validation.*;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package test.powerlog.mobile.springboot.web.dto.mobile.response;
+package test.powerlog.mobile.springboot.web.dto.mobile.response.account;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

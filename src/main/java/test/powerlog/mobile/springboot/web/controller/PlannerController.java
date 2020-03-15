@@ -24,8 +24,10 @@ import test.powerlog.mobile.springboot.service.mobile.account.SignUpService;
 import test.powerlog.mobile.springboot.service.mobile.account.UpdatePhoneService;
 import test.powerlog.mobile.springboot.service.mobile.planner.PlannerService;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.ReqTestHistoryDto;
+import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqByDaySaveDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqCheckProgramDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqProgramGenerateDto;
+import test.powerlog.mobile.springboot.web.dto.mobile.response.planner.RspByDaySaveDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.response.planner.RspProgramCheckDto;
 
 import javax.validation.Valid;
@@ -156,8 +158,8 @@ public class PlannerController {
     }
 
     //ing
-    @PostMapping(value = "/planner/program/generate")
-    public HashMap<String, Object> ProgramGenerate(@RequestBody @Valid ReqProgramGenerateDto reqProgramGenerateDto, BindingResult bindingResult) throws ParseException {
+    @PostMapping(value = "/planner/program/save")
+    public HashMap<String, Object> ProgramSave(@RequestBody @Valid ReqProgramGenerateDto reqProgramGenerateDto, BindingResult bindingResult) throws ParseException {
         List<ObjectError> invalidParamList = paramValidCheckService.getInvalidParamList(bindingResult);
         if (invalidParamList == null) {
             return plannerService.getProgramDetail(reqProgramGenerateDto);
@@ -175,5 +177,16 @@ public class PlannerController {
             return commonResponseService.getRspProgramCheckDto(invalidParamList, resultMap, reqCheckProgramDto);
         }
         return commonResponseService.getRspProgramCheckDto(invalidParamList, resultMap, reqCheckProgramDto);
+    }
+
+    @PostMapping(value = "/planner/byday/save")
+    public RspByDaySaveDto ByDaySave(@RequestBody @Valid ReqByDaySaveDto reqByDaySaveDto, BindingResult bindingResult) throws ParseException {
+        HashMap<String, Object> resultMap = commonResponseService.getCommonHashMap();
+        List<ObjectError> invalidParamList = paramValidCheckService.getInvalidParamList(bindingResult);
+        if (invalidParamList==null) {
+            resultMap = plannerService.SaveByDay(reqByDaySaveDto, resultMap);
+            return commonResponseService.getRspByDaySaveDto(invalidParamList, resultMap, reqByDaySaveDto);
+        }
+        return commonResponseService.getRspByDaySaveDto(invalidParamList, resultMap, reqByDaySaveDto);
     }
 }

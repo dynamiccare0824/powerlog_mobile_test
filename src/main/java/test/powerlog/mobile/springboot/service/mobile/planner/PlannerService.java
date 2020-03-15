@@ -3,17 +3,15 @@ package test.powerlog.mobile.springboot.service.mobile.planner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import test.powerlog.mobile.springboot.domain.old.ProgramTypeVwRepository;
-import test.powerlog.mobile.springboot.domain.table.PlannerByProgramTb;
-import test.powerlog.mobile.springboot.domain.table.PlannerByProgramTbRepository;
-import test.powerlog.mobile.springboot.domain.table.UserTbRepository;
+import test.powerlog.mobile.springboot.domain.table.*;
 import test.powerlog.mobile.springboot.domain.view.*;
 import test.powerlog.mobile.springboot.service.mobile.account.NumberGenService;
 import test.powerlog.mobile.springboot.service.mobile.account.SendEmailService;
 import test.powerlog.mobile.springboot.service.mobile.account.SignUpService;
+import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqByDaySaveDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqCheckProgramDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqProgramGenerateDto;
 
-import javax.swing.text.html.Option;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -40,6 +38,8 @@ public class PlannerService {
     private ProgramTypeVwRepository programTypeVwRepository;
     @Autowired
     private PlannerByProgramTbRepository plannerByProgramTbRepository;
+    @Autowired
+    private PlannerByDayTbRepository plannerByDayTbRepository;
 
     public ArrayList<ArrayList<String>> getGroupList(String numberPerWk) {
         switch (numberPerWk) {
@@ -263,6 +263,47 @@ public class PlannerService {
         }
         resultMap.replace("isPresent", true);
         resultMap.replace("message", "generated program doesn't exists");
+        return resultMap;
+    }
+
+    public HashMap<String, Object> SaveByDay(ReqByDaySaveDto reqByDaySaveDto, HashMap<String, Object> resultMap) throws ParseException
+    {
+        SimpleDateFormat transFormat = new SimpleDateFormat("yyyyMMdd");
+        Date onDate = transFormat.parse(reqByDaySaveDto.getDate());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(onDate);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        LocalDate localDate = LocalDate.parse(reqByDaySaveDto.getDate(), formatter);
+        LocalDateTime localDateTime = LocalDateTime.now();
+
+        PlannerByDayTb plannerByDayTb = PlannerByDayTb.builder()
+                .email(reqByDaySaveDto.getEmail())
+                .date(localDate)
+                .dayOfWk(Integer.toString(calendar.DAY_OF_WEEK))
+                .commonCode(reqByDaySaveDto.getCommonCode())
+                .weight(reqByDaySaveDto.getWeight())
+                .count(reqByDaySaveDto.getCount())
+                .set(reqByDaySaveDto.getSet())
+                .level(reqByDaySaveDto.getLevel())
+                .rest(reqByDaySaveDto.getRest())
+                .program("false")
+                .done("false")
+                .onSchedule("true")
+                .created(localDateTime)
+                .updated(localDateTime).build();
+
+        try{
+            plannerByDayTbRepository.save(plannerByDayTb);
+            resultMap.replace("isDone", true);
+            resultMap.replace("isError", false);
+            resultMap.replace("message", "schedule has been registered succesfully");
+        }
+        catch(Exception ex){
+            resultMap.replace("isDone", false);
+            resultMap.replace("isError", true);
+            resultMap.replace("message", "schedule has been registered succesfully");
+        }
         return resultMap;
     }
 

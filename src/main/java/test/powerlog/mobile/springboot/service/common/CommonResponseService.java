@@ -7,8 +7,10 @@ import test.powerlog.mobile.springboot.domain.view.UserAccountVwRepository;
 import test.powerlog.mobile.springboot.web.dto.common.CommonResponseDto;
 import test.powerlog.mobile.springboot.web.dto.kiosk.response.RspKioskLoginDto;
 import test.powerlog.mobile.springboot.web.dto.kiosk.response.RspKioskWorkoutDto;
+import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqByDaySaveDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqCheckProgramDto;
-import test.powerlog.mobile.springboot.web.dto.mobile.response.*;
+import test.powerlog.mobile.springboot.web.dto.mobile.response.account.*;
+import test.powerlog.mobile.springboot.web.dto.mobile.response.planner.RspByDaySaveDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.response.planner.RspProgramCheckDto;
 
 import java.util.ArrayList;
@@ -224,6 +226,26 @@ public class CommonResponseService {
             resultDto.setEmail(email);
             resultDto.setIsPresent((Boolean) resultMap.get("isPresent"));
             resultDto.setIsError(false);
+            resultDto.setInvalidParamList(invalidParamList);
+            resultDto.setMessage((String) resultMap.get("message"));
+        }
+        return resultDto;
+    }
+
+    public RspByDaySaveDto getRspByDaySaveDto(List<ObjectError> invalidParamList,
+                                                 HashMap<String, Object> resultMap, ReqByDaySaveDto reqByDaySaveDto) {
+        String email = reqByDaySaveDto.getEmail();
+        RspByDaySaveDto resultDto = new RspByDaySaveDto();
+        if (invalidParamList != null) {
+            resultDto.setEmail(email);
+            resultDto.setIsDone(null);
+            resultDto.setIsError(true);
+            resultDto.setInvalidParamList(invalidParamList);
+            resultDto.setMessage(invalidParamMessage);
+        } else {
+            resultDto.setEmail(email);
+            resultDto.setIsDone((Boolean) resultMap.get("isDone"));
+            resultDto.setIsError((Boolean) resultMap.get("isError"));
             resultDto.setInvalidParamList(invalidParamList);
             resultDto.setMessage((String) resultMap.get("message"));
         }
