@@ -2,10 +2,8 @@ package test.powerlog.mobile.springboot.service.kiosk;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import test.powerlog.mobile.springboot.domain.view.PlannerVw;
-import test.powerlog.mobile.springboot.domain.view.PlannerVwRepository;
-import test.powerlog.mobile.springboot.domain.view.UserAccountVw;
-import test.powerlog.mobile.springboot.domain.view.UserAccountVwRepository;
+import test.powerlog.mobile.springboot.domain.old.PlannerVw;
+import test.powerlog.mobile.springboot.domain.old.PlannerVwRepository;
 
 import java.text.SimpleDateFormat;
 import java.util.*;

@@ -24,7 +24,9 @@ import test.powerlog.mobile.springboot.service.mobile.account.SignUpService;
 import test.powerlog.mobile.springboot.service.mobile.account.UpdatePhoneService;
 import test.powerlog.mobile.springboot.service.mobile.planner.PlannerService;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.ReqTestHistoryDto;
+import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqCheckProgramDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqProgramGenerateDto;
+import test.powerlog.mobile.springboot.web.dto.mobile.response.planner.RspProgramCheckDto;
 
 import javax.validation.Valid;
 import java.text.ParseException;
@@ -110,21 +112,20 @@ public class PlannerController {
         HashMap<String, Object> resultMap2 = new HashMap();
         //
         String email = reqTestHistoryDto.getEmail();
-        ArrayList<String> codeList1 =  new ArrayList<String>(
+        ArrayList<String> codeList1 = new ArrayList<String>(
                 Arrays.asList("A01", "B01", "C01", "D01", "F01", "G01", "H01"));
 
-        ArrayList<String> codeList2 =  new ArrayList<String>(
+        ArrayList<String> codeList2 = new ArrayList<String>(
                 Arrays.asList("A03", "B03", "C03", "D03", "E03", "F03", "G03", "H03"));
 
 
-        try{
+        try {
             for (int i = 0; i < codeList1.size(); i++) {
                 List<LogTotalMsrVw> tmpList = logTotalMsrVwRepository.findAllByLgTotalMsrVwEmailAndLgTotalMsrVwCommonCodeOrderByLgTotalMsrVwDateTimeDesc(email,
                         codeList1.get(i));
-                if(!tmpList.isEmpty()){
+                if (!tmpList.isEmpty()) {
                     resultMap.put(codeList1.get(i), tmpList);
-                }
-                else{
+                } else {
                     resultMap.put(codeList1.get(i), null);
                 }
 
@@ -132,10 +133,9 @@ public class PlannerController {
             for (int i = 0; i < codeList2.size(); i++) {
                 List<LogTotalMsrVw> tmpList = logTotalMsrVwRepository.findAllByLgTotalMsrVwEmailAndLgTotalMsrVwCommonCodeOrderByLgTotalMsrVwDateTimeDesc(email,
                         codeList2.get(i));
-                if(!tmpList.isEmpty()){
+                if (!tmpList.isEmpty()) {
                     resultMap.put(codeList2.get(i), tmpList);
-                }
-                else{
+                } else {
                     resultMap.put(codeList2.get(i), null);
                 }
             }
@@ -144,7 +144,7 @@ public class PlannerController {
 //            resultMap.put("error", null);
         }
         // 아이디가 아예 존재하지 않는 경우
-        catch(Exception ex){
+        catch (Exception ex) {
 //            resultMap.put("result", null);
 //            resultMap.put("error", ex.toString());
         }
@@ -155,12 +155,25 @@ public class PlannerController {
         return resultMap2;
     }
 
+    //ing
     @PostMapping(value = "/planner/program/generate")
     public HashMap<String, Object> ProgramGenerate(@RequestBody @Valid ReqProgramGenerateDto reqProgramGenerateDto, BindingResult bindingResult) throws ParseException {
         List<ObjectError> invalidParamList = paramValidCheckService.getInvalidParamList(bindingResult);
-        if(invalidParamList==null){
+        if (invalidParamList == null) {
             return plannerService.getProgramDetail(reqProgramGenerateDto);
         }
         return null;
+    }
+
+    //ing
+    @PostMapping(value = "/planner/program/check")
+    public RspProgramCheckDto ProgramCheck(@RequestBody @Valid ReqCheckProgramDto reqCheckProgramDto, BindingResult bindingResult) throws ParseException {
+        HashMap<String, Object> resultMap = commonResponseService.getCommonHashMap();
+        List<ObjectError> invalidParamList = paramValidCheckService.getInvalidParamList(bindingResult);
+        if (invalidParamList==null) {
+            resultMap = plannerService.getProgramCheck(reqCheckProgramDto, resultMap);
+            return commonResponseService.getRspProgramCheckDto(invalidParamList, resultMap, reqCheckProgramDto);
+        }
+        return commonResponseService.getRspProgramCheckDto(invalidParamList, resultMap, reqCheckProgramDto);
     }
 }

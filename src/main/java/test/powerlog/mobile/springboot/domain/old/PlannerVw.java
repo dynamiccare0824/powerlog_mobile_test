@@ -1,4 +1,4 @@
-package test.powerlog.mobile.springboot.domain.view;
+package test.powerlog.mobile.springboot.domain.old;
 
 import lombok.AccessLevel;
 import lombok.Getter;

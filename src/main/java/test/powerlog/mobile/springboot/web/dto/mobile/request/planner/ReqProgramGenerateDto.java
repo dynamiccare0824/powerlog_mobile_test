@@ -20,7 +20,7 @@ public class ReqProgramGenerateDto {
     private String startDate;
 
     @NotBlank(message = "공백없이 입력하세요.")
-    @ApiModelProperty(value = "주 당 횟수", required = true, position = 3)
+    @ApiModelProperty(value = "주 당 횟수", required = true, position = 3, example = "4")
     private String numberPerWk;
 
     @NotBlank(message = "공백없이 입력하세요.")

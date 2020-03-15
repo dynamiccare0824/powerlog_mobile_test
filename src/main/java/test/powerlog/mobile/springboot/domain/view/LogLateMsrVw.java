@@ -5,6 +5,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
@@ -18,13 +21,13 @@ public class LogLateMsrVw {
     private String lgLateMsrVwEmail;
 
     @Column
-    private String lgLateMsrVwDateTime;
+    private LocalDateTime lgLateMsrVwDateTime;
 
     @Column
     private String lgLateMsrVwCommonCode;
 
     @Column
-    private String lgLateMsrVwMax;
+    private int lgLateMsrVwMax;
 
     @Column
     private String lgLateMsrVwXy;

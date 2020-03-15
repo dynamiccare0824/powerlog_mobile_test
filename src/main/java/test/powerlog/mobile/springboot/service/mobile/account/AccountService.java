@@ -78,7 +78,7 @@ public class AccountService {
                 if (commonCode.contains("01")) {
                     isWorkoutCode.add(logList.get().get(i).getLgLateMsrVwCommonCode());
                     HashMap<String, Object> codeDetailMap = (HashMap<String, Object>) workoutCodeMap.get((String) commonCode);
-                    String workoutMax = logList.get().get(i).getLgLateMsrVwMax();
+                    String workoutMax = Integer.toString(logList.get().get(i).getLgLateMsrVwMax());
                     codeDetailMap.replace("WorkoutMax", workoutMax);
                     codeDetailMap.replace("WorkoutRank", String.format("%,.1f", random.nextFloat() * 100));
                     workoutCodeMap.replace("commonCode", codeDetailMap);

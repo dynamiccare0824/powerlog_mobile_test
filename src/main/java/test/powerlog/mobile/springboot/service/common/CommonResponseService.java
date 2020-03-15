@@ -7,7 +7,9 @@ import test.powerlog.mobile.springboot.domain.view.UserAccountVwRepository;
 import test.powerlog.mobile.springboot.web.dto.common.CommonResponseDto;
 import test.powerlog.mobile.springboot.web.dto.kiosk.response.RspKioskLoginDto;
 import test.powerlog.mobile.springboot.web.dto.kiosk.response.RspKioskWorkoutDto;
+import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqCheckProgramDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.response.*;
+import test.powerlog.mobile.springboot.web.dto.mobile.response.planner.RspProgramCheckDto;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -204,6 +206,26 @@ public class CommonResponseService {
             resultDto.setWrkotCodeMap(wrkotCodeMap);
             resultDto.setInvalidParamList(invalidParamList);
             resultDto.setMessage(validParamMessage);
+        }
+        return resultDto;
+    }
+
+    public RspProgramCheckDto getRspProgramCheckDto(List<ObjectError> invalidParamList,
+                                                  HashMap<String, Object> resultMap, ReqCheckProgramDto reqCheckProgramDto) {
+        String email = reqCheckProgramDto.getEmail();
+        RspProgramCheckDto resultDto = new RspProgramCheckDto();
+        if (invalidParamList != null) {
+            resultDto.setEmail(email);
+            resultDto.setIsPresent(null);
+            resultDto.setIsError(true);
+            resultDto.setInvalidParamList(invalidParamList);
+            resultDto.setMessage(invalidParamMessage);
+        } else {
+            resultDto.setEmail(email);
+            resultDto.setIsPresent((Boolean) resultMap.get("isPresent"));
+            resultDto.setIsError(false);
+            resultDto.setInvalidParamList(invalidParamList);
+            resultDto.setMessage((String) resultMap.get("message"));
         }
         return resultDto;
     }
