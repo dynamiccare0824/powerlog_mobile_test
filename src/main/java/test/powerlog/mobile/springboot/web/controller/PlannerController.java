@@ -3,6 +3,7 @@ package test.powerlog.mobile.springboot.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -108,6 +109,7 @@ public class PlannerController {
 //    }
 
     //ing 예외처리가 되어있지 않다.
+    @ApiOperation(value = "측정 기록을 확인한다 [히스토리]")
     @PostMapping(value = "/historytest")
     public HashMap<String, Object> testHistory(@RequestBody ReqTestHistoryDto reqTestHistoryDto) throws JsonProcessingException {
         HashMap<String, Object> resultMap = new HashMap();
@@ -158,6 +160,7 @@ public class PlannerController {
     }
 
     //ing
+    @ApiOperation(value = "플랜 일정을 DB에 등록하고, 사용자에게 플랜 디테일을 보여준다 [플래너]")
     @PostMapping(value = "/planner/program/save")
     public HashMap<String, Object> ProgramSave(@RequestBody @Valid ReqProgramGenerateDto reqProgramGenerateDto, BindingResult bindingResult) throws ParseException {
         List<ObjectError> invalidParamList = paramValidCheckService.getInvalidParamList(bindingResult);
@@ -168,6 +171,7 @@ public class PlannerController {
     }
 
     //ing
+    @ApiOperation(value = "플랜 일정 추가시, 이미 있는 플랜이 있는지 검사 [플래너]")
     @PostMapping(value = "/planner/program/check")
     public RspProgramCheckDto ProgramCheck(@RequestBody @Valid ReqCheckProgramDto reqCheckProgramDto, BindingResult bindingResult) throws ParseException {
         HashMap<String, Object> resultMap = commonResponseService.getCommonHashMap();
@@ -179,6 +183,7 @@ public class PlannerController {
         return commonResponseService.getRspProgramCheckDto(invalidParamList, resultMap, reqCheckProgramDto);
     }
 
+    @ApiOperation(value = "개인 일정 추가 [플래너]")
     @PostMapping(value = "/planner/byday/save")
     public RspByDaySaveDto ByDaySave(@RequestBody @Valid ReqByDaySaveDto reqByDaySaveDto, BindingResult bindingResult) throws ParseException {
         HashMap<String, Object> resultMap = commonResponseService.getCommonHashMap();
