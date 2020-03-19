@@ -2,8 +2,8 @@ package test.powerlog.mobile.springboot.service.kiosk;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import test.powerlog.mobile.springboot.domain.old.PlannerVw;
-import test.powerlog.mobile.springboot.domain.old.PlannerVwRepository;
+import test.powerlog.mobile.springboot.domain.old.NewPlannerVw;
+import test.powerlog.mobile.springboot.domain.old.NewPlannerVwRepository;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -11,20 +11,20 @@ import java.util.*;
 @Service
 public class OnDateWrkotService {
     @Autowired
-    private PlannerVwRepository plannerVwRepository;
+    private NewPlannerVwRepository newPlannerVwRepository;
 
     public HashMap<String, Object> GetOnDateWrkot(String email) {
         System.out.println(email);
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        List<PlannerVw> list = plannerVwRepository.findSomeCaseQueryNative(email);
-        ArrayList<PlannerVw> programList = new ArrayList<>();
-        ArrayList<PlannerVw> privateList = new ArrayList<>();
+        List<NewPlannerVw> list = newPlannerVwRepository.findSomeCaseQueryNative(email);
+        ArrayList<NewPlannerVw> programList = new ArrayList<>();
+        ArrayList<NewPlannerVw> privateList = new ArrayList<>();
         HashMap<String, Object> resultMap = new HashMap<>();
 
         for (int i = 0; i < list.size(); i++) {
             if(list.get(i).getPlnVwOnDate().equals(sdf.format(date))){
-                if(list.get(i).getPlnVwProgram().equals("true")){
+                if(list.get(i).getPlnVwIsProgram().equals("true")){
                     programList.add(list.get(i));
                 }
                 else{

@@ -6,9 +6,9 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface PlannerVwRepository extends JpaRepository<PlannerVw, String> {
-    List<PlannerVw> findAllByPlnVwEmail(String email);
+public interface NewPlannerVwRepository extends JpaRepository<NewPlannerVw, String> {
+    List<NewPlannerVw> findAllByPlnVwEmail(String email);
 
     @Query(value = "select * from PlannerVw b where b.plnVwEmail = :email", nativeQuery = true)
-    List<PlannerVw> findSomeCaseQueryNative(@Param("email") String email);
+    List<NewPlannerVw> findSomeCaseQueryNative(@Param("email") String email);
 }

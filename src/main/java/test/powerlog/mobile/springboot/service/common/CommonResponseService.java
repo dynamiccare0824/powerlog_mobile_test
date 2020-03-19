@@ -9,8 +9,10 @@ import test.powerlog.mobile.springboot.web.dto.kiosk.response.RspKioskLoginDto;
 import test.powerlog.mobile.springboot.web.dto.kiosk.response.RspKioskWorkoutDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqByDaySaveDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqCheckProgramDto;
+import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqPlannerMainDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.response.account.*;
 import test.powerlog.mobile.springboot.web.dto.mobile.response.planner.RspByDaySaveDto;
+import test.powerlog.mobile.springboot.web.dto.mobile.response.planner.RspPlannerMainDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.response.planner.RspProgramCheckDto;
 
 import java.util.ArrayList;
@@ -252,6 +254,26 @@ public class CommonResponseService {
         return resultDto;
     }
 
+    public RspPlannerMainDto getRspPlannerMain(List<ObjectError> invalidParamList,
+                                               HashMap<String, Object> resultMap, ReqPlannerMainDto reqPlannerMainDto) {
+        String email = reqPlannerMainDto.getEmail();
+        RspPlannerMainDto resultDto = new RspPlannerMainDto();
+        if (invalidParamList != null) {
+            resultDto.setEmail(email);
+            resultDto.setIsError(true);
+            resultDto.setResultData((null));
+            resultDto.setInvalidParamList(invalidParamList);
+            resultDto.setMessage(invalidParamMessage);
+        } else {
+            resultDto.setEmail(email);
+            resultDto.setResultData((HashMap<String, Object>) resultMap.get("resultData"));
+            resultDto.setIsError((Boolean) resultMap.get("isError"));
+            resultDto.setInvalidParamList(invalidParamList);
+            resultDto.setMessage((String) resultMap.get(validParamMessage));
+        }
+        return resultDto;
+    }
+
     public RspKioskWorkoutDto getRspKioskWorkoutDto(List<ObjectError> invalidParamList,
                                                                    HashMap<String, Object> commonMap) {
         RspKioskWorkoutDto resultDto = new RspKioskWorkoutDto();
@@ -322,6 +344,7 @@ public class CommonResponseService {
         tmpMap.put("verificationNum", null);
         tmpMap.put("phonePresent", null);
         tmpMap.put("emailPresent", null);
+        tmpMap.put("resultData", null);
         tmpMap.put("isPresent", null);
         tmpMap.put("isError", null);
         tmpMap.put("isMatch", null);

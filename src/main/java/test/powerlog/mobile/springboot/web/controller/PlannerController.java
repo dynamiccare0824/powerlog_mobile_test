@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import test.powerlog.mobile.springboot.domain.old.NewPlannerVwRepository;
 import test.powerlog.mobile.springboot.domain.view.*;
 import test.powerlog.mobile.springboot.service.common.CommonResponseService;
 import test.powerlog.mobile.springboot.service.common.ParamValidCheckService;
@@ -27,8 +28,10 @@ import test.powerlog.mobile.springboot.service.mobile.planner.PlannerService;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.ReqTestHistoryDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqByDaySaveDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqCheckProgramDto;
+import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqPlannerMainDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqProgramGenerateDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.response.planner.RspByDaySaveDto;
+import test.powerlog.mobile.springboot.web.dto.mobile.response.planner.RspPlannerMainDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.response.planner.RspProgramCheckDto;
 
 import javax.validation.Valid;
@@ -91,22 +94,21 @@ public class PlannerController {
     @Autowired
     PlannerService plannerService;
 
-//    @PostMapping(value = "/plannerByMonth")
-//    public HashMap<String, Object> PlannerByMonth(@RequestBody UserAccountDto userAccountDto) throws JsonProcessingException {
-//        HashMap<String, Object> resultMap = new HashMap();
-//        String email = userAccountDto.getEmail();
-//
-//        try{
-//            resultMap.put("result", logTotalWrkotVwRepository.findAllByLgTotalWrkotVwEmail(email));
-//            resultMap.put("error", null);
-//        }
-//        // 아이디가 아예 존재하지 않는 경우
-//        catch(Exception ex){
-//            resultMap.put("result", null);
-//            resultMap.put("error", ex.toString());
-//        }
-//        return resultMap;
-//    }
+    @Autowired
+    NewPlannerVwRepository newPlannerVwRepository;
+
+    @ApiOperation(value = "Year와 Month를 받아 해당하는 년월의 일자 별 일정을 돌려준다 [플래너]")
+    @PostMapping(value = "/planner/main")
+    public RspPlannerMainDto PlannerMain(@RequestBody @Valid ReqPlannerMainDto reqPlannerMainDto, BindingResult bindingResult) throws JsonProcessingException {
+        HashMap<String, Object> resultMap = commonResponseService.getCommonHashMap();
+        List<ObjectError> invalidParamList = paramValidCheckService.getInvalidParamList(bindingResult);
+        if (invalidParamList == null) {
+            resultMap = plannerService.getPlannerMain(reqPlannerMainDto, resultMap);
+            return commonResponseService.getRspPlannerMain(invalidParamList, resultMap, reqPlannerMainDto);
+        }
+        return commonResponseService.getRspPlannerMain(invalidParamList, resultMap, reqPlannerMainDto);
+    }
+
 
     //ing 예외처리가 되어있지 않다.
     @ApiOperation(value = "측정 기록을 확인한다 [히스토리]")

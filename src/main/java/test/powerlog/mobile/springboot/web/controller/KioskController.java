@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
-import test.powerlog.mobile.springboot.domain.old.PlannerVw;
+import test.powerlog.mobile.springboot.domain.old.NewPlannerVw;
 import test.powerlog.mobile.springboot.domain.table.LogTb;
 import test.powerlog.mobile.springboot.domain.table.LogTbRepository;
 import test.powerlog.mobile.springboot.domain.table.WorkoutTb;
@@ -55,7 +55,7 @@ public class KioskController {
     private SaveMeasureService saveMeasureService;
 
     @PostMapping(value = "/uidlogin")
-    public RspKioskLoginDto<PlannerVw> UidLogin(@RequestBody @Valid ReqKioskLoginDto reqKioskLoginDto, BindingResult bindingResult) throws JsonProcessingException {
+    public RspKioskLoginDto<NewPlannerVw> UidLogin(@RequestBody @Valid ReqKioskLoginDto reqKioskLoginDto, BindingResult bindingResult) throws JsonProcessingException {
         HashMap<String, Object> uidLoginResult = new HashMap();
         HashMap<String, Object> workoutCodeVwMap = new HashMap();
         String uid = reqKioskLoginDto.getUid();

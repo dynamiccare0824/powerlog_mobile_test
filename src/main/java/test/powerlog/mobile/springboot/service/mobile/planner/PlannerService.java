@@ -2,6 +2,8 @@ package test.powerlog.mobile.springboot.service.mobile.planner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import test.powerlog.mobile.springboot.domain.old.NewPlannerVw;
+import test.powerlog.mobile.springboot.domain.old.NewPlannerVwRepository;
 import test.powerlog.mobile.springboot.domain.old.ProgramTypeVwRepository;
 import test.powerlog.mobile.springboot.domain.table.*;
 import test.powerlog.mobile.springboot.domain.view.*;
@@ -10,8 +12,11 @@ import test.powerlog.mobile.springboot.service.mobile.account.SendEmailService;
 import test.powerlog.mobile.springboot.service.mobile.account.SignUpService;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqByDaySaveDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqCheckProgramDto;
+import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqPlannerMainDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqProgramGenerateDto;
 
+import javax.print.DocFlavor;
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -40,6 +45,8 @@ public class PlannerService {
     private PlannerByProgramTbRepository plannerByProgramTbRepository;
     @Autowired
     private PlannerByDayTbRepository plannerByDayTbRepository;
+    @Autowired
+    private NewPlannerVwRepository newPlannerVwRepository;
 
     public ArrayList<ArrayList<String>> getGroupList(String numberPerWk) {
         switch (numberPerWk) {
@@ -102,7 +109,7 @@ public class PlannerService {
                     set = 5;
                     rest = 60;
             }
-            if (Integer.parseInt(careerNow) < 4) {
+            if (Integer.parseInt(careerNow) < 4 || userRecord.get().getLoginVwGender().equals("female")) {
                 defaultvalue = 0.3;
             }
 
@@ -265,7 +272,6 @@ public class PlannerService {
         resultMap.replace("message", "generated program doesn't exists");
         return resultMap;
     }
-
     public HashMap<String, Object> SaveByDay(ReqByDaySaveDto reqByDaySaveDto, HashMap<String, Object> resultMap) throws ParseException
     {
         SimpleDateFormat transFormat = new SimpleDateFormat("yyyyMMdd");
@@ -307,9 +313,85 @@ public class PlannerService {
         return resultMap;
     }
 
-    public HashMap<String, Object> getByDayDetail(ReqProgramGenerateDto reqProgramGenerateDto) throws ParseException
-    {
-        return null;
+    public HashMap<String, Object> getCalendarList(String year, String month) {
+
+
+        SimpleDateFormat dateFormat;
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd"); //년월일 표시
+        Calendar cal = Calendar.getInstance();
+
+
+        cal.set ( Integer.parseInt(year), Integer.parseInt(month), 1 ); //종료 날짜 셋팅
+        String endDate = dateFormat.format(cal.getTime());
+        cal.set ( Integer.parseInt(year), Integer.parseInt(month) - 1, 1 ); //시작 날짜 셋팅
+        String startDate = dateFormat.format(cal.getTime());
+
+
+        int i = 0;
+        HashMap<String, Object> tmpMap = new HashMap<>();
+
+        while(!startDate.equals(endDate)){ //다르다면 실행, 동일 하다면 빠져나감
+            ArrayList<HashMap<String, Object>>  tmpList = new ArrayList<>();
+            tmpMap.put(startDate, tmpList);
+            cal.add(Calendar.DATE, 1); //1일 더해줌
+            startDate = dateFormat.format(cal.getTime()); //비교를 위한 값 셋팅
+//            //+1달 출력
+//            System.out.println(dateFormat.format(cal.getTime()));
+            i++;
+        }
+        return tmpMap;
+    }
+
+
+    public HashMap<String, Object> getPlannerMain(ReqPlannerMainDto reqPlannerMainDto, HashMap<String, Object> resultMap) {
+        String email = reqPlannerMainDto.getEmail();
+        List<NewPlannerVw> record = newPlannerVwRepository.findAllByPlnVwEmail(email);
+
+        if(!record.isEmpty()){
+            HashMap<String, Object> dateMap = getCalendarList(reqPlannerMainDto.getYear(), reqPlannerMainDto.getMonth());
+            for(int i=0; i<record.size(); i++){
+                HashMap<String, Object> recordMap = new HashMap<>();
+                recordMap.put("plnVwCommonCode", record.get(i).getPlnVwCommonCode());
+                recordMap.put("plnVwStartDate", record.get(i).getPlnVwStartDate());
+                recordMap.put("plnVwEndDate", record.get(i).getPlnVwEndDate());
+                recordMap.put("plnVwOnDate", record.get(i).getPlnVwOnDate());
+                recordMap.put("plnVwOnDay", record.get(i).getPlnVwOnDay());
+                recordMap.put("plnVwChosenDayOfWk", record.get(i).getPlnVwChosenDayOfWk());
+                recordMap.put("plnVwWeight", record.get(i).getPlnVwWeight());
+                recordMap.put("plnVwCount", record.get(i).getPlnVwCount());
+                recordMap.put("plnVwSet", record.get(i).getPlnVwSet());
+                recordMap.put("plnVwLevel", record.get(i).getPlnVwLevel());
+                recordMap.put("plnVwRest", record.get(i).getPlnVwRest());
+                recordMap.put("plnVwIsProgram", record.get(i).getPlnVwIsProgram());
+                recordMap.put("plnVwOnSchedule", record.get(i).getPlnVwOnSchedule());
+                recordMap.put("plnIsDone", record.get(i).getPlnVwIsDone());
+                recordMap.put("plnVwCreatedTime", record.get(i).getPlnVwCreatedTime());
+                recordMap.put("plnVwUpdatedTime", record.get(i).getPlnVwUpdatedTime());
+                recordMap.put("plnVwId", record.get(i).getPlnVwId());
+                int recordMonth = record.get(i).getPlnVwOnDate().getMonthValue();
+                int recordYear = record.get(i).getPlnVwOnDate().getYear();
+                if(recordMonth == Integer.parseInt(reqPlannerMainDto.getMonth())
+                && recordYear == Integer.parseInt(reqPlannerMainDto.getYear())){
+                    ArrayList tmpList =(ArrayList) dateMap.get(record.get(i).getPlnVwOnDate().toString());
+                    tmpList.add(recordMap);
+                    dateMap.replace(record.get(i).getPlnVwOnDate().toString(), tmpList);
+                }
+            }
+            for(String key : dateMap.keySet()){
+                ArrayList<HashMap<String, Object>>  tmpList = new ArrayList<>();
+                if(dateMap.get(key).equals(tmpList)){
+                    dateMap.replace(key, null);
+                }
+            }
+            resultMap.replace("resultData", dateMap);
+            resultMap.replace("isError", false);
+        }
+        else{
+            resultMap.replace("isError", true);
+            resultMap.replace("message", "no registered data found");
+        }
+        System.out.println(resultMap);
+        return resultMap;
     }
 }
 
