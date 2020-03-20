@@ -9,6 +9,6 @@ import java.util.List;
 public interface NewPlannerVwRepository extends JpaRepository<NewPlannerVw, String> {
     List<NewPlannerVw> findAllByPlnVwEmail(String email);
 
-    @Query(value = "select * from PlannerVw b where b.plnVwEmail = :email", nativeQuery = true)
+    @Query(value = "select * from NewPlannerVw b where b.plnVwEmail = :email", nativeQuery = true)
     List<NewPlannerVw> findSomeCaseQueryNative(@Param("email") String email);
 }

@@ -23,11 +23,15 @@ public class OnDateWrkotService {
         HashMap<String, Object> resultMap = new HashMap<>();
 
         for (int i = 0; i < list.size(); i++) {
-            if(list.get(i).getPlnVwOnDate().equals(sdf.format(date))){
+            System.out.println(sdf.format(date));
+            System.out.println(list.get(i).getPlnVwOnDate());
+            System.out.println(list.get(i).getPlnVwIsProgram());
+            if(list.get(i).getPlnVwOnDate().toString().equals(sdf.format(date))){
                 if(list.get(i).getPlnVwIsProgram().equals("true")){
                     programList.add(list.get(i));
                 }
                 else{
+                    System.out.println(list.get(i).getPlnVwIsProgram());
                     privateList.add(list.get(i));
                 }
             }
