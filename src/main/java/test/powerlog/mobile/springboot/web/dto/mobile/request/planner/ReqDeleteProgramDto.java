@@ -5,12 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReqDeleteScheduleDto {
-    @ApiModelProperty(value = "운동이 가지고 있는 unique index", required = true, position = 1, example = "1 gjgustjd70@naver.com false")
-    private String index;
+public class ReqDeleteProgramDto {
+    @ApiModelProperty(value = "이메일", required = true, position = 1, example = "gjgustjd70@naver.com")
+    private String email;
 }

@@ -27,10 +27,7 @@ import test.powerlog.mobile.springboot.service.mobile.account.UpdatePhoneService
 import test.powerlog.mobile.springboot.service.mobile.planner.PlannerService;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.ReqTestHistoryDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.*;
-import test.powerlog.mobile.springboot.web.dto.mobile.response.planner.RspByDaySaveDto;
-import test.powerlog.mobile.springboot.web.dto.mobile.response.planner.RspDeleteScheduleDto;
-import test.powerlog.mobile.springboot.web.dto.mobile.response.planner.RspPlannerMainDto;
-import test.powerlog.mobile.springboot.web.dto.mobile.response.planner.RspProgramCheckDto;
+import test.powerlog.mobile.springboot.web.dto.mobile.response.planner.*;
 
 import javax.validation.Valid;
 import java.text.ParseException;
@@ -187,6 +184,19 @@ public class PlannerController {
         return commonResponseService.getRspProgramCheckDto(invalidParamList, resultMap, reqCheckProgramDto);
     }
 
+    //수정해야 한다
+    @ApiOperation(value = "프로그램 전체 삭제 [플래너]")
+    @PostMapping(value = "/planner/program/delete")
+    public RspDeleteProgramDto deleteProgram(@RequestBody @Valid ReqDeleteProgramDto reqDeleteProgramDto, BindingResult bindingResult) throws ParseException {
+        HashMap<String, Object> resultMap = commonResponseService.getCommonHashMap();
+        List<ObjectError> invalidParamList = paramValidCheckService.getInvalidParamList(bindingResult);
+        if (invalidParamList==null) {
+            resultMap = plannerService.DeleteProgramByEmail(reqDeleteProgramDto, resultMap);
+            return commonResponseService.getRspDeleteProgramDto(invalidParamList, resultMap, reqDeleteProgramDto);
+        }
+        return commonResponseService.getRspDeleteProgramDto(invalidParamList, resultMap, reqDeleteProgramDto);
+    }
+
     @ApiOperation(value = "개인 일정 추가 [플래너]")
     @PostMapping(value = "/planner/byday/save")
     public RspByDaySaveDto ByDaySave(@RequestBody @Valid ReqByDaySaveDto reqByDaySaveDto, BindingResult bindingResult) throws ParseException {
@@ -202,7 +212,7 @@ public class PlannerController {
     //수정해야 한다
     @ApiOperation(value = "일정 개별 삭제 [플래너]")
     @PostMapping(value = "/planner/schedule/delete")
-    public RspDeleteScheduleDto ByDaySave(@RequestBody @Valid ReqDeleteScheduleDto reqDeleteScheduleDto, BindingResult bindingResult) throws ParseException {
+    public RspDeleteScheduleDto deleteSchedule(@RequestBody @Valid ReqDeleteScheduleDto reqDeleteScheduleDto, BindingResult bindingResult) throws ParseException {
         HashMap<String, Object> resultMap = commonResponseService.getCommonHashMap();
         List<ObjectError> invalidParamList = paramValidCheckService.getInvalidParamList(bindingResult);
         if (invalidParamList==null) {
@@ -211,4 +221,6 @@ public class PlannerController {
         }
         return commonResponseService.getRspDeleteScheduleDto(invalidParamList, resultMap, reqDeleteScheduleDto);
     }
+
+
 }

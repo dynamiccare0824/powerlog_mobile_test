@@ -426,5 +426,28 @@ public class PlannerService {
         }
         return resultMap;
     }
+    public HashMap<String, Object> DeleteProgramByEmail(ReqDeleteProgramDto reqDeleteProgramDto, HashMap<String, Object> resultMap) throws ParseException
+    {
+        if(reqDeleteProgramDto.getEmail() != null){
+            String email = reqDeleteProgramDto.getEmail();
+            try{
+                plannerByProgramTbRepository.deleteAllByPlnEmail(email);
+                resultMap.replace("isDone", true);
+                resultMap.replace("isError", false);
+                resultMap.replace("message", null);
+            }
+            catch(Exception ex){
+                resultMap.replace("isDone", false);
+                resultMap.replace("isError", true);
+                resultMap.replace("message", ex.toString());
+            }
+        }
+        else{
+            resultMap.replace("isDone", null);
+            resultMap.replace("isError", true);
+            resultMap.replace("message", "null data received");
+        }
+        return resultMap;
+    }
 }
 
