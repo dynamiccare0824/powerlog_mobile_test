@@ -57,5 +57,5 @@ public class ReqKioskWorkoutDto {
     private String device;
 
     @ApiModelProperty(value = "만약 onSchedule = true 인 경우 갖는 index", required = true, position = 12)
-    private int index;
+    private String index;
 }
