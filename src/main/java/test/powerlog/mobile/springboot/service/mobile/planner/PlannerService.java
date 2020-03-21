@@ -10,10 +10,7 @@ import test.powerlog.mobile.springboot.domain.view.*;
 import test.powerlog.mobile.springboot.service.mobile.account.NumberGenService;
 import test.powerlog.mobile.springboot.service.mobile.account.SendEmailService;
 import test.powerlog.mobile.springboot.service.mobile.account.SignUpService;
-import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqByDaySaveDto;
-import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqCheckProgramDto;
-import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqPlannerMainDto;
-import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqProgramGenerateDto;
+import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.*;
 
 import javax.print.DocFlavor;
 import java.lang.reflect.Array;
@@ -45,6 +42,10 @@ public class PlannerService {
     private PlannerByProgramTbRepository plannerByProgramTbRepository;
     @Autowired
     private PlannerByDayTbRepository plannerByDayTbRepository;
+    @Autowired
+    private PlannerByProgramTbRepository2 plannerByProgramTbRepository2;
+    @Autowired
+    private PlannerByDayTbRepository2 plannerByDayTbRepository2;
     @Autowired
     private NewPlannerVwRepository newPlannerVwRepository;
 
@@ -312,7 +313,6 @@ public class PlannerService {
         }
         return resultMap;
     }
-
     public HashMap<String, Object> getCalendarList(String year, String month) {
 
 
@@ -341,7 +341,6 @@ public class PlannerService {
         }
         return tmpMap;
     }
-
 
     public HashMap<String, Object> getPlannerMain(ReqPlannerMainDto reqPlannerMainDto, HashMap<String, Object> resultMap) {
         String email = reqPlannerMainDto.getEmail();
@@ -391,6 +390,40 @@ public class PlannerService {
             resultMap.replace("message", "no registered data found");
         }
         System.out.println(resultMap);
+        return resultMap;
+    }
+
+    public HashMap<String, Object> DeleteByIndex(ReqDeleteScheduleDto reqDeleteScheduleDto, HashMap<String, Object> resultMap) throws ParseException
+    {
+        if(reqDeleteScheduleDto.getIndex() != null){
+            String index = reqDeleteScheduleDto.getIndex();
+            String[] splitString = index.split(" ");
+            int realIndex = Integer.parseInt(splitString[0]);
+//            String email = splitString[1];
+            String isProgram = splitString[2];
+            try{
+                if(isProgram.equals("true")){
+                    plannerByProgramTbRepository2.deleteById(realIndex);
+                }
+                else{
+                    plannerByDayTbRepository2.deleteById(realIndex);
+                }
+                resultMap.replace("isDone", true);
+                resultMap.replace("isError", false);
+                resultMap.replace("message", null);
+            }
+            catch(Exception ex){
+                resultMap.replace("isDone", false);
+                resultMap.replace("isError", true);
+                resultMap.replace("message", ex.toString());
+            }
+
+        }
+        else{
+            resultMap.replace("isDone", null);
+            resultMap.replace("isError", true);
+            resultMap.replace("message", "null data received");
+        }
         return resultMap;
     }
 }

@@ -19,7 +19,7 @@ public class PlannerByProgramTb {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String plnIndex;
+    private int plnIndex;
 
     @Column
     private String plnEmail;
@@ -75,7 +75,7 @@ public class PlannerByProgramTb {
 
 
     @Builder
-    public PlannerByProgramTb(String index, String email, LocalDate startDate, LocalDate endDate, LocalDate onDate, String onDay, String chosenDayOfWk,
+    public PlannerByProgramTb(int index, String email, LocalDate startDate, LocalDate endDate, LocalDate onDate, String onDay, String chosenDayOfWk,
                               String commonCode, int weight, int count, int set, int level, int rest, String program, String done, String onSchedule, LocalDateTime created, LocalDateTime updated){
         this.plnIndex = index;
         this.plnEmail = email;

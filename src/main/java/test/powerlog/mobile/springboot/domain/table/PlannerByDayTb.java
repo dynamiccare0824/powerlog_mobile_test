@@ -17,7 +17,7 @@ public class PlannerByDayTb {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String pdIndex;
+    private int pdIndex;
 
     @Column
     private String pdEmail;
@@ -64,7 +64,7 @@ public class PlannerByDayTb {
 
 
     @Builder
-    public PlannerByDayTb(String index, String email, LocalDate date, String dayOfWk,
+    public PlannerByDayTb(int index, String email, LocalDate date, String dayOfWk,
                           String commonCode, int weight, int count, int set, int level, int rest, String program,
                           String done, String onSchedule, LocalDateTime created, LocalDateTime updated){
         this.pdIndex = index;

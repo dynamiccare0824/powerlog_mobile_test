@@ -9,9 +9,11 @@ import test.powerlog.mobile.springboot.web.dto.kiosk.response.RspKioskLoginDto;
 import test.powerlog.mobile.springboot.web.dto.kiosk.response.RspKioskWorkoutDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqByDaySaveDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqCheckProgramDto;
+import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqDeleteScheduleDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.planner.ReqPlannerMainDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.response.account.*;
 import test.powerlog.mobile.springboot.web.dto.mobile.response.planner.RspByDaySaveDto;
+import test.powerlog.mobile.springboot.web.dto.mobile.response.planner.RspDeleteScheduleDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.response.planner.RspPlannerMainDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.response.planner.RspProgramCheckDto;
 
@@ -270,6 +272,23 @@ public class CommonResponseService {
             resultDto.setIsError((Boolean) resultMap.get("isError"));
             resultDto.setInvalidParamList(invalidParamList);
             resultDto.setMessage((String) resultMap.get(validParamMessage));
+        }
+        return resultDto;
+    }
+
+    public RspDeleteScheduleDto getRspDeleteScheduleDto(List<ObjectError> invalidParamList,
+                                                        HashMap<String, Object> resultMap, ReqDeleteScheduleDto reqDeleteScheduleDto) {
+        RspDeleteScheduleDto resultDto = new RspDeleteScheduleDto();
+        if (invalidParamList != null) {
+            resultDto.setIsDone(null);
+            resultDto.setIsError(true);
+            resultDto.setInvalidParamList(invalidParamList);
+            resultDto.setMessage(invalidParamMessage);
+        } else {
+            resultDto.setIsDone((Boolean) resultMap.get("isDone"));
+            resultDto.setIsError((Boolean) resultMap.get("isError"));
+            resultDto.setInvalidParamList(invalidParamList);
+            resultDto.setMessage((String) resultMap.get("message"));
         }
         return resultDto;
     }
