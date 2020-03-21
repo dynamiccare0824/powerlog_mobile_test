@@ -112,8 +112,9 @@ public class PlannerController {
 
     //ing 예외처리가 되어있지 않다.
     @ApiOperation(value = "측정 기록을 확인한다 [히스토리]")
-    @PostMapping(value = "/historytest")
+    @PostMapping(value = "/history")
     public HashMap<String, Object> testHistory(@RequestBody ReqTestHistoryDto reqTestHistoryDto) throws JsonProcessingException {
+        HashMap<String, Object> commonMap = commonResponseService.getCommonHashMap();
         HashMap<String, Object> resultMap = new HashMap();
         HashMap<String, Object> resultMap2 = new HashMap();
         //
@@ -158,6 +159,9 @@ public class PlannerController {
         resultMap2.put("isotonic", codeList1);
         resultMap2.put("isometric", codeList2);
         resultMap2.put("resultData", resultMap);
+        resultMap2.put("isError", false); // 이거 고쳐야 한다
+        resultMap2.put("message", "valid parameter requested");
+        resultMap2.put("invlaidParamList", null);
         return resultMap2;
     }
 

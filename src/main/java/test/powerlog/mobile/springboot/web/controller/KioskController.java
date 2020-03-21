@@ -91,8 +91,6 @@ public class KioskController {
         }
     }
 
-    // ing
-    // isProgram과 onSchedule 반영되지 않음
     @PostMapping(value = "/save/workout")
     public HashMap<String, Object> SaveWorkout(@RequestBody @Valid ReqKioskWorkoutDto reqKioskWorkoutDto, BindingResult bindingResult) throws JsonProcessingException {
         HashMap<String, Object> commonMap = commonResponseService.getCommonHashMap();
@@ -143,30 +141,4 @@ public class KioskController {
         return commonMap;
     }
 
-//    @PostMapping(value = "/testuidlogin")
-//    public RspKioskLoginDto<PlannerVw> Test(@RequestBody @Valid ReqKioskLoginDto reqKioskLoginDto, BindingResult bindingResult) throws JsonProcessingException {
-//        HashMap<String, Object> uidLoginResult = new HashMap();
-//        String uid = reqKioskLoginDto.getUid();
-////        userAccountVWRepository.findAll
-//
-//        List<ObjectError> invalidParamList = paramValidCheckService.getInvalidParamList(bindingResult);
-//        // 파라미터 오류가 존재한다면
-//        if(invalidParamList!= null){
-//            return commonResponseService.getRspKioskLoginDto(invalidParamList, null, null);
-//        }
-//
-//        // 파라미터 오류가 존재하지 않으면 db에 uid 존재 여부 조회
-//        uidLoginResult = uidLoginService.getUidLoginResult(uidLoginResult, uid);
-//
-//        //if: 사용자가 DB에 존재한다면 email 가져와서 plannerVW 조회
-//        if((Boolean) uidLoginResult.get("isPresent")){
-//            String email = (String) uidLoginResult.get("email");
-//            HashMap<String, Object> onDateWrkotMap = onDateWrkotService.GetOnDateWrkot(email);
-//            return commonResponseService.getRspKioskLoginDto(null, onDateWrkotMap, uidLoginResult);
-//        }
-//        //else: /사용자가 DB에 존재하지 않으면 결과 리턴
-//        else{
-//            return commonResponseService.getRspKioskLoginDto(null, null, uidLoginResult);
-//        }
-//    }
 }
