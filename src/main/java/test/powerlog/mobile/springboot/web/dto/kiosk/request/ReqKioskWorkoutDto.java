@@ -55,4 +55,7 @@ public class ReqKioskWorkoutDto {
     @NotBlank(message = "공백이 없어야 합니다")
     @ApiModelProperty(position = 11, example = "109239212938")
     private String device;
+
+    @ApiModelProperty(value = "만약 onSchedule = true 인 경우 갖는 index", required = true, position = 12)
+    private int index;
 }
