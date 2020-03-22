@@ -24,6 +24,8 @@ public class RspLoginDto<T> extends CommonResponseDto {
     private ArrayList resultPresentList;
     @ApiModelProperty(value = "로그인 성공 시 받는 전체 01 운동의 목록", position = 4)
     private ArrayList totalList;
-    @ApiModelProperty(value = "로그인 성공하고 최근 측정 데이터가 있을 때 받는 데이터", position = 5)
+    @ApiModelProperty(value = "로그인 성공 시 받는 전체 01 운동의 목록", position = 5)
+    private Boolean planExpired;
+    @ApiModelProperty(value = "로그인 성공하고 최근 측정 데이터가 있을 때 받는 데이터", position = 6)
     private HashMap<String, Object> resultData;
 }

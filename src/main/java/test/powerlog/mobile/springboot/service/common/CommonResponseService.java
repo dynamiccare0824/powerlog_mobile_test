@@ -60,6 +60,7 @@ public class CommonResponseService {
             tmpDto.setResultData(logRecordMap);
 
         }
+        tmpDto.setPlanExpired(true);
         return tmpDto;
     }
 
