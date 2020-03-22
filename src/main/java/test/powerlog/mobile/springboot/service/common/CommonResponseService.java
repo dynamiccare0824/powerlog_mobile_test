@@ -270,6 +270,28 @@ public class CommonResponseService {
         return resultDto;
     }
 
+    public RspProgramGenerateDto getRspProgramGenerateDto(List<ObjectError> invalidParamList,
+                                               HashMap<String, Object> resultMap, ReqProgramGenerateDto reqProgramGenerateDto) {
+        String email = reqProgramGenerateDto.getEmail();
+        RspProgramGenerateDto resultDto = new RspProgramGenerateDto();
+        if (invalidParamList != null) {
+            resultDto.setEmail(email);
+            resultDto.setIsError(true);
+            resultDto.setResultData((null));
+            resultDto.setNullList(null);
+            resultDto.setInvalidParamList(invalidParamList);
+            resultDto.setMessage(invalidParamMessage);
+        } else {
+            resultDto.setEmail(email);
+            resultDto.setNullList((ArrayList) resultMap.get("codeNull"));
+            resultDto.setResultData((HashMap<String, Object>) resultMap.get("resultData"));
+            resultDto.setIsError((Boolean) resultMap.get("isError"));
+            resultDto.setInvalidParamList(invalidParamList);
+            resultDto.setMessage((String) resultMap.get("message"));
+        }
+        return resultDto;
+    }
+
     public RspDeleteScheduleDto getRspDeleteScheduleDto(List<ObjectError> invalidParamList,
                                                         HashMap<String, Object> resultMap, ReqDeleteScheduleDto reqDeleteScheduleDto) {
         RspDeleteScheduleDto resultDto = new RspDeleteScheduleDto();
