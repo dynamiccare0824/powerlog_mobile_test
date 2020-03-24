@@ -42,8 +42,13 @@ public class SaveWorkoutService {
         int index = Integer.parseInt(reqKioskWorkoutDto.getIndex().split(" ")[0]);
         String email = reqKioskWorkoutDto.getIndex().split(" ")[1];
         String isProgram = reqKioskWorkoutDto.getIndex().split(" ")[2];
+        System.out.println(index);
+        System.out.println(email);
+        System.out.println(isProgram
+        );
+        System.out.println(reqKioskWorkoutDto.getOnSchedule());
 
-        if(isProgram.equals("false") &&reqKioskWorkoutDto.getOnSchedule().equals("true")){
+        if(!reqKioskWorkoutDto.getIsProgram() && reqKioskWorkoutDto.getOnSchedule()){
             Optional<PlannerByDayTb> record = plannerByDayTbRepository2.findById(index);
             PlannerByDayTb plannerByDayTb = PlannerByDayTb.builder()
                     .index(index)
@@ -64,7 +69,7 @@ public class SaveWorkoutService {
                     .build();
             plannerByDayTbRepository2.save(plannerByDayTb);
         }
-        else if(isProgram.equals("true")&&reqKioskWorkoutDto.getOnSchedule().equals("true")){
+        else if(reqKioskWorkoutDto.getIsProgram() && reqKioskWorkoutDto.getOnSchedule()){
             Optional<PlannerByProgramTb> record = plannerByProgramTbRepository2.findById(index);
             PlannerByProgramTb plannerByProgramTb = PlannerByProgramTb.builder()
                     .index(index)
@@ -93,7 +98,7 @@ public class SaveWorkoutService {
             PlannerByDayTb plannerByDayTb = PlannerByDayTb.builder()
                     .email(reqKioskWorkoutDto.getEmail())
                     .date(localDate)
-                    .dayOfWk(localDate.getDayOfWeek().toString())
+                    .dayOfWk(Integer.toString(localDate.getDayOfWeek().getValue()))
                     .commonCode(reqKioskWorkoutDto.getCommonCode())
                     .weight(reqKioskWorkoutDto.getWeight())
                     .count(reqKioskWorkoutDto.getCount())
