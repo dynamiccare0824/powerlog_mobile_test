@@ -2,8 +2,7 @@ package test.powerlog.mobile.springboot.service.kiosk;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import test.powerlog.mobile.springboot.domain.table.WorkoutTb;
-import test.powerlog.mobile.springboot.domain.table.WorkoutTbRepository;
+import test.powerlog.mobile.springboot.domain.table.*;
 import test.powerlog.mobile.springboot.domain.view.UserAccountVw;
 import test.powerlog.mobile.springboot.domain.view.UserAccountVwRepository;
 import test.powerlog.mobile.springboot.domain.view.WorkoutCodeVwRepository;
@@ -18,6 +17,10 @@ import java.util.Optional;
 public class SaveWorkoutService {
     @Autowired
     private WorkoutTbRepository workoutTbRepository;
+    @Autowired
+    private PlannerByDayTbRepository2 plannerByDayTbRepository2;
+    @Autowired
+    private PlannerByProgramTbRepository2 plannerByProgramTbRepository2;
 
     public WorkoutTb ToSaveRecordForm(ReqKioskWorkoutDto reqKioskWorkoutDto){
         System.out.println("!!!!!23123");
@@ -35,6 +38,76 @@ public class SaveWorkoutService {
                 .wDevice(reqKioskWorkoutDto.getDevice())
                 .wDate(localDate)
                 .build();
+
+        int index = Integer.parseInt(reqKioskWorkoutDto.getIndex().split(" ")[0]);
+        String email = reqKioskWorkoutDto.getIndex().split(" ")[1];
+        String isProgram = reqKioskWorkoutDto.getIndex().split(" ")[2];
+
+        if(isProgram.equals("false") &&reqKioskWorkoutDto.getOnSchedule().equals("true")){
+            Optional<PlannerByDayTb> record = plannerByDayTbRepository2.findById(index);
+            PlannerByDayTb plannerByDayTb = PlannerByDayTb.builder()
+                    .index(index)
+                    .email(record.get().getPdEmail())
+                    .date(record.get().getPdDate())
+                    .dayOfWk(record.get().getPdDayOfWk())
+                    .commonCode(record.get().getPdCommonCode())
+                    .weight(record.get().getPdWeight())
+                    .count(record.get().getPdCount())
+                    .set(record.get().getPdSet())
+                    .level(record.get().getPdLevel())
+                    .rest(record.get().getPdRest())
+                    .program(record.get().getPdProgram())
+                    .onSchedule(record.get().getPdOnSchedule())
+                    .done("true")
+                    .created(record.get().getPdCreated())
+                    .updated(localDateTime)
+                    .build();
+            plannerByDayTbRepository2.save(plannerByDayTb);
+        }
+        else if(isProgram.equals("true")&&reqKioskWorkoutDto.getOnSchedule().equals("true")){
+            Optional<PlannerByProgramTb> record = plannerByProgramTbRepository2.findById(index);
+            PlannerByProgramTb plannerByProgramTb = PlannerByProgramTb.builder()
+                    .index(index)
+                    .email(record.get().getPlnEmail())
+                    .startDate(record.get().getPlnStartDate())
+                    .endDate(record.get().getPlnEndDate())
+                    .onDate(record.get().getPlnOnDate())
+                    .onDay(record.get().getPlnOnDay())
+                    .chosenDayOfWk(record.get().getPlnChosenDayOfWk())
+                    .commonCode(record.get().getPlnCommonCode())
+                    .weight(record.get().getPlnWeight())
+                    .count(record.get().getPlnCount())
+                    .set(record.get().getPlnSet())
+                    .level(record.get().getPlnLevel())
+                    .rest(record.get().getPlnRest())
+                    .program(record.get().getPlnProgram())
+                    .done("true")
+                    .onSchedule(record.get().getPlnOnSchedule())
+                    .created(record.get().getPlnCreated())
+                    .updated(localDateTime)
+                    .build();
+            plannerByProgramTbRepository2.save(plannerByProgramTb);
+        }
+        // 새로 만든 플랜일 경우
+        else{
+            PlannerByDayTb plannerByDayTb = PlannerByDayTb.builder()
+                    .email(reqKioskWorkoutDto.getEmail())
+                    .date(localDate)
+                    .dayOfWk(localDate.getDayOfWeek().toString())
+                    .commonCode(reqKioskWorkoutDto.getCommonCode())
+                    .weight(reqKioskWorkoutDto.getWeight())
+                    .count(reqKioskWorkoutDto.getCount())
+                    .set(reqKioskWorkoutDto.getSet())
+                    .level(reqKioskWorkoutDto.getLevel())
+                    .rest(reqKioskWorkoutDto.getRest())
+                    .program("false")
+                    .onSchedule("false")
+                    .done("true")
+                    .created(localDateTime)
+                    .updated(localDateTime)
+                    .build();
+            plannerByDayTbRepository2.save(plannerByDayTb);
+        }
 
         return workoutTb;
     }
