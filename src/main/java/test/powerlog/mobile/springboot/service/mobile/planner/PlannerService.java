@@ -269,7 +269,7 @@ public class PlannerService {
             resultMap.replace("message", "generated program already exists");
             return resultMap;
         }
-        resultMap.replace("isPresent", true);
+        resultMap.replace("isPresent", false);
         resultMap.replace("message", "generated program doesn't exists");
         return resultMap;
     }
