@@ -73,7 +73,7 @@ public class KioskController {
 
         // 파라미터 오류가 존재한다면
         if(invalidParamList!= null){
-            return commonResponseService.getRspKioskLoginDto(invalidParamList, null, null, workoutCodeVwMap);
+            return commonResponseService.getRspKioskLoginDto(invalidParamList, null, null, workoutCodeVwMap, null);
         }
 
         // 파라미터 오류가 존재하지 않으면 db에 uid 존재 여부 조회
@@ -83,11 +83,11 @@ public class KioskController {
         if((Boolean) uidLoginResult.get("isPresent")){
             String email = (String) uidLoginResult.get("email");
             HashMap<String, Object> onDateWrkotMap = onDateWrkotService.GetOnDateWrkot(email);
-            return commonResponseService.getRspKioskLoginDto(null, onDateWrkotMap, uidLoginResult, workoutCodeVwMap);
+            return commonResponseService.getRspKioskLoginDto(null, onDateWrkotMap, uidLoginResult, workoutCodeVwMap, email);
         }
         //else: /사용자가 DB에 존재하지 않으면 결과 리턴
         else{
-            return commonResponseService.getRspKioskLoginDto(null, null, uidLoginResult, workoutCodeVwMap);
+            return commonResponseService.getRspKioskLoginDto(null, null, uidLoginResult, workoutCodeVwMap, null);
         }
     }
 
