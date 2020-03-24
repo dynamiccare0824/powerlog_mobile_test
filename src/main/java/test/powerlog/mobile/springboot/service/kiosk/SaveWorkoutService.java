@@ -39,59 +39,60 @@ public class SaveWorkoutService {
                 .wDate(localDate)
                 .build();
 
-        int index = Integer.parseInt(reqKioskWorkoutDto.getIndex().split(" ")[0]);
-        String email = reqKioskWorkoutDto.getIndex().split(" ")[1];
-        String isProgram = reqKioskWorkoutDto.getIndex().split(" ")[2];
-        System.out.println(index);
-        System.out.println(email);
-        System.out.println(isProgram
-        );
-        System.out.println(reqKioskWorkoutDto.getOnSchedule());
-
-        if(reqKioskWorkoutDto.getIsProgram().equals(false) && reqKioskWorkoutDto.getOnSchedule()){
-            Optional<PlannerByDayTb> record = plannerByDayTbRepository2.findById(index);
-            PlannerByDayTb plannerByDayTb = PlannerByDayTb.builder()
-                    .index(index)
-                    .email(record.get().getPdEmail())
-                    .date(record.get().getPdDate())
-                    .dayOfWk(record.get().getPdDayOfWk())
-                    .commonCode(record.get().getPdCommonCode())
-                    .weight(record.get().getPdWeight())
-                    .count(record.get().getPdCount())
-                    .set(record.get().getPdSet())
-                    .level(record.get().getPdLevel())
-                    .rest(record.get().getPdRest())
-                    .program(record.get().getPdProgram())
-                    .onSchedule(record.get().getPdOnSchedule())
-                    .done("true")
-                    .created(record.get().getPdCreated())
-                    .updated(localDateTime)
-                    .build();
-            plannerByDayTbRepository2.save(plannerByDayTb);
-        }
-        else if(reqKioskWorkoutDto.getIsProgram() && reqKioskWorkoutDto.getOnSchedule()){
-            Optional<PlannerByProgramTb> record = plannerByProgramTbRepository2.findById(index);
-            PlannerByProgramTb plannerByProgramTb = PlannerByProgramTb.builder()
-                    .index(index)
-                    .email(record.get().getPlnEmail())
-                    .startDate(record.get().getPlnStartDate())
-                    .endDate(record.get().getPlnEndDate())
-                    .onDate(record.get().getPlnOnDate())
-                    .onDay(record.get().getPlnOnDay())
-                    .chosenDayOfWk(record.get().getPlnChosenDayOfWk())
-                    .commonCode(record.get().getPlnCommonCode())
-                    .weight(record.get().getPlnWeight())
-                    .count(record.get().getPlnCount())
-                    .set(record.get().getPlnSet())
-                    .level(record.get().getPlnLevel())
-                    .rest(record.get().getPlnRest())
-                    .program(record.get().getPlnProgram())
-                    .done("true")
-                    .onSchedule(record.get().getPlnOnSchedule())
-                    .created(record.get().getPlnCreated())
-                    .updated(localDateTime)
-                    .build();
-            plannerByProgramTbRepository2.save(plannerByProgramTb);
+        if(reqKioskWorkoutDto.getIndex() != null){
+            int index = Integer.parseInt(reqKioskWorkoutDto.getIndex().split(" ")[0]);
+            String email = reqKioskWorkoutDto.getIndex().split(" ")[1];
+            String isProgram = reqKioskWorkoutDto.getIndex().split(" ")[2];
+            System.out.println(index);
+            System.out.println(email);
+            System.out.println(isProgram
+            );
+            System.out.println(reqKioskWorkoutDto.getOnSchedule());
+            if(reqKioskWorkoutDto.getIsProgram().equals(false) && reqKioskWorkoutDto.getOnSchedule()){
+                Optional<PlannerByDayTb> record = plannerByDayTbRepository2.findById(index);
+                PlannerByDayTb plannerByDayTb = PlannerByDayTb.builder()
+                        .index(index)
+                        .email(record.get().getPdEmail())
+                        .date(record.get().getPdDate())
+                        .dayOfWk(record.get().getPdDayOfWk())
+                        .commonCode(record.get().getPdCommonCode())
+                        .weight(record.get().getPdWeight())
+                        .count(record.get().getPdCount())
+                        .set(record.get().getPdSet())
+                        .level(record.get().getPdLevel())
+                        .rest(record.get().getPdRest())
+                        .program(record.get().getPdProgram())
+                        .onSchedule(record.get().getPdOnSchedule())
+                        .done("true")
+                        .created(record.get().getPdCreated())
+                        .updated(localDateTime)
+                        .build();
+                plannerByDayTbRepository2.save(plannerByDayTb);
+            }
+            else if(reqKioskWorkoutDto.getIsProgram() && reqKioskWorkoutDto.getOnSchedule()){
+                Optional<PlannerByProgramTb> record = plannerByProgramTbRepository2.findById(index);
+                PlannerByProgramTb plannerByProgramTb = PlannerByProgramTb.builder()
+                        .index(index)
+                        .email(record.get().getPlnEmail())
+                        .startDate(record.get().getPlnStartDate())
+                        .endDate(record.get().getPlnEndDate())
+                        .onDate(record.get().getPlnOnDate())
+                        .onDay(record.get().getPlnOnDay())
+                        .chosenDayOfWk(record.get().getPlnChosenDayOfWk())
+                        .commonCode(record.get().getPlnCommonCode())
+                        .weight(record.get().getPlnWeight())
+                        .count(record.get().getPlnCount())
+                        .set(record.get().getPlnSet())
+                        .level(record.get().getPlnLevel())
+                        .rest(record.get().getPlnRest())
+                        .program(record.get().getPlnProgram())
+                        .done("true")
+                        .onSchedule(record.get().getPlnOnSchedule())
+                        .created(record.get().getPlnCreated())
+                        .updated(localDateTime)
+                        .build();
+                plannerByProgramTbRepository2.save(plannerByProgramTb);
+            }
         }
         // 새로 만든 플랜일 경우
         else{
