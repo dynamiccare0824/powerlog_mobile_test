@@ -48,7 +48,7 @@ public class SaveWorkoutService {
         );
         System.out.println(reqKioskWorkoutDto.getOnSchedule());
 
-        if(!reqKioskWorkoutDto.getIsProgram() && reqKioskWorkoutDto.getOnSchedule()){
+        if(reqKioskWorkoutDto.getIsProgram().equals(false) && reqKioskWorkoutDto.getOnSchedule()){
             Optional<PlannerByDayTb> record = plannerByDayTbRepository2.findById(index);
             PlannerByDayTb plannerByDayTb = PlannerByDayTb.builder()
                     .index(index)
