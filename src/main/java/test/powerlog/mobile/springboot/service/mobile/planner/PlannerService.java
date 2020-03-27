@@ -236,7 +236,7 @@ public class PlannerService {
                             .rest(rest)
                             .program("true")
                             .done("false")
-                            .onSchedule("false")
+                            .onSchedule("true")
                             .created(localDateTime)
                             .updated(localDateTime)
                             .build();
