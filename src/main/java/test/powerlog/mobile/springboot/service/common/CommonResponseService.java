@@ -14,6 +14,7 @@ import test.powerlog.mobile.springboot.web.dto.mobile.response.planner.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 
 @Service // 해당 Class가 Service임을 명시합니다.
@@ -256,15 +257,23 @@ public class CommonResponseService {
 
     public RspPlannerMainDto getRspPlannerMain(List<ObjectError> invalidParamList,
                                                HashMap<String, Object> resultMap, ReqPlannerMainDto reqPlannerMainDto) {
+        Random r = new Random();
+        double rangeMax = 100;
+        double rangeMin = 0;
+        double randomValue = rangeMin + (rangeMax - rangeMin) * r.nextDouble();
         String email = reqPlannerMainDto.getEmail();
         RspPlannerMainDto resultDto = new RspPlannerMainDto();
         if (invalidParamList != null) {
+            resultDto.setAttendance(null);
+            resultDto.setAchievementRate(Double.toString(randomValue));
             resultDto.setEmail(email);
             resultDto.setIsError(true);
             resultDto.setResultData((null));
             resultDto.setInvalidParamList(invalidParamList);
             resultDto.setMessage(invalidParamMessage);
         } else {
+            resultDto.setAchievementRate(String.format("%.1f", randomValue));
+            resultDto.setAttendance(Integer.toString((int) resultMap.get("attendance")));
             resultDto.setEmail(email);
             resultDto.setResultData((HashMap<String, Object>) resultMap.get("resultData"));
             resultDto.setIsError((Boolean) resultMap.get("isError"));

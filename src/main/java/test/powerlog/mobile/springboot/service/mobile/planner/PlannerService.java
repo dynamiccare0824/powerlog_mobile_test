@@ -348,7 +348,6 @@ public class PlannerService {
 
         if (!record.isEmpty()) {
             HashMap<String, Object> dateMap = getCalendarList(reqPlannerMainDto.getYear(), reqPlannerMainDto.getMonth());
-            HashMap<String, Object> attendanceMap = new HashMap<>();
             for (int i = 0; i < record.size(); i++) {
                 HashMap<String, Object> recordMap = new HashMap<>();
                 recordMap.put("plnVwCommonCode", record.get(i).getPlnVwCommonCode());
@@ -364,7 +363,7 @@ public class PlannerService {
                 recordMap.put("plnVwRest", record.get(i).getPlnVwRest());
                 recordMap.put("plnVwIsProgram", record.get(i).getPlnVwIsProgram());
                 recordMap.put("plnVwOnSchedule", record.get(i).getPlnVwOnSchedule());
-                recordMap.put("plnIsDone", record.get(i).getPlnVwIsDone());
+                recordMap.put("plnVwIsDone", record.get(i).getPlnVwIsDone());
                 recordMap.put("plnVwCreatedTime", record.get(i).getPlnVwCreatedTime());
                 recordMap.put("plnVwUpdatedTime", record.get(i).getPlnVwUpdatedTime());
                 recordMap.put("plnVwId", record.get(i).getPlnVwId());
@@ -384,9 +383,25 @@ public class PlannerService {
 //                    attendanceMap.put(record.get(i).getPlnVwOnDate().toString(), true);
 //                }
             }
+            int attendance = 0;
             for (String key : dateMap.keySet()) {
+                Boolean tmpAttendance = false;
                 ArrayList<HashMap<String, Object>> tmpList = new ArrayList<>();
-                if (dateMap.get(key).equals(tmpList)) {
+                if(dateMap.get(key)!=null){
+                    HashMap<String, Object> tmpMap = new HashMap<>();
+                    tmpList =(ArrayList<HashMap<String, Object>>) dateMap.get(key);
+                    for(int j=0; j<tmpList.size(); j++){
+                        tmpMap = tmpList.get(j);
+                        if((tmpMap.get("plnVwIsDone").equals("true"))){
+                            tmpAttendance = true;
+                        }
+                    }
+                    if(tmpAttendance){
+                        attendance = attendance + 1;
+                    }
+                }
+                ArrayList<HashMap<String, Object>> emptyList = new ArrayList<>();
+                if (dateMap.get(key).equals(emptyList)) {
                     dateMap.replace(key, null);
                 }
             }
@@ -395,9 +410,11 @@ public class PlannerService {
 //            for (String key : dateMap2.keySet()) {
 //                dateMap2.replace(key, false);
 //            }
+            resultMap.put("attendance", attendance);
             resultMap.replace("resultData", dateMap);
             resultMap.replace("isError", false);
         } else {
+            resultMap.put("attendance", null);
             resultMap.replace("isError", true);
             resultMap.replace("message", "no registered data found");
         }
