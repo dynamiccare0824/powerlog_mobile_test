@@ -348,6 +348,7 @@ public class PlannerService {
 
         if (!record.isEmpty()) {
             HashMap<String, Object> dateMap = getCalendarList(reqPlannerMainDto.getYear(), reqPlannerMainDto.getMonth());
+            HashMap<String, Object> attendanceMap = new HashMap<>();
             for (int i = 0; i < record.size(); i++) {
                 HashMap<String, Object> recordMap = new HashMap<>();
                 recordMap.put("plnVwCommonCode", record.get(i).getPlnVwCommonCode());
@@ -375,6 +376,13 @@ public class PlannerService {
                     tmpList.add(recordMap);
                     dateMap.replace(record.get(i).getPlnVwOnDate().toString(), tmpList);
                 }
+                // 출석 수 센다
+//                if(record.get(i).getPlnVwIsDone().equals("true")){
+//                    attendanceMap.put(record.get(i).getPlnVwOnDate().toString(), true);
+//                }
+//                else{
+//                    attendanceMap.put(record.get(i).getPlnVwOnDate().toString(), true);
+//                }
             }
             for (String key : dateMap.keySet()) {
                 ArrayList<HashMap<String, Object>> tmpList = new ArrayList<>();
@@ -382,6 +390,11 @@ public class PlannerService {
                     dateMap.replace(key, null);
                 }
             }
+            // 달성률 만든다.
+//            HashMap<String, Object> dateMap2 = dateMap;
+//            for (String key : dateMap2.keySet()) {
+//                dateMap2.replace(key, false);
+//            }
             resultMap.replace("resultData", dateMap);
             resultMap.replace("isError", false);
         } else {
@@ -395,6 +408,8 @@ public class PlannerService {
     public HashMap<String, Object> getProgramDetail(ReqProgramGenerateDto reqProgramGenerateDto, HashMap<String, Object> resultMap) {
         String email = reqProgramGenerateDto.getEmail();
         List<NewPlannerVw> record = newPlannerVwRepository.findAllByPlnVwEmail(email);
+        int totalCount = 0;
+        int doneCount = 0;
 
         if (!record.isEmpty()) {
 //            HashMap<String, Object> dateMap = getCalendarList(reqPlannerMainDto.getYear(), reqPlannerMainDto.getMonth());
@@ -406,6 +421,7 @@ public class PlannerService {
             // string : 빈 리스트 만들어주었음
             ArrayList<String> codeNull = new ArrayList<>(Arrays.asList("A01", "B01", "C01", "D01", "E01", "F01", "G01", "H01"));
             for (int i = 0; i < record.size(); i++) {
+                totalCount = totalCount + 1;
                 HashMap<String, Object> recordMap = new HashMap<>();
                 String isProgram = record.get(i).getPlnVwIsProgram();
                 if (isProgram.equals("true")) {
@@ -433,9 +449,15 @@ public class PlannerService {
                     tmpList.add(recordMap);
                     dateMap.replace(record.get(i).getPlnVwOnDate().toString(), tmpList);
                 }
-
+                if(record.get(i).getPlnVwIsDone().equals("true")){
+                    doneCount = doneCount + 1;
+                }
             }
             // 빈 리스트에 추가했음
+            int doneRate = doneCount / totalCount;
+            String achievementRate = Integer.toString(doneRate);
+            String attendance = Integer.toString(doneCount);
+
 
             for (String key : dateMap.keySet()) {
                 ArrayList<HashMap<String, Object>> tmpList = new ArrayList<>();
@@ -445,10 +467,15 @@ public class PlannerService {
             }
             //남아있는 빈 리스트에 대해 null로 표시함
 
+            resultMap.put("achievementRate", achievementRate);
+            resultMap.put("attendance", attendance);
             resultMap.replace("resultData", dateMap);
             resultMap.replace("isError", false);
             resultMap.put("codeNull", codeNull);
+
         } else {
+            resultMap.put("achievementRate", "0");
+            resultMap.put("attendance", "0");
             resultMap.replace("isError", true);
             resultMap.replace("message", "no registered data found");
             resultMap.put("codeNull", null);

@@ -279,6 +279,8 @@ public class CommonResponseService {
         String email = reqProgramGenerateDto.getEmail();
         RspProgramGenerateDto resultDto = new RspProgramGenerateDto();
         if (invalidParamList != null) {
+//            resultDto.setAchievementRate(null);
+//            resultDto.setAttendance(null);
             resultDto.setEmail(email);
             resultDto.setIsError(true);
             resultDto.setResultData((null));
@@ -286,6 +288,8 @@ public class CommonResponseService {
             resultDto.setInvalidParamList(invalidParamList);
             resultDto.setMessage(invalidParamMessage);
         } else {
+//            resultDto.setAchievementRate((String) resultMap.get("achievementRate"));
+//            resultDto.setAttendance((String) resultMap.get("attendance"));
             resultDto.setEmail(email);
             resultDto.setNullList((ArrayList) resultMap.get("codeNull"));
             resultDto.setResultData((HashMap<String, Object>) resultMap.get("resultData"));

@@ -19,4 +19,8 @@ public class RspProgramGenerateDto<T> extends CommonResponseDto {
     private HashMap<String, Object> resultData;
     @ApiModelProperty(value = "안 한 운동의 리스트", position = 3)
     private ArrayList nullList;
+//    @ApiModelProperty(value = "달성률", position = 4)
+//    private String achievementRate;
+//    @ApiModelProperty(value = "출석 수", position = 5)
+//    private String attendance;
 }
