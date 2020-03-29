@@ -265,14 +265,14 @@ public class CommonResponseService {
         RspPlannerMainDto resultDto = new RspPlannerMainDto();
         if (invalidParamList != null) {
             resultDto.setAttendance(null);
-            resultDto.setAchievementRate(Double.toString(randomValue));
+            resultDto.setAchievementRate(null);
             resultDto.setEmail(email);
             resultDto.setIsError(true);
             resultDto.setResultData((null));
             resultDto.setInvalidParamList(invalidParamList);
             resultDto.setMessage(invalidParamMessage);
         } else {
-            resultDto.setAchievementRate(String.format("%.1f", randomValue));
+            resultDto.setAchievementRate(String.format("%.0f",(double) resultMap.get("acheivementRate")));
             resultDto.setAttendance(Integer.toString((int) resultMap.get("attendance")));
             resultDto.setEmail(email);
             resultDto.setResultData((HashMap<String, Object>) resultMap.get("resultData"));

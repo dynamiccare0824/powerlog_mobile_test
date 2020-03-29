@@ -384,6 +384,8 @@ public class PlannerService {
 //                }
             }
             int attendance = 0;
+            int programTotal = 0;
+            int programDone = 0;
             for (String key : dateMap.keySet()) {
                 Boolean tmpAttendance = false;
                 ArrayList<HashMap<String, Object>> tmpList = new ArrayList<>();
@@ -394,6 +396,12 @@ public class PlannerService {
                         tmpMap = tmpList.get(j);
                         if((tmpMap.get("plnVwIsDone").equals("true"))){
                             tmpAttendance = true;
+                        }
+                        if((tmpMap.get("plnVwIsProgram").equals("true"))){
+                            programTotal = programTotal + 1;
+                            if((tmpMap.get("plnVwIsDone").equals("true"))){
+                                programDone = programDone + 1;
+                            }
                         }
                     }
                     if(tmpAttendance){
@@ -410,11 +418,14 @@ public class PlannerService {
 //            for (String key : dateMap2.keySet()) {
 //                dateMap2.replace(key, false);
 //            }
+            double acheivementRate = ((double) programDone / (double) programTotal) * 100;
             resultMap.put("attendance", attendance);
+            resultMap.put("acheivementRate", acheivementRate);
             resultMap.replace("resultData", dateMap);
             resultMap.replace("isError", false);
         } else {
             resultMap.put("attendance", null);
+            resultMap.put("acheivementRate", null);
             resultMap.replace("isError", true);
             resultMap.replace("message", "no registered data found");
         }
