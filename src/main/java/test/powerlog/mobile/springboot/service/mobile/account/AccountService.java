@@ -64,8 +64,11 @@ public class AccountService {
         return tmpMap;
     }
 
+
     public HashMap<String, Object> LgLateMsrVwEmailMap(String email, HashMap<String, Object> workoutCodeMap) {
         Random random = new Random();
+
+
         HashMap<String, Object> resultMap = new HashMap<>();
         Optional<List<LogLateMsrVw>> logList = Optional.ofNullable(logLateMsrVwRepository.findAllByLgLateMsrVwEmail(email));
         ArrayList<String> isWorkoutCode = new ArrayList<>();
@@ -76,11 +79,21 @@ public class AccountService {
                 String commonCode = logList.get().get(i).getLgLateMsrVwCommonCode();
 
                 if (commonCode.contains("01")) {
-                    isWorkoutCode.add(logList.get().get(i).getLgLateMsrVwCommonCode());
+                    int rank = 0;
+                    Optional<List<LogLateMsrVw>> codeList = Optional.ofNullable(logLateMsrVwRepository.findAllByLgLateMsrVwCommonCodeOrderByLgLateMsrVwMaxDesc(commonCode));
+                    for(int j = 0; j < codeList.get().size(); j++){
+                        if(codeList.get().get(j).getLgLateMsrVwEmail().equals(email)){
+                            rank = j;
+                            break;
+                        }
+                    }
+                    double workoutRank = (double) (rank + 1) / codeList.get().size() * 100;
+                    isWorkoutCode.add(commonCode);
                     HashMap<String, Object> codeDetailMap = (HashMap<String, Object>) workoutCodeMap.get((String) commonCode);
                     String workoutMax = Integer.toString(logList.get().get(i).getLgLateMsrVwMax());
                     codeDetailMap.replace("WorkoutMax", workoutMax);
-                    codeDetailMap.replace("WorkoutRank", String.format("%,.1f", random.nextFloat() * 100));
+//                    codeDetailMap.replace("WorkoutRank", String.format("%,.1f", random.nextFloat() * 100));
+                    codeDetailMap.replace("WorkoutRank", String.format("%,.1f", workoutRank));
                     workoutCodeMap.replace("commonCode", codeDetailMap);
                 }
             }
