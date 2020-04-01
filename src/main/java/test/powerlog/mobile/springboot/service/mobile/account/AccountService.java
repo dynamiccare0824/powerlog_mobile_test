@@ -81,13 +81,18 @@ public class AccountService {
                 if (commonCode.contains("01")) {
                     int rank = 0;
                     Optional<List<LogLateMsrVw>> codeList = Optional.ofNullable(logLateMsrVwRepository.findAllByLgLateMsrVwCommonCodeOrderByLgLateMsrVwMaxDesc(commonCode));
-                    for(int j = 0; j < codeList.get().size(); j++){
-                        if(codeList.get().get(j).getLgLateMsrVwEmail().equals(email)){
+                    for (int j = 0; j < codeList.get().size(); j++) {
+                        if (codeList.get().get(j).getLgLateMsrVwEmail().equals(email)) {
                             rank = j;
                             break;
                         }
                     }
+
                     double workoutRank = (double) (rank + 1) / codeList.get().size() * 100;
+                    if ((rank + 1) == codeList.get().size()) {
+                        workoutRank = 99.9;
+                    }
+
                     isWorkoutCode.add(commonCode);
                     HashMap<String, Object> codeDetailMap = (HashMap<String, Object>) workoutCodeMap.get((String) commonCode);
                     String workoutMax = Integer.toString(logList.get().get(i).getLgLateMsrVwMax());
