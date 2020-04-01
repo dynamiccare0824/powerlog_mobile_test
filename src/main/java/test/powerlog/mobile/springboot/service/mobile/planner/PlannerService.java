@@ -452,7 +452,8 @@ public class PlannerService {
                 totalCount = totalCount + 1;
                 HashMap<String, Object> recordMap = new HashMap<>();
                 String isProgram = record.get(i).getPlnVwIsProgram();
-                if (isProgram.equals("true")) {
+                String isDone = record.get(i).getPlnVwIsDone();
+                if (isProgram.equals("true") && isDone.equals("false")) {
                     recordMap.put("plnVwCommonCode", record.get(i).getPlnVwCommonCode());
                     if(codeNull.contains(record.get(i).getPlnVwCommonCode())){
                         codeNull.remove(record.get(i).getPlnVwCommonCode());
@@ -546,7 +547,8 @@ public class PlannerService {
         if (reqDeleteProgramDto.getEmail() != null) {
             String email = reqDeleteProgramDto.getEmail();
             try {
-                plannerByProgramTbRepository.deleteAllByPlnEmail(email);
+//                plannerByProgramTbRepository.deleteAllByPlnEmail(email);
+                plannerByProgramTbRepository.deleteAllByPlnEmailAndPlnDone(email, "false");
                 resultMap.replace("isDone", true);
                 resultMap.replace("isError", false);
                 resultMap.replace("message", null);

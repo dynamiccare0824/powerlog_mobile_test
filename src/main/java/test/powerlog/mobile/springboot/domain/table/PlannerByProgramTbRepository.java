@@ -12,4 +12,7 @@ public interface PlannerByProgramTbRepository extends JpaRepository<PlannerByPro
 
     @Transactional
     void deleteAllByPlnEmail(String email);
+
+    @Transactional
+    void deleteAllByPlnEmailAndPlnDone(String email, String trueorfalse);
 }
