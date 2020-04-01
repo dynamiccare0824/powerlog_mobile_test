@@ -10,6 +10,6 @@ import java.util.List;
 public interface LogLateMsrVwRepository extends JpaRepository<LogLateMsrVw, String>, JpaSpecificationExecutor<LogLateMsrVw> {
 //    EntityManager em = emf.createEntityManager();
     List<LogLateMsrVw> findAllByLgLateMsrVwEmail(String email);
-    List<LogLateMsrVw> countAllByLgLateMsrVwCommonCode(String commonCode);
+    List<LogLateMsrVw> findAllByLgLateMsrVwCommonCodeOrderByLgLateMsrVwMaxDesc(String commonCode);
 //    TypedQuery<LogLateMsrVw> query = em.createQuery
 }
