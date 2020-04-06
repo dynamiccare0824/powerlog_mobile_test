@@ -115,7 +115,7 @@ public class PlannerController {
         //
         String email = reqTestHistoryDto.getEmail();
         ArrayList<String> codeList1 = new ArrayList<String>(
-                Arrays.asList("A01", "B01", "C01", "D01", "F01", "G01", "H01"));
+                Arrays.asList("A01", "B01", "C01", "D01", "E01", "F01", "G01", "H01"));
 
         ArrayList<String> codeList2 = new ArrayList<String>(
                 Arrays.asList("A03", "B03", "C03", "D03", "E03", "F03", "G03", "H03"));
