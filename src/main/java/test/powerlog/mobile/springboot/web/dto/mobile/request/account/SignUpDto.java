@@ -3,11 +3,13 @@ package test.powerlog.mobile.springboot.web.dto.mobile.request.account;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import test.powerlog.mobile.springboot.domain.table.UserTb;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class SignUpDto {
 

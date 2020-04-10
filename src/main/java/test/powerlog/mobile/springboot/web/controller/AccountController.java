@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
@@ -105,6 +106,9 @@ public class AccountController {
     @Autowired
     private ParamValidCheckService paramValidCheckService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     //Completed
     //회원정보 틀렸을 때 오류
     @ApiOperation(value = "회원 로그인 [로그인]", notes = "이메일 아이디와 비밀번호를 받아 로그인한다!")
@@ -121,7 +125,7 @@ public class AccountController {
         } else {
             // 파라미터 에러가 없으면 초기화
             String email = reqLoginDto.getEmail();
-            String password = reqLoginDto.getPassword();
+            String password = passwordEncoder.encode(reqLoginDto.getPassword());
 
             // 파라미터를 가지고 resultMap 초기화
             resultMap = accountService.EmailPasswordCheck(email, password);
@@ -212,6 +216,7 @@ public class AccountController {
         } else {
             HashMap<String, Object> resultMap = new HashMap();
             SignUpDto signUpDto = accountService.ToRegisterForm(reqRegisterDto);
+            signUpDto.setPassword(passwordEncoder.encode(signUpDto.getPassword()));
             accountService.Signup(signUpDto); // save 실행
             return commonResponseService.getRspRegisterDto(null, reqRegisterDto.getEmail());
         }
@@ -293,7 +298,7 @@ public class AccountController {
             return commonResponseService.getRspEmailPasswordCheckDto(invalidParamList, null);
         } else {
             String email = emailPasswordCheckDto.getEmail();
-            String password = emailPasswordCheckDto.getPassword();
+            String password = passwordEncoder.encode(emailPasswordCheckDto.getPassword());
             HashMap checkResultMap = checkService.EmailPasswordCheck(email, password);
             return commonResponseService.getRspEmailPasswordCheckDto(null, checkResultMap);
         }
@@ -307,7 +312,7 @@ public class AccountController {
         HashMap<String, Object> resultMap = new HashMap();
 
         String email = reqUpdatePasswordDto.getEmail();
-        String password = reqUpdatePasswordDto.getPassword();
+        String password = passwordEncoder.encode(reqUpdatePasswordDto.getPassword());
 
         try {
             Boolean result = resetPasswordService.ResetPassword(email, password);
@@ -475,7 +480,7 @@ public class AccountController {
 
         HashMap<String, Object> resultMap= new HashMap<>();
         String email = reqDeleteUserDto.getEmail();
-        String password = reqDeleteUserDto.getPassword();
+        String password = passwordEncoder.encode(reqDeleteUserDto.getPassword());
 
         HashMap<String, Object> checkResultMap = accountService.EmailPasswordCheck(email, password);
         if ((Boolean) checkResultMap.get("isMatch")) {

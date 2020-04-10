@@ -1,6 +1,7 @@
 package test.powerlog.mobile.springboot.service.mobile.account;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import test.powerlog.mobile.springboot.domain.view.UserAccountVw;
 import test.powerlog.mobile.springboot.domain.view.UserAccountVwRepository;
@@ -22,6 +23,9 @@ public class EmailQuestionCheckService {
     @Autowired
     private ResetPasswordService resetPasswordService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     /*로그인 요청 처리*/
     public boolean emailQuestionCheck(String email, String questionCode, String questionAnswer, String number) {
         boolean result = false;
@@ -42,7 +46,8 @@ public class EmailQuestionCheckService {
                 emailFormDto.setSubject("[파워로그] " + name + " 고객님, 안녕하세요! 발급된 임시 비밀번호를 확인하세요");
                 emailServiceImpl.sendMail(emailFormDto);
 
-                resetPasswordService.ResetPassword(email, number);
+                String encodedNumber = passwordEncoder.encode(number);
+                resetPasswordService.ResetPassword(email, encodedNumber);
                 result = true;
             } else {
                 System.out.println(record.get().getLoginVwEmail());
@@ -50,7 +55,7 @@ public class EmailQuestionCheckService {
                 result = false;
             }//            return (record.get().getId() == testProductDto.getId() && record.get().getPassword() == testProductDto.getPassword()) ? true: false
         } catch (Exception ex) {
-            System.out.println(ex);
+            System.out.println(ex + "1111");
         }
         System.out.println("EmailQuestionCheckDone");
         return result;
