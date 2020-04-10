@@ -1,6 +1,7 @@
 package test.powerlog.mobile.springboot.service.mobile.account;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import test.powerlog.mobile.springboot.domain.table.UserTb;
@@ -32,6 +33,8 @@ public class AccountService {
     private SignUpService signUpService;
     @Autowired
     private LogLateMsrVwRepository logLateMsrVwRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
 
     /*로그인 요청 처리*/
