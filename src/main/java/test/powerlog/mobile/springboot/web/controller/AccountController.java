@@ -125,7 +125,7 @@ public class AccountController {
         } else {
             // 파라미터 에러가 없으면 초기화
             String email = reqLoginDto.getEmail();
-            String password = passwordEncoder.encode(reqLoginDto.getPassword());
+            String password = reqLoginDto.getPassword();
 
             // 파라미터를 가지고 resultMap 초기화
             resultMap = accountService.EmailPasswordCheck(email, password);
@@ -298,8 +298,8 @@ public class AccountController {
             return commonResponseService.getRspEmailPasswordCheckDto(invalidParamList, null);
         } else {
             String email = emailPasswordCheckDto.getEmail();
-            String password = passwordEncoder.encode(emailPasswordCheckDto.getPassword());
-            HashMap checkResultMap = checkService.EmailPasswordCheck(email, password);
+            String password = emailPasswordCheckDto.getPassword();
+            HashMap checkResultMap = accountService.EmailPasswordCheck(email, password);
             return commonResponseService.getRspEmailPasswordCheckDto(null, checkResultMap);
         }
     }
@@ -429,7 +429,6 @@ public class AccountController {
         return commonResponseService.getRspDupCheckSendMsgDto(null, tmpMap);
     }
 
-
     //
     @ApiOperation(value = "새로운 핸드폰 번호 등록 [더보기]")
     @PostMapping(value = "/more/phone/update")
@@ -480,12 +479,12 @@ public class AccountController {
 
         HashMap<String, Object> resultMap= new HashMap<>();
         String email = reqDeleteUserDto.getEmail();
-        String password = passwordEncoder.encode(reqDeleteUserDto.getPassword());
+        String password = reqDeleteUserDto.getPassword();
 
         HashMap<String, Object> checkResultMap = accountService.EmailPasswordCheck(email, password);
         if ((Boolean) checkResultMap.get("isMatch")) {
             HashMap<String, Object> deleteResultMap = deleteAccountService.DeleteAccount(checkResultMap, email);
-            if(deleteResultMap.get("error")!=null){
+            if(deleteResultMap.get("error")==null){
                 resultMap.put("isError", false);
                 resultMap.put("isMatch", true);
                 resultMap.put("isDone", true);

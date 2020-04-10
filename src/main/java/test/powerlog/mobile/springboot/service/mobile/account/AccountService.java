@@ -42,11 +42,10 @@ public class AccountService {
 
         HashMap<String, Object> tmpMap = new HashMap();
         Optional<UserAccountVw> record = userAccountVwRepository.findById(email);
-        password = passwordEncoder.encode(password);
 
         if (record.isPresent()) {
             // 레코드가 존재하는데 조건에 맞다면 제대로 입력한 것
-            if (record.get().getLoginVwEmail().equals(email) && record.get().getLoginVwPassword().equals(password)) {
+            if (record.get().getLoginVwEmail().equals(email) && passwordEncoder.matches(password, record.get().getLoginVwPassword())) {
                 String name = record.get().getLoginVwName();
                 tmpMap.put("isMatch", true);
                 tmpMap.put("error", null);
