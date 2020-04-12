@@ -37,6 +37,7 @@ public class CommonResponseService {
             tmpDto.setInvalidParamList(invalidParamList);
             tmpDto.setIsError(true);
             tmpDto.setMessage(invalidParamMessage);
+            tmpDto.setPlanExpired(null);
         }
         // Request valid but no record
         else if (logRecordMap == null) {
@@ -44,7 +45,9 @@ public class CommonResponseService {
             tmpDto.setIsMatch(false);
             tmpDto.setTotalList((ArrayList) logRecordFormMap.get("LoginWorkoutCode"));
             tmpDto.setMessage("No registered data existed.");
+            tmpDto.setPlanExpired(null);
         } else {
+            tmpDto.setPlanExpired((Boolean) map.get("planExpired"));
             tmpDto.setIsMatch((Boolean) map.get("isMatch"));
             tmpDto.setName((String) map.get("name"));
             tmpDto.setIsError(false);
@@ -61,7 +64,7 @@ public class CommonResponseService {
             tmpDto.setResultData(logRecordMap);
 
         }
-        tmpDto.setPlanExpired(true);
+
         return tmpDto;
     }
 

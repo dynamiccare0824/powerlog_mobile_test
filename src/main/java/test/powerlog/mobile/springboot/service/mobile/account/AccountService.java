@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import test.powerlog.mobile.springboot.domain.table.PlannerByProgramTb;
+import test.powerlog.mobile.springboot.domain.table.PlannerByProgramTbRepository;
 import test.powerlog.mobile.springboot.domain.table.UserTb;
 import test.powerlog.mobile.springboot.domain.table.UserTbRepository;
 import test.powerlog.mobile.springboot.domain.view.LogLateMsrVw;
@@ -15,6 +17,7 @@ import test.powerlog.mobile.springboot.web.dto.mobile.request.account.ReqUpdateB
 import test.powerlog.mobile.springboot.web.dto.mobile.request.account.ReqRegisterDto;
 import test.powerlog.mobile.springboot.web.dto.mobile.request.account.SignUpDto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -35,6 +38,8 @@ public class AccountService {
     private LogLateMsrVwRepository logLateMsrVwRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
+    private PlannerByProgramTbRepository plannerByProgramTbRepository;
 
 
     /*로그인 요청 처리*/
@@ -65,6 +70,19 @@ public class AccountService {
             tmpMap.put("name", null);
         }
         return tmpMap;
+    }
+
+    public Boolean ifExpired(String email){
+        Boolean result = false;
+        Optional<List<PlannerByProgramTb>> logList = Optional.ofNullable(plannerByProgramTbRepository.findAllByPlnEmailOrderByPlnOnDateDesc(email));
+        if(logList.isPresent()){
+            LocalDate logDate = logList.get().get(0).getPlnOnDate();
+            LocalDate curDate = LocalDate.now();
+            if(logDate.isBefore(curDate)){
+                result = true;
+            }
+        }
+        return result;
     }
 
 

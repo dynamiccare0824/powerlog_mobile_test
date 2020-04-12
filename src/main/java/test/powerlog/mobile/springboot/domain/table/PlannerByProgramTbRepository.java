@@ -10,6 +10,8 @@ import java.util.List;
 public interface PlannerByProgramTbRepository extends JpaRepository<PlannerByProgramTb, String>{
     List<PlannerByProgramTb> findAllByPlnEmail(String email);
 
+    List<PlannerByProgramTb> findAllByPlnEmailOrderByPlnOnDateDesc(String email);
+
     @Transactional
     void deleteAllByPlnEmail(String email);
 

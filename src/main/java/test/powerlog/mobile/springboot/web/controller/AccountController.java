@@ -132,6 +132,7 @@ public class AccountController {
 
             //로그인 정보가 맞든 틀리든.. formMap이 있어서 틀리면 그걸 활용해
             HashMap<String, Object> logRecordMap = accountService.LgLateMsrVwEmailMap(email, logRecordFormMap);
+            resultMap.put("planExpired", accountService.ifExpired(email));
             return commonResponseService.getRspLoginDto(null, logRecordMap, logRecordFormMap, resultMap);
         }
     }
