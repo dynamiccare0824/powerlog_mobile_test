@@ -75,7 +75,7 @@ public class AccountService {
     public Boolean ifExpired(String email){
         Boolean result = false;
         Optional<List<PlannerByProgramTb>> logList = Optional.ofNullable(plannerByProgramTbRepository.findAllByPlnEmailOrderByPlnOnDateDesc(email));
-        if(logList.isPresent()){
+        if(logList.get().size() > 0){
             LocalDate logDate = logList.get().get(0).getPlnOnDate();
             LocalDate curDate = LocalDate.now();
             if(logDate.isBefore(curDate)){
