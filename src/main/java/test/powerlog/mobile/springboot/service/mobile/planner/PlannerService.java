@@ -87,6 +87,7 @@ public class PlannerService {
         if (userRecord.isPresent()) {
             String bodyShape = userRecord.get().getLoginVwShapeCode();
             String careerNow = userRecord.get().getLoginVwCareerNow();
+            String vwAge = userRecord.get().getLoginVwAge();
             double weightRate = 0;
             double defaultvalue = 0;
             int count = 0;
@@ -107,14 +108,15 @@ public class PlannerService {
                     rest = 60;
                     break;
                 case "C":
-                    weightRate = 0.55;
+                    weightRate = 0.45;
                     count = 15;
                     set = 5;
                     rest = 60;
                     break;
             }
-            if (Integer.parseInt(careerNow) < 4 || userRecord.get().getLoginVwGender().equals("female")) {
-                defaultvalue = 0.3;
+
+            if (Integer.parseInt(careerNow) < 4 || userRecord.get().getLoginVwGender().equals("female") || Integer.parseInt(vwAge) > 50) {
+                defaultvalue = 0.2;
             }
 
             tmpMap.put("weightRate", weightRate);
