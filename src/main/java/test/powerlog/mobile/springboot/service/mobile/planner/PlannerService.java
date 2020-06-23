@@ -88,10 +88,10 @@ public class PlannerService {
             String bodyShape = userRecord.get().getLoginVwShapeCode();
             String careerNow = userRecord.get().getLoginVwCareerNow();
             double weightRate = 0;
+            double defaultvalue = 0;
             int count = 0;
             int set = 0;
             int rest = 0;
-            double defaultvalue = 1;
 
             switch (bodyShape) {
                 case "A":
