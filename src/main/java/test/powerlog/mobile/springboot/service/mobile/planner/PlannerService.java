@@ -232,7 +232,7 @@ public class PlannerService {
                             .onDay(Integer.toString(calendarReg.get(Calendar.DAY_OF_WEEK)))
                             .chosenDayOfWk(reqProgramGenerateDto.getDayOfWk())
                             .commonCode(commonCodeList.get(i))
-                            .weight((int) (integerMaxList.get(i) * weightRate))
+                            .weight((int) (integerMaxList.get(i) * weightRate * defaultValue))
                             .count(count)
                             .set(set)
                             .level(0)
