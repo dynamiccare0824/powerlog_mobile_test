@@ -99,16 +99,19 @@ public class PlannerService {
                     count = 8;
                     set = 3;
                     rest = 60;
+                    break;
                 case "B":
                     weightRate = 0.65;
                     count = 10;
                     set = 4;
                     rest = 60;
+                    break;
                 case "C":
                     weightRate = 0.55;
                     count = 15;
                     set = 5;
                     rest = 60;
+                    break;
             }
             if (Integer.parseInt(careerNow) < 4 || userRecord.get().getLoginVwGender().equals("female")) {
                 defaultvalue = 0.3;
